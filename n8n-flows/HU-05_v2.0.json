@@ -1,0 +1,204 @@
+{
+  "name": "Verificar correo",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "reserva",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -512,
+        16
+      ],
+      "id": "31c4c35d-91e9-49d4-89ac-95b80cd51da1",
+      "name": "Webhook",
+      "webhookId": "26c8edf5-34de-459c-a2d0-b75c527f4b3c"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "1aa56a81-d653-43bb-9a5e-dadfebb79fcb",
+              "leftValue": "={{ $json.body.correo }}",
+              "rightValue": "@uandresbello.edu",
+              "operator": {
+                "type": "string",
+                "operation": "endsWith"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -352,
+        16
+      ],
+      "id": "90645bc0-ca08-4574-8ee4-c5ffcb4c1999",
+      "name": "Filtrar dominio institucional"
+    },
+    {
+      "parameters": {
+        "errorMessage": "correo invalido: El correo no termina con @uandresbello.edu"
+      },
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        -176,
+        128
+      ],
+      "id": "edfbc679-7116-4b54-beb1-7bc58036b1c3",
+      "name": "correo invalido"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Webhook').item.json.body.correo }}",
+        "subject": "Verificacion institucional requerida",
+        "message": "=Hola,\n\nGracias por tu solicitud. Para completar la verificación institucional, por favor haz clic en el siguiente enlace y autentícate con tu cuenta uandresbello.edu:\n\n<a href=\"{{ $json.authLink }}\">Verificar ahora</a>\n\nEste enlace es único para tu solicitud y nos permitirá validar tu identidad.\n\nSaludos,  \nEquipo de reservas\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        64,
+        -16
+      ],
+      "id": "2a4c5964-06f5-4fc1-81af-33ffbe293023",
+      "name": "Send a message",
+      "webhookId": "50d3be20-271b-48d3-9d00-1a9341671f61",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "irwNL1VCyr8bqWol",
+          "name": "Gmail account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "path": "oauth2-credential/callback",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -496,
+        272
+      ],
+      "id": "4a3b909d-2445-42fc-bd25-fd788c813489",
+      "name": "Recibir autenticacion",
+      "webhookId": "dead6216-b902-46f0-a046-ee484fa9fb2a"
+    },
+    {
+      "parameters": {
+        "jsCode": "const clientId = '36788e45-7a1d-4015-8040-9e3e065953fc';\nconst redirectUri = encodeURIComponent('https://jeremy-pily-prediligently.ngrok-free.dev/webhook-test/oauth2-credential/callback');\nconst scope = encodeURIComponent('https://graph.microsoft.com/User.Read');\nconst state = encodeURIComponent($input.first().json.body.id);\n\nreturn {\n  authLink: `https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=${clientId}&response_type=code&redirect_uri=${redirectUri}&scope=${scope}&state=${state}`\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -96,
+        -16
+      ],
+      "id": "85cb0614-cbaa-4782-811f-7941a8cdef37",
+      "name": "Code in JavaScript"
+    }
+  ],
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "content-type": "application/json",
+            "user-agent": "PostmanRuntime/7.49.1",
+            "accept": "*/*",
+            "postman-token": "3d1cec62-b2a0-4efe-938f-c43438e8a4a0",
+            "host": "localhost:5678",
+            "accept-encoding": "gzip, deflate, br",
+            "connection": "keep-alive",
+            "content-length": "237"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "id": "31/10/2025 16:53:14",
+            "nombre": "Nicolás",
+            "correo": "n.torresdaz@uandresbello.edu",
+            "area": "Ingenieria",
+            "fecha": "1/11/2025",
+            "inicio": "10:00:00 a.m.",
+            "fin": "6:00:00 p.m.",
+            "participantes": "100",
+            "sala": "1-B"
+          },
+          "webhookUrl": "http://localhost:5678/webhook-test/reserva",
+          "executionMode": "test"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Filtrar dominio institucional",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filtrar dominio institucional": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "correo invalido",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "65a51c84-d18f-4e44-83dc-279fcd053f7c",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "329da24686c0fb2dc28fa0c9c962e549e2a0d4f6a8ac08a0b7b38a0d77558624"
+  },
+  "id": "9Wo9XMrQH5ZpmNXY",
+  "tags": []
+}
