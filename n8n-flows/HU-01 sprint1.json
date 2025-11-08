@@ -1,0 +1,385 @@
+{
+  "name": "HU-01 sprint1",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "reserva-sala",
+        "options": {}
+      },
+      "id": "b810946b-b814-4d0f-ad49-7ad72bbb338c",
+      "name": "Webhook - Recibir Reserva",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -1904,
+        256
+      ],
+      "webhookDescription": "Recibe sala, fecha, horaInicio, horaFin, correo, titulo, descripcion",
+      "webhookId": "ca13ae7b-95fc-4974-80ad-63ad82e04c8a"
+    },
+    {
+      "parameters": {
+        "functionCode": "// --- Entradas desde Google Sheets y Webhook ---\nconst reservas = Array.isArray(items) ? items : [items];\nconst nueva = $json;\n\n// --- Normalizar claves del webhook (sin importar mayúsculas, espacios ni formato) ---\nconst normalizarKeys = {};\nfor (const k of Object.keys(nueva)) {\n  normalizarKeys[k.toLowerCase().trim()] = nueva[k];\n}\n\n// --- Normalización de los datos del POST ---\nconst salaNueva = (normalizarKeys[\"sala\"] || \"\").toString().trim().toLowerCase();\nconst fechaNueva = (normalizarKeys[\"fecha\"] || \"\").toString().trim();\nconst horaInicioNueva = (normalizarKeys[\"horainicio\"] || \"\").toString().trim();\nconst horaFinNueva = (normalizarKeys[\"horafin\"] || \"\").toString().trim();\n\n// --- Función para convertir HH:MM (o HH:MM:SS) a minutos ---\nfunction toMinutes(hora) {\n  if (!hora) return 0;\n  const [h, m] = hora.toString().split(\":\").map(Number);\n  return (h || 0) * 60 + (m || 0);\n}\n\n// --- Validación de conflicto ---\nlet conflicto = false;\nlet conflictoData = null;\n\nfor (const raw of reservas) {\n  const item = raw.json;\n\n  const salaExistente = (item.Sala || \"\").toString().trim().toLowerCase();\n  const fechaExistente = (item.Fecha || \"\").toString().trim();\n  const horaInicioExistente = (item.HoraInicio || \"\").toString().trim();\n  const horaFinExistente = (item.HoraFin || \"\").toString().trim();\n\n  // --- Comparar sala y fecha ---\n  if (salaExistente === salaNueva && fechaExistente === fechaNueva) {\n    const inicioNueva = toMinutes(horaInicioNueva);\n    const finNueva = toMinutes(horaFinNueva);\n    const inicioExistente = toMinutes(horaInicioExistente);\n    const finExistente = toMinutes(horaFinExistente);\n\n    // --- Comprobar solapamiento de horarios ---\n    if (inicioNueva < finExistente && finNueva > inicioExistente) {\n      conflicto = true;\n      conflictoData = item;\n      break;\n    }\n  }\n}\n\n// --- Salida final ---\nreturn [\n  {\n    json: {\n      disponible: !conflicto,\n      mensaje: conflicto\n        ? `❌ La sala ya está reservada para esa fecha (${fechaNueva}) entre ${horaInicioNueva} y ${horaFinNueva}.`\n        : \"✅ La sala está disponible para reservar.\",\n      conflicto: conflictoData,\n      totalFilasLeidas: reservas.length,\n      debug: {\n        salaNueva,\n        fechaNueva,\n        horaInicioNueva,\n        horaFinNueva,\n        salasEnSheet: reservas.map(r => r.json.Sala)\n      }\n    }\n  }\n];\n"
+      },
+      "id": "2f449b60-f9db-45b6-abea-1c21f2a2db6d",
+      "name": "Code - Revisar Disponibilidad",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        -1376,
+        256
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json[\"disponible\"] }}",
+              "value2": "={{ true }}"
+            }
+          ]
+        }
+      },
+      "id": "9604f966-9503-4aa7-95df-a02d1b8b6863",
+      "name": "IF - ¿Disponible?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        -1088,
+        256
+      ],
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "4cc6f6e9-764f-4545-b990-ac2ec31b7bbf",
+      "name": "Responder Webhook - OK",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        0,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "96b80bca-2fbc-41f6-aa43-efed49dfe28d",
+      "name": "Responder Webhook - Rechazo",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        -256,
+        544
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "={{$item(0).$node[\"Webhook - Recibir Reserva\"].json.body.correo}}",
+        "subject": "Tu reserva fue exitosa",
+        "message": "Hola! informamos que tu reciente reserva fue aprobada con exito!",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        -320,
+        176
+      ],
+      "id": "6b0f3918-b6d8-4cfe-90f3-3b2f3052c998",
+      "name": "Gmail Confirmacion",
+      "webhookId": "3e50c9f0-d2aa-462d-be2b-ac0a0572ce6e",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "iUtEaxbjQFiZ8zKd",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "proyectoespacioscorporativos@gmail.com",
+          "mode": "id"
+        },
+        "start": "={{ $json[\"fecha\"] + \"T\" + $json[\"horaInicio\"] + \":00-03:00\" }}\n",
+        "end": "={{ $json[\"fecha\"] + \"T\" + $json[\"horaFin\"] + \":00-03:00\" }}\n",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        0
+      ],
+      "id": "9580325e-81f5-413a-ad58-515acaa8b2df",
+      "name": "Google Calendar",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "vr7vDj7dPKxuUPLZ",
+          "name": "Google Calendar account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M",
+          "mode": "list",
+          "cachedResultName": "Salas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1945850352,
+          "mode": "list",
+          "cachedResultName": "Reservas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit#gid=1945850352"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ID": "={{ Math.random().toString(36).substring(2,10).toUpperCase() }}",
+            "Sala": "={{ $item(0).$node[\"Webhook - Recibir Reserva\"].json.body.sala }}",
+            "Fecha": "={{ $item(0).$node[\"Webhook - Recibir Reserva\"].json.body.fecha }}",
+            "HoraInicio": "={{ $item(0).$node[\"Webhook - Recibir Reserva\"].json.body.horaInicio }}",
+            "HoraFin": "={{ $item(0).$node[\"Webhook - Recibir Reserva\"].json.body.horaFin }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Sala",
+              "displayName": "Sala",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Fecha",
+              "displayName": "Fecha",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "HoraInicio",
+              "displayName": "HoraInicio",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "HoraFin",
+              "displayName": "HoraFin",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -736,
+        96
+      ],
+      "id": "bec1b09c-2836-4a82-804e-01310686c3e4",
+      "name": "Registrar",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "ruJWFuUh3fOxO0aM",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{$item(0).$node[\"Webhook - Recibir Reserva\"].json.body.correo}}",
+        "subject": "Reserva rechazada",
+        "message": "=Hola! informamos que tu reciente reserva fue rechazada.",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        -832,
+        464
+      ],
+      "id": "821c850b-78ab-41b3-b1a9-c6efeb67c799",
+      "name": "Rechazo",
+      "webhookId": "70d27376-afc5-457e-9a85-42c6ebf0d87c",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "iUtEaxbjQFiZ8zKd",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M",
+          "mode": "list",
+          "cachedResultName": "Salas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1945850352,
+          "mode": "list",
+          "cachedResultName": "Reservas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit#gid=1945850352"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -1648,
+        256
+      ],
+      "id": "793f913c-1a9b-4eb1-89fa-647697be3474",
+      "name": "Revisar reservas",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "ruJWFuUh3fOxO0aM",
+          "name": "Google Sheets account 2"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook - Recibir Reserva": {
+      "main": [
+        [
+          {
+            "node": "Revisar reservas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code - Revisar Disponibilidad": {
+      "main": [
+        [
+          {
+            "node": "IF - ¿Disponible?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF - ¿Disponible?": {
+      "main": [
+        [
+          {
+            "node": "Registrar",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Rechazo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail Confirmacion": {
+      "main": [
+        [
+          {
+            "node": "Responder Webhook - OK",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Google Calendar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Registrar": {
+      "main": [
+        [
+          {
+            "node": "Gmail Confirmacion",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rechazo": {
+      "main": [
+        [
+          {
+            "node": "Responder Webhook - Rechazo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Revisar reservas": {
+      "main": [
+        [
+          {
+            "node": "Code - Revisar Disponibilidad",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "18c239ad-e37e-4c5b-abdd-a5796eba92e8",
+  "meta": {
+    "instanceId": "da64bfcd864e9aee246dea7ad158240ca6236afe6fbc6f458fa745d786cff46f"
+  },
+  "id": "2p7sNamdpUhcjuTG",
+  "tags": []
+}

@@ -1,0 +1,340 @@
+{
+  "name": "Cancelar Reserva - (pr) copy",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "423c2399-1662-4583-afd3-dd9c4bfbc228",
+        "options": {}
+      },
+      "name": "Webhook Cancelar",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -1504,
+        256
+      ],
+      "id": "9a36a296-2db2-43c0-b006-ec0a892fa91b",
+      "webhookId": "423c2399-1662-4583-afd3-dd9c4bfbc228"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M",
+          "mode": "list",
+          "cachedResultName": "Salas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1945850352,
+          "mode": "list",
+          "cachedResultName": "Reservas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit#gid=1945850352"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "ID",
+              "lookupValue": "={{ $json.body.ID }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Google Sheets - Buscar por ID",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        -1280,
+        256
+      ],
+      "id": "498d1e60-e1b7-4846-bc9a-05cc04be8cc6",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "scbK5fwRANpmdXq5",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first().json; return [{ json: { reserva_id: item.ID, row_number: item.row_number, email: item.Correo } }];"
+      },
+      "name": "Code - Extrae datos",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1056,
+        256
+      ],
+      "id": "e517bf38-9b23-494f-862a-14ee5ce7e23e"
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "documentId": {
+          "__rl": true,
+          "value": "1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M",
+          "mode": "list",
+          "cachedResultName": "Salas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1945850352,
+          "mode": "list",
+          "cachedResultName": "Reservas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit#gid=1945850352"
+        },
+        "startIndex": "={{ $json.row_number }}"
+      },
+      "name": "Google Sheets - Eliminar fila",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        -832,
+        256
+      ],
+      "id": "f18aa038-e191-4806-bad2-d3410069db4e",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "scbK5fwRANpmdXq5",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "name": "Responder éxito",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        288,
+        256
+      ],
+      "id": "bbdd3b62-2c62-4cc8-a894-e98d5f03c827"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Code - Extrae datos').first().json.email }}",
+        "subject": "Reserva Cancelada",
+        "emailType": "text",
+        "message": "=Su reserva el dia {{ $('Google Sheets - Buscar por ID').item.json.Fecha }} a las {{ $('Google Sheets - Buscar por ID').item.json.HoraInicio }} ha sido cancelada exitosamente.",
+        "options": {}
+      },
+      "id": "be40c01e-6712-4966-860e-82ed3d2907a0",
+      "name": "Gmail - Enviar notificación cancelación",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        64,
+        256
+      ],
+      "webhookId": "fcbeb1e2-f8ae-4e34-9e6d-f89c94f5d408",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "mvOzmZ8ar5W4BJLA",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "proyectoespacioscorporativos@gmail.com",
+          "mode": "list",
+          "cachedResultName": "proyectoespacioscorporativos@gmail.com"
+        },
+        "timeMin": "={{ $('Google Sheets - Buscar por ID').item.json.Fecha + 'T' + $('Google Sheets - Buscar por ID').item.json.HoraInicio }}",
+        "timeMax": "={{ DateTime.fromISO($('Google Sheets - Buscar por ID').item.json.Fecha + 'T' + $('Google Sheets - Buscar por ID').item.json.HoraInicio).plus({ minutes: 1 }).toISO() }}",
+        "options": {
+          "recurringEventHandling": "expand"
+        }
+      },
+      "id": "b3a3d8dc-0d75-45b2-bd4e-393a15e736cb",
+      "name": "Google Calendar - Eliminar evento",
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        -608,
+        48
+      ],
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "z5X28y0htHvFYTPR",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extract the event ID from the first item returned by Google Calendar\nconst items = $input.all();\n\nif (items.length > 0 && items[0].json.id) {\n  return [{\n    json: {\n      eventId: items[0].json.id,\n      calendarId: items[0].json.organizer?.email || 'proyectoespacioscorporativos@gmail.com'\n    }\n  }];\n} else {\n  // No event found, return empty result\n  return [{\n    json: {\n      eventId: null,\n      message: 'No event found to delete'\n    }\n  }];\n}"
+      },
+      "id": "f10d3a70-2540-455e-8b51-2612a9c77bfc",
+      "name": "Code - Extraer Event ID",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -384,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "calendar": {
+          "__rl": true,
+          "value": "proyectoespacioscorporativos@gmail.com",
+          "mode": "list",
+          "cachedResultName": "proyectoespacioscorporativos@gmail.com"
+        },
+        "eventId": "={{ $('Code - Extraer Event ID').item.json.eventId }}",
+        "options": {}
+      },
+      "id": "ccd52bd3-aaa9-498d-bbf5-74601db3a4b7",
+      "name": "Google Calendar - Eliminar por ID",
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        -160,
+        384
+      ],
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "z5X28y0htHvFYTPR",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## HU-06: Cancelacion de reserva"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1472,
+        32
+      ],
+      "id": "e273b287-14a3-48ef-bc8a-088ac0094a6f",
+      "name": "Sticky Note1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook Cancelar": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets - Buscar por ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets - Buscar por ID": {
+      "main": [
+        [
+          {
+            "node": "Code - Extrae datos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code - Extrae datos": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets - Eliminar fila",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets - Eliminar fila": {
+      "main": [
+        [
+          {
+            "node": "Gmail - Enviar notificación cancelación",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Google Calendar - Eliminar evento",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail - Enviar notificación cancelación": {
+      "main": [
+        [
+          {
+            "node": "Responder éxito",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Calendar - Eliminar evento": {
+      "main": [
+        [
+          {
+            "node": "Gmail - Enviar notificación cancelación",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Code - Extraer Event ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code - Extraer Event ID": {
+      "main": [
+        [
+          {
+            "node": "Google Calendar - Eliminar por ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Calendar - Eliminar por ID": {
+      "main": [
+        [
+          {
+            "node": "Gmail - Enviar notificación cancelación",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "ca2ce027-e6f7-402e-9686-d17c203ffe79",
+  "meta": {
+    "instanceId": "18ddb1d1d8982b9bc4242f1bd443f7e33b279388b29d0304b7d271dbb8758078"
+  },
+  "id": "CX85gdNMXZs61ou3",
+  "tags": []
+}
