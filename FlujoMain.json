@@ -79,10 +79,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -1936,
-        944
+        -2480,
+        832
       ],
-      "id": "7c06a616-1797-4278-8fce-a4b76f088cdd",
+      "id": "42bf1b9b-12ba-434d-8b92-2c2f1d342452",
       "name": "Datos completos?"
     },
     {
@@ -106,14 +106,14 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -1680,
-        1056
+        -2224,
+        944
       ],
-      "id": "2418f5d1-caae-4c40-ac94-fb3a45b3ced9",
+      "id": "f49ae026-c7e3-4130-9ecc-05e60005ae74",
       "name": "salasDisponibles",
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "gWSCpACgvfwv0eO3",
+          "id": "U0ZzoFnaRUMS9JmW",
           "name": "Google Sheets account"
         }
       }
@@ -125,10 +125,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -1488,
-        1040
+        -2032,
+        928
       ],
-      "id": "8f9c1602-c938-46a6-8c2f-6bd6d0de3d2d",
+      "id": "a189a0a0-b7a6-428f-9f2d-7f919e4d918f",
       "name": "Code in JavaScript"
     },
     {
@@ -141,16 +141,16 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        -1248,
-        1200
+        -1792,
+        1088
       ],
-      "id": "eddc73e0-dfcc-4e00-bde4-0aa303340521",
+      "id": "40393708-74c1-4556-baea-a3da6e4d2fe9",
       "name": "Send a message",
       "webhookId": "e1452d47-c4eb-4d4c-a3ea-669e4a43dd6b",
       "credentials": {
         "gmailOAuth2": {
-          "id": "irwNL1VCyr8bqWol",
-          "name": "Gmail account 2"
+          "id": "PI0JLj0Jq8eA1fLT",
+          "name": "Gmail account"
         }
       }
     },
@@ -181,10 +181,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -1536,
-        800
+        -2080,
+        688
       ],
-      "id": "38fd91cf-1b51-49f5-87b2-81b1a6b97bc9",
+      "id": "477c4710-3221-41ac-950f-164a1e255381",
       "name": "Filtrar dominio institucional"
     },
     {
@@ -194,10 +194,10 @@
       "type": "n8n-nodes-base.stopAndError",
       "typeVersion": 1,
       "position": [
-        -1232,
-        928
+        -1776,
+        816
       ],
-      "id": "f6acfa99-1628-4ae6-9026-8d646d1fbb9b",
+      "id": "6b056ffd-438a-47f3-9980-4648c8be5ffd",
       "name": "correo invalido"
     },
     {
@@ -208,10 +208,10 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2.1,
       "position": [
-        -1472,
-        224
+        -2016,
+        112
       ],
-      "id": "51b59420-4c99-445f-a07f-5a8bf895bd1a",
+      "id": "2f72f926-4ea2-4748-98ea-14b69b3ca7d8",
       "name": "Recibir autenticacion",
       "webhookId": "dead6216-b902-46f0-a046-ee484fa9fb2a"
     },
@@ -225,15 +225,15 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        -976,
-        736
+        -1520,
+        624
       ],
-      "id": "707dcea1-1b06-4daa-a803-1712f756097d",
+      "id": "7126ca99-10e8-446d-9c7c-5b234134913d",
       "name": "Send a message1",
       "webhookId": "50d3be20-271b-48d3-9d00-1a9341671f61",
       "credentials": {
         "gmailOAuth2": {
-          "id": "77lW1ku5qoL8DsvZ",
+          "id": "PI0JLj0Jq8eA1fLT",
           "name": "Gmail account"
         }
       }
@@ -245,10 +245,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -1232,
-        736
+        -1776,
+        624
       ],
-      "id": "a0269f00-1c6a-40ab-aaa4-816778a089e4",
+      "id": "80dc65f0-08f4-4c33-81ca-d781d7cb0d88",
       "name": "Code in JavaScript1"
     },
     {
@@ -257,13 +257,13 @@
         "path": "reserva-sala",
         "options": {}
       },
-      "id": "e838a98d-2243-4109-b538-e2a959264a17",
+      "id": "a3d0ba9c-05bd-4b7d-bc9b-2c1631149570",
       "name": "Webhook - Recibir Reserva",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 1,
       "position": [
-        -1824,
-        336
+        -2368,
+        224
       ],
       "webhookDescription": "Recibe sala, fecha, horaInicio, horaFin, correo, titulo, descripcion",
       "webhookId": "ca13ae7b-95fc-4974-80ad-63ad82e04c8a"
@@ -279,13 +279,13 @@
           ]
         }
       },
-      "id": "60f16751-0070-4a95-b84a-0edb75668cb8",
+      "id": "a98d056d-f285-4aab-97c6-5aa61bc75f24",
       "name": "IF - ¿Disponible?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
-        -448,
-        368
+        -992,
+        256
       ],
       "alwaysOutputData": false
     },
@@ -293,31 +293,31 @@
       "parameters": {
         "options": {}
       },
-      "id": "6dd6852a-8583-4f0e-947f-895d9014f3a8",
+      "id": "08a8b285-d963-4ac8-ab79-cbcd4df6bace",
       "name": "Responder Webhook - OK",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1,
       "position": [
-        544,
-        416
+        0,
+        304
       ]
     },
     {
       "parameters": {
         "options": {}
       },
-      "id": "08c4de97-c584-497b-a242-7c826b59642c",
+      "id": "3163c387-ee61-4968-a81b-091011e3feea",
       "name": "Responder Webhook - Rechazo",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1,
       "position": [
-        0,
-        528
+        -544,
+        416
       ]
     },
     {
       "parameters": {
-        "sendTo": "={{ $('Extraer solicitud de reserva').item.json['Correo electrónico'] }}",
+        "sendTo": "={{ $('Extraer solicitud de reserva').item.json.Correo }}",
         "subject": "Tu reserva fue exitosa",
         "message": "Hola! informamos que tu reciente reserva fue aprobada con exito!",
         "options": {}
@@ -325,16 +325,16 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        224,
-        288
+        -320,
+        176
       ],
-      "id": "2830f503-4a45-485a-b651-7cb2f68f5c5b",
+      "id": "3a312645-cd05-4df8-8cc9-427dfeba17b2",
       "name": "Gmail Confirmacion",
       "webhookId": "3e50c9f0-d2aa-462d-be2b-ac0a0572ce6e",
       "credentials": {
         "gmailOAuth2": {
-          "id": "irwNL1VCyr8bqWol",
-          "name": "Gmail account 2"
+          "id": "PI0JLj0Jq8eA1fLT",
+          "name": "Gmail account"
         }
       }
     },
@@ -356,14 +356,14 @@
       "type": "n8n-nodes-base.googleCalendar",
       "typeVersion": 1.3,
       "position": [
-        544,
-        112
+        0,
+        0
       ],
-      "id": "3e6bd99d-8eca-47fb-b6da-80760575c16c",
+      "id": "36f4d924-1970-420f-83d3-77606e6d6399",
       "name": "Google Calendar",
       "credentials": {
         "googleCalendarOAuth2Api": {
-          "id": "LWS8EKe877hhB3ZS",
+          "id": "YMklK1o4xsWKqJnP",
           "name": "Google Calendar account"
         }
       }
@@ -450,15 +450,15 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -16,
-        208
+        -560,
+        96
       ],
-      "id": "cefe02e1-5399-4b42-828f-b3aaa1f6a279",
+      "id": "21da2187-5a3d-438b-bcad-2f2a9451c7b4",
       "name": "Registrar",
       "alwaysOutputData": true,
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "gWSCpACgvfwv0eO3",
+          "id": "U0ZzoFnaRUMS9JmW",
           "name": "Google Sheets account"
         }
       }
@@ -473,16 +473,16 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        -224,
-        496
+        -768,
+        384
       ],
-      "id": "788a65d2-9ccd-4a94-892a-02a87f35edd4",
+      "id": "2a7907f3-52a2-4fac-a77e-494acd770ffd",
       "name": "Rechazo",
       "webhookId": "70d27376-afc5-457e-9a85-42c6ebf0d87c",
       "credentials": {
         "gmailOAuth2": {
-          "id": "irwNL1VCyr8bqWol",
-          "name": "Gmail account 2"
+          "id": "PI0JLj0Jq8eA1fLT",
+          "name": "Gmail account"
         }
       }
     },
@@ -507,15 +507,15 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -1200,
-        368
+        -1744,
+        256
       ],
-      "id": "a4a1edb3-8e1b-4502-8663-32b257b78c5d",
+      "id": "68468046-5264-4e15-beea-5ccb8f41392a",
       "name": "Revisar reservas",
       "alwaysOutputData": true,
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "gWSCpACgvfwv0eO3",
+          "id": "U0ZzoFnaRUMS9JmW",
           "name": "Google Sheets account"
         }
       }
@@ -530,10 +530,10 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 1,
       "position": [
-        1264,
-        688
+        720,
+        576
       ],
-      "id": "50af4715-ccf8-4fc5-b1c1-8b2fe8193d35",
+      "id": "4eed461a-22dd-4576-aed7-06b9163151b2",
       "webhookId": "423c2399-1662-4583-afd3-dd9c4bfbc228"
     },
     {
@@ -566,13 +566,13 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4,
       "position": [
-        1488,
-        688
+        944,
+        576
       ],
-      "id": "e249d3a9-f768-402e-9e94-973c882be62a",
+      "id": "a2b903c4-3e6a-4072-8122-4cabb9704bdc",
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "gWSCpACgvfwv0eO3",
+          "id": "U0ZzoFnaRUMS9JmW",
           "name": "Google Sheets account"
         }
       }
@@ -585,10 +585,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1712,
-        688
+        1168,
+        576
       ],
-      "id": "980f50a0-3113-4496-ac79-d4cca44dec37"
+      "id": "daa9f09b-a13a-41bc-9468-866f9e003ff8"
     },
     {
       "parameters": {
@@ -613,13 +613,13 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4,
       "position": [
-        1936,
-        688
+        1392,
+        576
       ],
-      "id": "39ad2b11-6a28-4aa2-9b57-ff0029e585f0",
+      "id": "6106a143-fd5b-4265-9252-f85ea786c78c",
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "gWSCpACgvfwv0eO3",
+          "id": "U0ZzoFnaRUMS9JmW",
           "name": "Google Sheets account"
         }
       }
@@ -632,10 +632,10 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1,
       "position": [
-        3056,
-        688
+        2512,
+        576
       ],
-      "id": "e370d3d3-fef7-4749-a4ba-f7394a746a87"
+      "id": "3e50ffd6-6009-430f-91bd-27c55c4f3c20"
     },
     {
       "parameters": {
@@ -645,19 +645,19 @@
         "message": "=Su reserva el dia {{ $('Google Sheets - Buscar por ID').item.json.Fecha }} a las {{ $('Google Sheets - Buscar por ID').item.json.HoraInicio }} ha sido cancelada exitosamente.",
         "options": {}
       },
-      "id": "04305a6e-1744-4d17-8904-d524364f67b7",
+      "id": "3c48a135-cb19-4bf7-8cff-71c044a54f2d",
       "name": "Gmail - Enviar notificación cancelación",
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        2832,
-        688
+        2288,
+        576
       ],
       "webhookId": "fcbeb1e2-f8ae-4e34-9e6d-f89c94f5d408",
       "credentials": {
         "gmailOAuth2": {
-          "id": "irwNL1VCyr8bqWol",
-          "name": "Gmail account 2"
+          "id": "PI0JLj0Jq8eA1fLT",
+          "name": "Gmail account"
         }
       }
     },
@@ -676,17 +676,17 @@
           "recurringEventHandling": "expand"
         }
       },
-      "id": "dd82b11f-f1a3-4e42-ae97-6eb9a79fc84a",
+      "id": "c7f4c7ba-6535-401d-9c8b-54d98a6dc154",
       "name": "Google Calendar - Eliminar evento",
       "type": "n8n-nodes-base.googleCalendar",
       "typeVersion": 1.3,
       "position": [
-        2160,
-        480
+        1616,
+        368
       ],
       "credentials": {
         "googleCalendarOAuth2Api": {
-          "id": "LWS8EKe877hhB3ZS",
+          "id": "YMklK1o4xsWKqJnP",
           "name": "Google Calendar account"
         }
       }
@@ -695,13 +695,13 @@
       "parameters": {
         "jsCode": "// Extract the event ID from the first item returned by Google Calendar\nconst items = $input.all();\n\nif (items.length > 0 && items[0].json.id) {\n  return [{\n    json: {\n      eventId: items[0].json.id,\n      calendarId: items[0].json.organizer?.email || 'proyectoespacioscorporativos@gmail.com'\n    }\n  }];\n} else {\n  // No event found, return empty result\n  return [{\n    json: {\n      eventId: null,\n      message: 'No event found to delete'\n    }\n  }];\n}"
       },
-      "id": "c6bd5304-3b59-4121-828f-242e9388c12a",
+      "id": "8bcc4336-d0dc-44c5-a9db-34d1713bc69d",
       "name": "Code - Extraer Event ID",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        2384,
-        832
+        1840,
+        720
       ]
     },
     {
@@ -716,17 +716,17 @@
         "eventId": "={{ $('Code - Extraer Event ID').item.json.eventId }}",
         "options": {}
       },
-      "id": "c099c192-5e70-4a9d-8b16-16c3afcc0a2b",
+      "id": "ebfe8204-764c-401c-b7e4-60260038c990",
       "name": "Google Calendar - Eliminar por ID",
       "type": "n8n-nodes-base.googleCalendar",
       "typeVersion": 1.3,
       "position": [
-        2608,
-        816
+        2064,
+        704
       ],
       "credentials": {
         "googleCalendarOAuth2Api": {
-          "id": "LWS8EKe877hhB3ZS",
+          "id": "YMklK1o4xsWKqJnP",
           "name": "Google Calendar account"
         }
       }
@@ -738,10 +738,10 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        1296,
-        464
+        752,
+        352
       ],
-      "id": "3056db5a-f459-457a-9718-4d239ee39ad0",
+      "id": "46cf6f5c-2ba7-4395-bedb-48e102bfc9ea",
       "name": "Sticky Note1"
     },
     {
@@ -753,10 +753,10 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -2464,
-        944
+        -3008,
+        832
       ],
-      "id": "c7ad08af-aa31-410f-8b4b-8a2a3808a715",
+      "id": "9bb034cc-27ae-47e2-8dd7-8d422ccd7680",
       "name": "Sticky Note"
     },
     {
@@ -768,10 +768,10 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2.1,
       "position": [
-        -2160,
-        832
+        -2704,
+        720
       ],
-      "id": "d76228ed-dd63-4826-913e-31553611121d",
+      "id": "ded7770c-dd65-48a5-bbe3-912415c854a8",
       "name": "Test - Datos completos",
       "webhookId": "26c8edf5-34de-459c-a2d0-b75c527f4b3c"
     },
@@ -784,10 +784,10 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2.1,
       "position": [
-        -2160,
-        1072
+        -2704,
+        960
       ],
-      "id": "76ceed8f-cfe7-4308-ac15-6b77ddabf7e4",
+      "id": "c8a1d6cc-93d0-4508-9380-8f1babac22e0",
       "name": "Datos formulario",
       "webhookId": "26c8edf5-34de-459c-a2d0-b75c527f4b3c"
     },
@@ -799,10 +799,10 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2.1,
       "position": [
-        -1488,
-        432
+        -2032,
+        320
       ],
-      "id": "4b5d21fa-bf79-4fa0-bb4a-52018f8afe9e",
+      "id": "d8250352-6072-40dd-b454-d2d8b796fa87",
       "name": "Test - autenticacion",
       "webhookId": "dead6216-b902-46f0-a046-ee484fa9fb2a"
     },
@@ -814,11 +814,11 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -1072,
-        192
+        -1616,
+        80
       ],
       "typeVersion": 1,
-      "id": "83a71dc3-e83b-447b-ab78-2775a4e087a1",
+      "id": "0a2b5adc-e684-46b5-9f05-a6e635dddf3c",
       "name": "Sticky Note2"
     },
     {
@@ -850,15 +850,15 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -1040,
-        368
+        -1584,
+        256
       ],
-      "id": "bef62166-ea37-4214-8e29-e5612636837d",
+      "id": "27085044-8cd3-49f4-b334-87202f26e22b",
       "name": "Extraer solicitud de reserva",
       "executeOnce": true,
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "gWSCpACgvfwv0eO3",
+          "id": "U0ZzoFnaRUMS9JmW",
           "name": "Google Sheets account"
         }
       }
@@ -871,10 +871,10 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2.1,
       "position": [
-        -1488,
-        592
+        -2032,
+        480
       ],
-      "id": "bbff4827-5c4e-40f4-8d4e-7d7cae5e9f4e",
+      "id": "0ab18fee-645b-466f-b572-a37a19c986f3",
       "name": "Test - auth reserva ocupada",
       "webhookId": "dead6216-b902-46f0-a046-ee484fa9fb2a"
     },
@@ -885,23 +885,23 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -272,
-        128
+        -816,
+        16
       ],
-      "id": "2d4e7ae5-3bb2-4069-a638-16417406e4c5",
+      "id": "2899eadd-8dc9-4533-a630-8a1762b808db",
       "name": "Crear ID"
     },
     {
       "parameters": {
-        "jsCode": "const reservasExistentes = $(\"Revisar reservas\").all().map(item => item.json);\n\nfunction horaEnMinutos(horaStr) {\n  horaStr = horaStr.trim().toLowerCase();\n\n  // Caso 1: formato con am/pm → \"10:00:00 a.m.\"\n  if (horaStr.includes(\"a.m.\") || horaStr.includes(\"p.m.\")) {\n    const [time, meridian] = horaStr.split(\" \");\n    const [hStr, mStr, sStr] = time.split(\":\");\n\n    let horas = parseInt(hStr, 10);\n    const minutos = parseInt(mStr, 10);\n    const segundos = sStr ? parseInt(sStr, 10) : 0;\n\n    if (meridian === \"p.m.\" && horas !== 12) {\n      horas += 12;\n    }\n    if (meridian === \"a.m.\" && horas === 12) {\n      horas = 0;\n    }\n\n    return horas * 60 + minutos + Math.floor(segundos / 60);\n  }\n\n  // Caso 2: formato 24 horas → \"10:00\" o \"14:00\"\n  const [hStr, mStr] = horaStr.split(\":\");\n  const horas = parseInt(hStr, 10);\n  const minutos = parseInt(mStr, 10);\n\n  return horas * 60 + minutos;\n}\n\n\n\nfunction normalizarFecha(fechaStr) {\n  fechaStr = fechaStr.trim();\n\n  // Caso 1: formato DD/MM/YYYY → \"20/12/2025\"\n  if (fechaStr.includes(\"/\")) {\n    const [dia, mes, anio] = fechaStr.split(\"/\");\n    return new Date(`${anio}-${mes.padStart(2,\"0\")}-${dia.padStart(2,\"0\")}`);\n  }\n\n  // Caso 2: formato YYYY-MM-DD → \"2025-12-20\"\n  if (fechaStr.includes(\"-\")) {\n    return new Date(fechaStr);\n  }\n\n  throw new Error(\"Formato de fecha no reconocido: \" + fechaStr);\n}\n\n\n\n\nfunction validarReserva(reservas) {\n  const inicio = horaEnMinutos($input.first().json['Hora de inicio']);\n  const fin = horaEnMinutos($input.first().json['Hora fin']);\n  const fecha = normalizarFecha($input.first().json['Fecha de la reunión']);\n  \n  for (let index = 0; index < reservas.length; index++) {\n    const r = reservas[index];\n    if(r.Sala === $input.first().json['Selecciona una sala'] && fin > horaEnMinutos(r.HoraInicio) && inicio < horaEnMinutos(r.HoraFin) && fecha.getDate() === normalizarFecha(r.Fecha).getDate()){\n      return false;\n    }\n  }\n  return true;\n}\n\n\n\n\nfunction convertirFecha(fechaStr) {\n  const [dia, mes, anio] = fechaStr.split(\"/\");\n  return `${anio}-${mes.padStart(2, \"0\")}-${dia.padStart(2, \"0\")}`;\n}\n\nfunction minutosAHora(minutos) {\n  const horas = Math.floor(minutos / 60);\n  const mins = minutos % 60;\n\n  // Formateamos con dos dígitos\n  const horasStr = String(horas).padStart(2, \"0\");\n  const minsStr = String(mins).padStart(2, \"0\");\n\n  return `${horasStr}:${minsStr}`;\n}\n\nconst resultado = validarReserva(reservasExistentes);\nconst date = convertirFecha($input.first().json['Fecha de la reunión']);\n\nconst inicio = horaEnMinutos($input.first().json['Hora de inicio'])\nconst fin = horaEnMinutos($input.first().json['Hora fin'])\nconst HoraInicio = minutosAHora(inicio)\nconst HoraFin = minutosAHora(fin)\n\n\nreturn {\n  resultado,\n  sala: $input.first().json['Selecciona una sala'],\n  date,\n  HoraInicio,\n  HoraFin\n};\n"
+        "jsCode": "const reservasExistentes = $(\"Revisar reservas\").all().map(item => item.json);\n\nfunction horaEnMinutos(horaStr) {\n  horaStr = horaStr.trim().toLowerCase();\n\n  // Caso 1: formato con am/pm → \"10:00:00 a.m.\"\n  if (horaStr.includes(\"a.m.\") || horaStr.includes(\"p.m.\")) {\n    const [time, meridian] = horaStr.split(\" \");\n    const [hStr, mStr, sStr] = time.split(\":\");\n\n    let horas = parseInt(hStr, 10);\n    const minutos = parseInt(mStr, 10);\n    const segundos = sStr ? parseInt(sStr, 10) : 0;\n\n    if (meridian === \"p.m.\" && horas !== 12) {\n      horas += 12;\n    }\n    if (meridian === \"a.m.\" && horas === 12) {\n      horas = 0;\n    }\n\n    return horas * 60 + minutos + Math.floor(segundos / 60);\n  }\n\n  // Caso 2: formato 24 horas → \"10:00\" o \"14:00\"\n  const [hStr, mStr] = horaStr.split(\":\");\n  const horas = parseInt(hStr, 10);\n  const minutos = parseInt(mStr, 10);\n\n  return horas * 60 + minutos;\n}\n\n\n\nfunction normalizarFecha(fechaStr) {\n  fechaStr = fechaStr.trim();\n\n  // Caso 1: formato DD/MM/YYYY → \"20/12/2025\"\n  if (fechaStr.includes(\"/\")) {\n    const [dia, mes, anio] = fechaStr.split(\"/\");\n    return new Date(`${anio}-${mes.padStart(2,\"0\")}-${dia.padStart(2,\"0\")}`);\n  }\n\n  // Caso 2: formato YYYY-MM-DD → \"2025-12-20\"\n  if (fechaStr.includes(\"-\")) {\n    return new Date(fechaStr);\n  }\n\n  throw new Error(\"Formato de fecha no reconocido: \" + fechaStr);\n}\n\n\n\n\nfunction validarReserva(reservas) {\n  const inicio = horaEnMinutos($input.first().json['Hora Inicio']);\n  const fin = horaEnMinutos($input.first().json['Hora Termino']);\n  const fecha = normalizarFecha($input.first().json.Fecha);\n  \n  for (let index = 0; index < reservas.length; index++) {\n    const r = reservas[index];\n    if(r.Sala === $input.first().json['Selecciona una sala'] && fin > horaEnMinutos(r.HoraInicio) && inicio < horaEnMinutos(r.HoraFin) && fecha.getDate() === normalizarFecha(r.Fecha).getDate()){\n      return false;\n    }\n  }\n  return true;\n}\n\n\n\n\nfunction convertirFecha(fechaStr) {\n  const [dia, mes, anio] = fechaStr.split(\"/\");\n  return `${anio}-${mes.padStart(2, \"0\")}-${dia.padStart(2, \"0\")}`;\n}\n\nfunction minutosAHora(minutos) {\n  const horas = Math.floor(minutos / 60);\n  const mins = minutos % 60;\n\n  // Formateamos con dos dígitos\n  const horasStr = String(horas).padStart(2, \"0\");\n  const minsStr = String(mins).padStart(2, \"0\");\n\n  return `${horasStr}:${minsStr}`;\n}\n\nconst resultado = validarReserva(reservasExistentes);\nconst date = convertirFecha($input.first().json.Fecha);\n\nconst inicio = horaEnMinutos($input.first().json['Hora Inicio'])\nconst fin = horaEnMinutos($input.first().json['Hora Termino'])\nconst HoraInicio = minutosAHora(inicio)\nconst HoraFin = minutosAHora(fin)\n\n\nreturn {\n  resultado,\n  sala: $input.first().json['Selecciona una sala'],\n  date,\n  HoraInicio,\n  HoraFin\n};\n"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -752,
-        368
+        -1296,
+        256
       ],
-      "id": "fdaf4f9e-3a38-4c7c-baf6-c394347dccd5",
+      "id": "75110c77-94b6-45eb-88b6-7f5014fc67fd",
       "name": "Comparar horarios",
       "executeOnce": false
     }
@@ -1077,11 +1077,6 @@
             "index": 0
           }
         ]
-      ]
-    },
-    "Webhook - Recibir Reserva": {
-      "main": [
-        []
       ]
     },
     "IF - ¿Disponible?": {
@@ -1338,15 +1333,19 @@
       ]
     }
   },
-  "active": false,
+  "active": true,
   "settings": {
-    "executionOrder": "v1"
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false,
+    "errorWorkflow": "TKv6ipo4nI363US7",
+    "timeSavedPerExecution": 0
   },
-  "versionId": "8dcd63b5-42eb-4114-8d7d-e8723598b153",
+  "versionId": "18618296-27c9-4afb-b61e-3ef282e07737",
   "meta": {
     "templateCredsSetupCompleted": true,
-    "instanceId": "329da24686c0fb2dc28fa0c9c962e549e2a0d4f6a8ac08a0b7b38a0d77558624"
+    "instanceId": "d4c9b3ce393a220acee21dac452e47e92f8db10620fe87691ea485c77483a9f5"
   },
-  "id": "itd7GmBmfbZto0ea",
+  "id": "n3utUVKmu0gP3Osb",
   "tags": []
 }
