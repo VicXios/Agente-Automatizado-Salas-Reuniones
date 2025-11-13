@@ -1,0 +1,283 @@
+{
+  "name": "HU-09: Gestion de salas",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "Salas",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        96
+      ],
+      "id": "06f1e9f6-bec7-4a26-b67d-c83e4e75b3ba",
+      "name": "Webhook",
+      "webhookId": "6a731da8-1093-4629-81ef-5a7e8f648c95"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M",
+          "mode": "list",
+          "cachedResultName": "Salas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1702884083,
+          "mode": "list",
+          "cachedResultName": "Solicitud gestion de sala",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit#gid=1702884083"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Marca temporal",
+              "lookupValue": "={{ $json.body.id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        208,
+        0
+      ],
+      "id": "24785de6-b849-4ece-9f3b-0e46627b8116",
+      "name": "Get datos solicitud",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "gWSCpACgvfwv0eO3",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "5848cfac-f7eb-4970-8ec1-9676a052913a"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "b6919c9a-1abd-4f99-8528-a8126969cbbb",
+                    "leftValue": "",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "2ae0a2d7-8317-49b2-84ec-63a0c0b68aa8",
+                    "leftValue": "",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {
+          "ignoreCase": false
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        720,
+        -16
+      ],
+      "id": "dfdb4f63-29dc-4e4f-98c8-d46fada83ba6",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "jsCode": "const correo = $input.first().json['Correo administrador'];\nconst nuevaSala = $input.first().json['Codigo de sala unico'];\nconst capacidad = $input.first().json['Capacidad maxima de participantes'];\nconst apertura = $input.first().json['Hora de apertura'];\nconst cierre = $input.first().json['Hora de cierre'];\nconst ubicacion = $input.first().json['Ubicacion (piso, edificio,sector)'];\nconst eliminarSala = $input.first().json['Codigo sala a eliminar'];\n\n// Función auxiliar para verificar si un campo tiene valor\nfunction tieneDato(valor) {\n  return valor !== undefined && valor !== null && String(valor).trim() !== '';\n}\n\nlet tipoSolicitud = \"incompleto\";\n\n// Caso AGREGAR: todos los campos de agregar tienen datos y eliminarSala está vacío\nif (\n  tieneDato(correo) &&\n  tieneDato(nuevaSala) &&\n  tieneDato(capacidad) &&\n  tieneDato(apertura) &&\n  tieneDato(cierre) &&\n  tieneDato(ubicacion) &&\n  !tieneDato(eliminarSala)\n) {\n  tipoSolicitud = \"agregar\";\n}\n\n// Caso ELIMINAR: correo y eliminarSala tienen datos y el resto está vacío\nelse if (\n  tieneDato(correo) &&\n  tieneDato(eliminarSala) &&\n  !tieneDato(nuevaSala) &&\n  !tieneDato(capacidad) &&\n  !tieneDato(apertura) &&\n  !tieneDato(cierre) &&\n  !tieneDato(ubicacion)\n) {\n  tipoSolicitud = \"eliminar\";\n}\n\n// En cualquier otro escenario → incompleto\nreturn [\n  {\n    json: {\n      ...$input.first().json,\n      tipoSolicitud\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        464,
+        0
+      ],
+      "id": "b65d2a64-4de5-4e45-aabd-82cd6ea926b0",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "Salas",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        -128
+      ],
+      "id": "33c9137e-225e-41e3-8852-7ffd54626871",
+      "name": "Webhook1",
+      "webhookId": "6a731da8-1093-4629-81ef-5a7e8f648c95"
+    }
+  ],
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "jeremy-pily-prediligently.ngrok-free.dev",
+            "user-agent": "Mozilla/5.0 (compatible; Google-Apps-Script; beanserver; +https://script.google.com; id: UAEmdDd9BY3vrcnO5EVquSyGnLTuW6Gcikw)",
+            "content-length": "28",
+            "accept-encoding": "gzip, deflate, br",
+            "content-type": "application/json",
+            "x-forwarded-for": "107.178.192.42",
+            "x-forwarded-host": "jeremy-pily-prediligently.ngrok-free.dev",
+            "x-forwarded-proto": "https"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "id": "13/11/2025 11:25:35"
+          },
+          "webhookUrl": "http://localhost:5678/webhook-test/Salas",
+          "executionMode": "test"
+        }
+      }
+    ],
+    "Webhook1": [
+      {
+        "json": {
+          "headers": {
+            "host": "jeremy-pily-prediligently.ngrok-free.dev",
+            "user-agent": "Mozilla/5.0 (compatible; Google-Apps-Script; beanserver; +https://script.google.com; id: UAEmdDd9BY3vrcnO5EVquSyGnLTuW6Gcikw)",
+            "content-length": "28",
+            "accept-encoding": "gzip, deflate, br",
+            "content-type": "application/json",
+            "x-forwarded-for": "107.178.192.42",
+            "x-forwarded-host": "jeremy-pily-prediligently.ngrok-free.dev",
+            "x-forwarded-proto": "https"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "id": "13/11/2025 12:08:12"
+          },
+          "webhookUrl": "http://localhost:5678/webhook-test/Salas",
+          "executionMode": "test"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Get datos solicitud",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get datos solicitud": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook1": {
+      "main": [
+        [
+          {
+            "node": "Get datos solicitud",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "1d4aece3-ac32-4243-a340-280035b77026",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "329da24686c0fb2dc28fa0c9c962e549e2a0d4f6a8ac08a0b7b38a0d77558624"
+  },
+  "id": "lHBulavQtPFjbxR7",
+  "tags": []
+}
