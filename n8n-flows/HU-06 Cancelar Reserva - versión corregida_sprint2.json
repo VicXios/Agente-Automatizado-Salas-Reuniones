@@ -1,0 +1,423 @@
+{
+  "name": "HU-06 Cancelar Reserva - versión corregida",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "98bd68b7-6d8d-490a-918a-6b51fd9d5af5",
+        "options": {}
+      },
+      "id": "141906e9-0440-41a0-93e2-244e3667a931",
+      "name": "Webhook Cancelar",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -720,
+        224
+      ],
+      "webhookId": "98bd68b7-6d8d-490a-918a-6b51fd9d5af5"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M",
+          "mode": "list",
+          "cachedResultName": "Salas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1945850352,
+          "mode": "list",
+          "cachedResultName": "Reservas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit#gid=1945850352"
+        },
+        "options": {}
+      },
+      "id": "db3ad54a-b742-4dde-b8c3-02e7db199518",
+      "name": "Google Sheets - Obtener filas",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        -480,
+        224
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "M9S5GWOfIYFeuaNB",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// ID desde el webhook (acepta body.ID o ID plano)\nconst webhook = $('Webhook Cancelar').first().json;\nconst idToCancel = webhook.body?.ID ?? webhook.ID;\nif (!idToCancel) throw new Error('No se recibió ID en el webhook.');\n\n// Filas del Get Row(s)\nconst rows = $input.all();\nlet found = null;\nlet rowNumber = null;\n\nfor (let i = 0; i < rows.length; i++) {\n  const r = rows[i].json;\n  if (r.ID === idToCancel) {\n    found = r;\n    // 1 = header, 2 = primera fila de datos\n    rowNumber = r.rowNumber ?? r.rowIndex ?? (i + 2);\n    break;\n  }\n}\n\nif (!found || !rowNumber || rowNumber < 2) {\n  throw new Error(`No se encontró reserva válida con ID ${idToCancel}`);\n}\n\nreturn [{\n  json: {\n    id: found.ID,\n    sala: found.Sala,\n    email: found.Correo,\n    fecha: found.Fecha,\n    horaInicio: found.HoraInicio,\n    horaFin: found.HoraFin,\n    titulo: found.Titulo,\n    descripcion: found.Descripcion,\n    participantes: found.Participantes,   // puede venir como string JSON\n    idCalendar: found.ID_Calendar,\n    linkCalendar: found.Link_Calendar,\n    rowNumber\n  }\n}];\n"
+      },
+      "id": "99274640-2265-44c2-b612-a8492318f473",
+      "name": "Code - Buscar reserva por ID",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -240,
+        224
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "documentId": {
+          "__rl": true,
+          "value": "1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M",
+          "mode": "list",
+          "cachedResultName": "Salas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1945850352,
+          "mode": "list",
+          "cachedResultName": "Reservas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit#gid=1945850352"
+        },
+        "startIndex": "={{ $json.rowNumber }}"
+      },
+      "id": "221028b7-0a97-4759-b5c5-77d953944cb0",
+      "name": "Google Sheets - Eliminar fila",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        0,
+        224
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "M9S5GWOfIYFeuaNB",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "calendar": "proyectoespacioscorporativos@gmail.com",
+        "eventId": "={{ $('Code - Buscar reserva por ID').first().json.idCalendar }}",
+        "options": {}
+      },
+      "id": "3c2d8e0a-a4cc-447d-bf2d-da0df29b9781",
+      "name": "Google Calendar - Eliminar por ID",
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        -16
+      ],
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "PtPdMO6WOl3a215X",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Code - Buscar reserva por ID').first().json.email }}",
+        "subject": "Confirmación de cancelación de reserva",
+        "message": "==<p>Hola,</p>\n<p>Tu reserva con <strong>ID {{ $('Code - Buscar reserva por ID').first().json.id }}</strong> para el <strong>{{ $('Code - Buscar reserva por ID').first().json.fecha }}</strong> a las <strong>{{ $('Code - Buscar reserva por ID').first().json.horaInicio }}</strong> ha sido cancelada exitosamente.</p>\n<p>Saludos.</p>\n",
+        "options": {}
+      },
+      "id": "9f3a3065-7b06-482d-a06d-6aa06fa64c43",
+      "name": "Gmail - Enviar notificación cancelación",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        240,
+        224
+      ],
+      "webhookId": "57779984-5048-4147-8381-b9984886e33d",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "LGezdq22HDgoCHcX",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "bee89e54-86da-404d-9d2c-1fc3a0162966",
+      "name": "Responder éxito",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        480,
+        224
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## HU-06: \nCancela una reserva - Elimina la fila en google sheet - Elimina el evento en google calendar en base al ID - Registra la cancelacion en otra hoja google sheet - Envia un correo de notificacion",
+        "height": 192
+      },
+      "id": "6ee512e0-d599-4238-b48b-4f07f20e15f5",
+      "name": "HU-06: Cancelación de reserva",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -720,
+        -48
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M",
+          "mode": "list",
+          "cachedResultName": "Salas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1486633971,
+          "mode": "list",
+          "cachedResultName": "Reservas canceladas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit#gid=1486633971"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ID": "={{ $json.id }}",
+            "HoraInicio": "={{ $json.horaInicio }}",
+            "Fecha": "={{ $json.fecha }}",
+            "HoraFin": "={{ $json.horaFin }}",
+            "Titulo": "={{ $json.titulo }}",
+            "Correo": "={{ $json.email }}",
+            "Participantes": "={{ $json.participantes }}",
+            "ID_Calendar": "={{ $json.idCalendar }}",
+            "Link_Calendar": "={{ $json.linkCalendar }}",
+            "Sala": "={{ $json.sala }}",
+            "Descripcion": "={{ $json.descripcion }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Sala",
+              "displayName": "Sala",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Fecha",
+              "displayName": "Fecha",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "HoraInicio",
+              "displayName": "HoraInicio",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "HoraFin",
+              "displayName": "HoraFin",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Titulo",
+              "displayName": "Titulo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Correo",
+              "displayName": "Correo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Descripcion",
+              "displayName": "Descripcion",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Participantes",
+              "displayName": "Participantes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ID_Calendar",
+              "displayName": "ID_Calendar",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Link_Calendar",
+              "displayName": "Link_Calendar",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "f5ffdc94-b1a4-4083-975f-c544b6da3718",
+      "name": "Google Sheets - Registrar cancelacion",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        0,
+        448
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "M9S5GWOfIYFeuaNB",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "Ejemplo JSON\n{\n\"ID\": \"6nbcrjndbc06a8puu68pbu74b8\"\n}",
+        "height": 96,
+        "width": 288
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -768,
+        432
+      ],
+      "id": "1f005345-4fae-41f1-90ce-9aa99c652792",
+      "name": "Sticky Note"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook Cancelar": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets - Obtener filas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets - Obtener filas": {
+      "main": [
+        [
+          {
+            "node": "Code - Buscar reserva por ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code - Buscar reserva por ID": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets - Eliminar fila",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Google Calendar - Eliminar por ID",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Google Sheets - Registrar cancelacion",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets - Eliminar fila": {
+      "main": [
+        [
+          {
+            "node": "Gmail - Enviar notificación cancelación",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail - Enviar notificación cancelación": {
+      "main": [
+        [
+          {
+            "node": "Responder éxito",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "cc0680a5-373d-4306-b7a3-805a8e25ecee",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "4bbe6dcbdeac6e58e31d8870bdb4658b96b3a51b38c763a613f7198406b04293"
+  },
+  "id": "48dKOP6uqiDQhM0f",
+  "tags": []
+}
