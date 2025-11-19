@@ -1,6 +1,82 @@
 {
-  "name": "prueba de flujo",
+  "name": "HU-09: Gestion de salas",
   "nodes": [
+    {
+      "parameters": {
+        "functionCode": "// --- Obtener datos, sea directo o dentro de body ---\nconst data = $(\"Extraer solicitud de reserva\").all().map(item => item.json);\nlet participantes = data.map(item => item[\"Correos participantes\"]);\n\n// Si no hay participantes, error\nif (!participantes || participantes.length === 0) {\n  return [{\n    json: {\n      error: true,\n      mensaje: 'Debe incluir al menos un participante en el campo \"participantes\".'\n    }\n  }];\n}\n\n// Si llega como texto separado por comas\nif (!Array.isArray(participantes)) {\n  participantes = typeof participantes === 'string'\n    ? participantes.split(',').map(c => c.trim())\n    : [];\n}\n\n// Validación de formato\nconst regexCorreo = /^[\\w.-]+@[\\w.-]+\\.[A-Za-z]{2,}$/;\nconst validos = participantes.filter((c, i, self) => regexCorreo.test(c) && self.indexOf(c) === i);\nconst invalidos = participantes.filter(c => !regexCorreo.test(c));\n\n// Si hay inválidos, error\nif (invalidos.length > 0) {\n  return [{\n    json: {\n      error: true,\n      mensaje: `❌ Correos inválidos detectados: ${invalidos.join(', ')}`\n    }\n  }];\n}\n\nreturn [{\n  json: {\n    ...data,\n    participantesValidos: validos,\n    totalParticipantes: validos.length\n  }\n}];\n"
+      },
+      "id": "e68de4a0-be26-4451-b71c-83713cb42bfe",
+      "name": "Validar Participantes",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        -272,
+        1648
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.error }}",
+              "value2": "={{ true }}"
+            }
+          ]
+        }
+      },
+      "id": "16cc6801-c2fc-4eb0-ac87-21c91f7907cb",
+      "name": "IF - ¿Error en correos?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        -128,
+        1632
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $('IF - ¿Disponible?1').item.json.resultado }}",
+              "value2": "={{ true }}"
+            }
+          ]
+        }
+      },
+      "id": "84ee129b-7bc6-4482-a2ce-62c3437ceadb",
+      "name": "IF - ¿Disponible?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        48,
+        1648
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $item(0).$node[\"Webhook - Recibir Reserva\"].json.body.correo }}\n",
+        "subject": "Reserva rechazada",
+        "message": "Hola! Informamos que tu reserva fue rechazada, ya existe una en ese horario.",
+        "options": {}
+      },
+      "id": "fad0ce8b-3ec0-4f3c-9353-27513ccfa70f",
+      "name": "Gmail Rechazo",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        272,
+        1712
+      ],
+      "webhookId": "c1112f79-322b-4846-9cab-bdee4819f5c7",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "irwNL1VCyr8bqWol",
+          "name": "Gmail account 2"
+        }
+      }
+    },
     {
       "parameters": {
         "conditions": {
@@ -79,10 +155,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -2480,
-        832
+        -528,
+        2432
       ],
-      "id": "42bf1b9b-12ba-434d-8b92-2c2f1d342452",
+      "id": "30a739d6-2b23-425b-a7a4-863c4113ca5b",
       "name": "Datos completos?"
     },
     {
@@ -106,14 +182,14 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -2224,
-        944
+        -272,
+        2544
       ],
-      "id": "f49ae026-c7e3-4130-9ecc-05e60005ae74",
+      "id": "dde0bd87-249c-454d-ac41-d4e56a56e023",
       "name": "salasDisponibles",
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "U0ZzoFnaRUMS9JmW",
+          "id": "gWSCpACgvfwv0eO3",
           "name": "Google Sheets account"
         }
       }
@@ -125,10 +201,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -2032,
-        928
+        -80,
+        2528
       ],
-      "id": "a189a0a0-b7a6-428f-9f2d-7f919e4d918f",
+      "id": "f22c0a8b-3b34-49ba-aa37-3e1fff25145b",
       "name": "Code in JavaScript"
     },
     {
@@ -141,16 +217,16 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        -1792,
-        1088
+        160,
+        2688
       ],
-      "id": "40393708-74c1-4556-baea-a3da6e4d2fe9",
+      "id": "8a64ebfd-2d00-4910-bdae-f7b24bd29089",
       "name": "Send a message",
       "webhookId": "e1452d47-c4eb-4d4c-a3ea-669e4a43dd6b",
       "credentials": {
         "gmailOAuth2": {
-          "id": "PI0JLj0Jq8eA1fLT",
-          "name": "Gmail account"
+          "id": "irwNL1VCyr8bqWol",
+          "name": "Gmail account 2"
         }
       }
     },
@@ -181,10 +257,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -2080,
-        688
+        -128,
+        2288
       ],
-      "id": "477c4710-3221-41ac-950f-164a1e255381",
+      "id": "21d662de-ed39-496b-ab5f-dace5d6dc144",
       "name": "Filtrar dominio institucional"
     },
     {
@@ -194,10 +270,10 @@
       "type": "n8n-nodes-base.stopAndError",
       "typeVersion": 1,
       "position": [
-        -1776,
-        816
+        176,
+        2416
       ],
-      "id": "6b056ffd-438a-47f3-9980-4648c8be5ffd",
+      "id": "02a396cd-d8e8-4408-bf81-f10bac303e61",
       "name": "correo invalido"
     },
     {
@@ -208,16 +284,16 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2.1,
       "position": [
-        -2016,
-        112
+        -1072,
+        1776
       ],
-      "id": "2f72f926-4ea2-4748-98ea-14b69b3ca7d8",
+      "id": "80caeb28-16cd-49b0-bcb4-0ebac49186c0",
       "name": "Recibir autenticacion",
       "webhookId": "dead6216-b902-46f0-a046-ee484fa9fb2a"
     },
     {
       "parameters": {
-        "sendTo": "={{ $('Test - Datos completos').item.json.body.correo }}",
+        "sendTo": "={{ $('Datos completos?').item.json.body.correo }}",
         "subject": "Verificacion institucional requerida",
         "message": "=Hola,\n\nGracias por tu solicitud. Para completar la verificación institucional, por favor haz clic en el siguiente enlace y autentícate con tu cuenta uandresbello.edu:\n\n<a href=\"{{ $json.authLink }}\">Verificar ahora</a>\n\nEste enlace es único para tu solicitud y nos permitirá validar tu identidad.\n\nSaludos,  \nEquipo de reservas\n",
         "options": {}
@@ -225,16 +301,16 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        -1520,
-        624
+        432,
+        2224
       ],
-      "id": "7126ca99-10e8-446d-9c7c-5b234134913d",
+      "id": "51818962-52ad-4b2c-bedb-c95bcfdd1668",
       "name": "Send a message1",
       "webhookId": "50d3be20-271b-48d3-9d00-1a9341671f61",
       "credentials": {
         "gmailOAuth2": {
-          "id": "PI0JLj0Jq8eA1fLT",
-          "name": "Gmail account"
+          "id": "irwNL1VCyr8bqWol",
+          "name": "Gmail account 2"
         }
       }
     },
@@ -245,128 +321,11 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -1776,
-        624
+        176,
+        2224
       ],
-      "id": "80dc65f0-08f4-4c33-81ca-d781d7cb0d88",
+      "id": "5fe6cd71-89da-499e-999f-38f43b009d2e",
       "name": "Code in JavaScript1"
-    },
-    {
-      "parameters": {
-        "httpMethod": "POST",
-        "path": "reserva-sala",
-        "options": {}
-      },
-      "id": "a3d0ba9c-05bd-4b7d-bc9b-2c1631149570",
-      "name": "Webhook - Recibir Reserva",
-      "type": "n8n-nodes-base.webhook",
-      "typeVersion": 1,
-      "position": [
-        -2368,
-        224
-      ],
-      "webhookDescription": "Recibe sala, fecha, horaInicio, horaFin, correo, titulo, descripcion",
-      "webhookId": "ca13ae7b-95fc-4974-80ad-63ad82e04c8a"
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "boolean": [
-            {
-              "value1": "={{ $json.resultado }}",
-              "value2": "={{ true }}"
-            }
-          ]
-        }
-      },
-      "id": "a98d056d-f285-4aab-97c6-5aa61bc75f24",
-      "name": "IF - ¿Disponible?",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 1,
-      "position": [
-        -992,
-        256
-      ],
-      "alwaysOutputData": false
-    },
-    {
-      "parameters": {
-        "options": {}
-      },
-      "id": "08a8b285-d963-4ac8-ab79-cbcd4df6bace",
-      "name": "Responder Webhook - OK",
-      "type": "n8n-nodes-base.respondToWebhook",
-      "typeVersion": 1,
-      "position": [
-        0,
-        304
-      ]
-    },
-    {
-      "parameters": {
-        "options": {}
-      },
-      "id": "3163c387-ee61-4968-a81b-091011e3feea",
-      "name": "Responder Webhook - Rechazo",
-      "type": "n8n-nodes-base.respondToWebhook",
-      "typeVersion": 1,
-      "position": [
-        -544,
-        416
-      ]
-    },
-    {
-      "parameters": {
-        "sendTo": "={{ $('Extraer solicitud de reserva').item.json.Correo }}",
-        "subject": "Tu reserva fue exitosa",
-        "message": "Hola! informamos que tu reciente reserva fue aprobada con exito!",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.gmail",
-      "typeVersion": 2.1,
-      "position": [
-        -320,
-        176
-      ],
-      "id": "3a312645-cd05-4df8-8cc9-427dfeba17b2",
-      "name": "Gmail Confirmacion",
-      "webhookId": "3e50c9f0-d2aa-462d-be2b-ac0a0572ce6e",
-      "credentials": {
-        "gmailOAuth2": {
-          "id": "PI0JLj0Jq8eA1fLT",
-          "name": "Gmail account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "calendar": {
-          "__rl": true,
-          "value": "proyectoespacioscorporativos@gmail.com",
-          "mode": "list",
-          "cachedResultName": "proyectoespacioscorporativos@gmail.com"
-        },
-        "start": "={{ $('Comparar horarios').item.json.date + \"T\" + $('Comparar horarios').item.json.HoraInicio + \":00-03:00\" }}",
-        "end": "={{ $('Comparar horarios').item.json.date + \"T\" + $('Comparar horarios').item.json.HoraFin + \":00-03:00\" }}",
-        "additionalFields": {
-          "id": "={{ $('Crear ID').item.json.ID }}",
-          "summary": "=Reserva"
-        }
-      },
-      "type": "n8n-nodes-base.googleCalendar",
-      "typeVersion": 1.3,
-      "position": [
-        0,
-        0
-      ],
-      "id": "36f4d924-1970-420f-83d3-77606e6d6399",
-      "name": "Google Calendar",
-      "credentials": {
-        "googleCalendarOAuth2Api": {
-          "id": "YMklK1o4xsWKqJnP",
-          "name": "Google Calendar account"
-        }
-      }
     },
     {
       "parameters": {
@@ -389,10 +348,12 @@
           "mappingMode": "defineBelow",
           "value": {
             "ID": "={{ $json.ID }}",
-            "Sala": "={{ $('Comparar horarios').item.json.sala }}",
+            "Sala": "={{ $('Extraer solicitud de reserva').item.json.Sala }}",
             "Fecha": "={{ $('Comparar horarios').item.json.date }}",
             "HoraInicio": "={{ $('Comparar horarios').item.json.HoraInicio }}",
-            "HoraFin": "={{ $('Comparar horarios').item.json.HoraFin }}"
+            "HoraFin": "={{ $('Comparar horarios').item.json.HoraFin }}",
+            "Correo": "={{ $('Extraer solicitud de reserva').item.json.Correo }}",
+            "Participantes": "={{ $('Extraer solicitud de reserva').item.json['Correos participantes'] }}"
           },
           "matchingColumns": [],
           "schema": [
@@ -440,6 +401,66 @@
               "display": true,
               "type": "string",
               "canBeUsedToMatch": true
+            },
+            {
+              "id": "Titulo",
+              "displayName": "Titulo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Correo",
+              "displayName": "Correo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Descripcion",
+              "displayName": "Descripcion",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Participantes",
+              "displayName": "Participantes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "ID_Calendar",
+              "displayName": "ID_Calendar",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Link_Calendar",
+              "displayName": "Link_Calendar",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
             }
           ],
           "attemptToConvertTypes": false,
@@ -450,22 +471,22 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -560,
-        96
+        384,
+        1584
       ],
-      "id": "21da2187-5a3d-438b-bcad-2f2a9451c7b4",
+      "id": "5d12883c-b078-482c-98e2-4a4c912561e9",
       "name": "Registrar",
       "alwaysOutputData": true,
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "U0ZzoFnaRUMS9JmW",
+          "id": "gWSCpACgvfwv0eO3",
           "name": "Google Sheets account"
         }
       }
     },
     {
       "parameters": {
-        "sendTo": "={{$item(0).$node[\"Webhook - Recibir Reserva\"].json.body.correo}}",
+        "sendTo": "={{ $('Extraer solicitud de reserva').item.json.Correo }}",
         "subject": "Reserva rechazada",
         "message": "=Hola! informamos que tu reciente reserva fue rechazada.",
         "options": {}
@@ -473,276 +494,18 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        -768,
-        384
+        -256,
+        1888
       ],
-      "id": "2a7907f3-52a2-4fac-a77e-494acd770ffd",
+      "id": "98e0b180-5050-4a24-8cc2-702408bc4915",
       "name": "Rechazo",
       "webhookId": "70d27376-afc5-457e-9a85-42c6ebf0d87c",
       "credentials": {
         "gmailOAuth2": {
-          "id": "PI0JLj0Jq8eA1fLT",
-          "name": "Gmail account"
+          "id": "irwNL1VCyr8bqWol",
+          "name": "Gmail account 2"
         }
       }
-    },
-    {
-      "parameters": {
-        "documentId": {
-          "__rl": true,
-          "value": "1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M",
-          "mode": "list",
-          "cachedResultName": "Salas",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit?usp=drivesdk"
-        },
-        "sheetName": {
-          "__rl": true,
-          "value": 1945850352,
-          "mode": "list",
-          "cachedResultName": "Reservas",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit#gid=1945850352"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.googleSheets",
-      "typeVersion": 4.7,
-      "position": [
-        -1744,
-        256
-      ],
-      "id": "68468046-5264-4e15-beea-5ccb8f41392a",
-      "name": "Revisar reservas",
-      "alwaysOutputData": true,
-      "credentials": {
-        "googleSheetsOAuth2Api": {
-          "id": "U0ZzoFnaRUMS9JmW",
-          "name": "Google Sheets account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "httpMethod": "POST",
-        "path": "423c2399-1662-4583-afd3-dd9c4bfbc228",
-        "options": {}
-      },
-      "name": "Webhook Cancelar",
-      "type": "n8n-nodes-base.webhook",
-      "typeVersion": 1,
-      "position": [
-        720,
-        576
-      ],
-      "id": "4eed461a-22dd-4576-aed7-06b9163151b2",
-      "webhookId": "423c2399-1662-4583-afd3-dd9c4bfbc228"
-    },
-    {
-      "parameters": {
-        "documentId": {
-          "__rl": true,
-          "value": "1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M",
-          "mode": "list",
-          "cachedResultName": "Salas",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit?usp=drivesdk"
-        },
-        "sheetName": {
-          "__rl": true,
-          "value": 1945850352,
-          "mode": "list",
-          "cachedResultName": "Reservas",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit#gid=1945850352"
-        },
-        "filtersUI": {
-          "values": [
-            {
-              "lookupColumn": "ID",
-              "lookupValue": "={{ $json.body.ID }}"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "name": "Google Sheets - Buscar por ID",
-      "type": "n8n-nodes-base.googleSheets",
-      "typeVersion": 4,
-      "position": [
-        944,
-        576
-      ],
-      "id": "a2b903c4-3e6a-4072-8122-4cabb9704bdc",
-      "credentials": {
-        "googleSheetsOAuth2Api": {
-          "id": "U0ZzoFnaRUMS9JmW",
-          "name": "Google Sheets account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "jsCode": "const item = $input.first().json; return [{ json: { reserva_id: item.ID, row_number: item.row_number, email: item.Correo } }];"
-      },
-      "name": "Code - Extrae datos",
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        1168,
-        576
-      ],
-      "id": "daa9f09b-a13a-41bc-9468-866f9e003ff8"
-    },
-    {
-      "parameters": {
-        "operation": "delete",
-        "documentId": {
-          "__rl": true,
-          "value": "1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M",
-          "mode": "list",
-          "cachedResultName": "Salas",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit?usp=drivesdk"
-        },
-        "sheetName": {
-          "__rl": true,
-          "value": 1945850352,
-          "mode": "list",
-          "cachedResultName": "Reservas",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit#gid=1945850352"
-        },
-        "startIndex": "={{ $json.row_number }}"
-      },
-      "name": "Google Sheets - Eliminar fila",
-      "type": "n8n-nodes-base.googleSheets",
-      "typeVersion": 4,
-      "position": [
-        1392,
-        576
-      ],
-      "id": "6106a143-fd5b-4265-9252-f85ea786c78c",
-      "credentials": {
-        "googleSheetsOAuth2Api": {
-          "id": "U0ZzoFnaRUMS9JmW",
-          "name": "Google Sheets account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "options": {}
-      },
-      "name": "Responder éxito",
-      "type": "n8n-nodes-base.respondToWebhook",
-      "typeVersion": 1,
-      "position": [
-        2512,
-        576
-      ],
-      "id": "3e50ffd6-6009-430f-91bd-27c55c4f3c20"
-    },
-    {
-      "parameters": {
-        "sendTo": "={{ $('Code - Extrae datos').first().json.email }}",
-        "subject": "Reserva Cancelada",
-        "emailType": "text",
-        "message": "=Su reserva el dia {{ $('Google Sheets - Buscar por ID').item.json.Fecha }} a las {{ $('Google Sheets - Buscar por ID').item.json.HoraInicio }} ha sido cancelada exitosamente.",
-        "options": {}
-      },
-      "id": "3c48a135-cb19-4bf7-8cff-71c044a54f2d",
-      "name": "Gmail - Enviar notificación cancelación",
-      "type": "n8n-nodes-base.gmail",
-      "typeVersion": 2.1,
-      "position": [
-        2288,
-        576
-      ],
-      "webhookId": "fcbeb1e2-f8ae-4e34-9e6d-f89c94f5d408",
-      "credentials": {
-        "gmailOAuth2": {
-          "id": "PI0JLj0Jq8eA1fLT",
-          "name": "Gmail account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "operation": "getAll",
-        "calendar": {
-          "__rl": true,
-          "value": "proyectoespacioscorporativos@gmail.com",
-          "mode": "list",
-          "cachedResultName": "proyectoespacioscorporativos@gmail.com"
-        },
-        "timeMin": "={{ $('Google Sheets - Buscar por ID').item.json.Fecha + 'T' + $('Google Sheets - Buscar por ID').item.json.HoraInicio }}",
-        "timeMax": "={{ DateTime.fromISO($('Google Sheets - Buscar por ID').item.json.Fecha + 'T' + $('Google Sheets - Buscar por ID').item.json.HoraInicio).plus({ minutes: 1 }).toISO() }}",
-        "options": {
-          "recurringEventHandling": "expand"
-        }
-      },
-      "id": "c7f4c7ba-6535-401d-9c8b-54d98a6dc154",
-      "name": "Google Calendar - Eliminar evento",
-      "type": "n8n-nodes-base.googleCalendar",
-      "typeVersion": 1.3,
-      "position": [
-        1616,
-        368
-      ],
-      "credentials": {
-        "googleCalendarOAuth2Api": {
-          "id": "YMklK1o4xsWKqJnP",
-          "name": "Google Calendar account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "jsCode": "// Extract the event ID from the first item returned by Google Calendar\nconst items = $input.all();\n\nif (items.length > 0 && items[0].json.id) {\n  return [{\n    json: {\n      eventId: items[0].json.id,\n      calendarId: items[0].json.organizer?.email || 'proyectoespacioscorporativos@gmail.com'\n    }\n  }];\n} else {\n  // No event found, return empty result\n  return [{\n    json: {\n      eventId: null,\n      message: 'No event found to delete'\n    }\n  }];\n}"
-      },
-      "id": "8bcc4336-d0dc-44c5-a9db-34d1713bc69d",
-      "name": "Code - Extraer Event ID",
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        1840,
-        720
-      ]
-    },
-    {
-      "parameters": {
-        "operation": "delete",
-        "calendar": {
-          "__rl": true,
-          "value": "proyectoespacioscorporativos@gmail.com",
-          "mode": "list",
-          "cachedResultName": "proyectoespacioscorporativos@gmail.com"
-        },
-        "eventId": "={{ $('Code - Extraer Event ID').item.json.eventId }}",
-        "options": {}
-      },
-      "id": "ebfe8204-764c-401c-b7e4-60260038c990",
-      "name": "Google Calendar - Eliminar por ID",
-      "type": "n8n-nodes-base.googleCalendar",
-      "typeVersion": 1.3,
-      "position": [
-        2064,
-        704
-      ],
-      "credentials": {
-        "googleCalendarOAuth2Api": {
-          "id": "YMklK1o4xsWKqJnP",
-          "name": "Google Calendar account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "content": "## HU-06: Cancelacion de reserva"
-      },
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        752,
-        352
-      ],
-      "id": "46cf6f5c-2ba7-4395-bedb-48e102bfc9ea",
-      "name": "Sticky Note1"
     },
     {
       "parameters": {
@@ -753,10 +516,10 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -3008,
-        832
+        -1056,
+        2432
       ],
-      "id": "9bb034cc-27ae-47e2-8dd7-8d422ccd7680",
+      "id": "87662dc6-4f64-4792-8382-c4b3e959c115",
       "name": "Sticky Note"
     },
     {
@@ -768,58 +531,12 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2.1,
       "position": [
-        -2704,
-        720
+        -688,
+        2432
       ],
-      "id": "ded7770c-dd65-48a5-bbe3-912415c854a8",
-      "name": "Test - Datos completos",
-      "webhookId": "26c8edf5-34de-459c-a2d0-b75c527f4b3c"
-    },
-    {
-      "parameters": {
-        "httpMethod": "POST",
-        "path": "reserva",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.webhook",
-      "typeVersion": 2.1,
-      "position": [
-        -2704,
-        960
-      ],
-      "id": "c8a1d6cc-93d0-4508-9380-8f1babac22e0",
+      "id": "17103094-c482-4c2c-802c-e93f628bee40",
       "name": "Datos formulario",
       "webhookId": "26c8edf5-34de-459c-a2d0-b75c527f4b3c"
-    },
-    {
-      "parameters": {
-        "path": "oauth2-credential/callback",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.webhook",
-      "typeVersion": 2.1,
-      "position": [
-        -2032,
-        320
-      ],
-      "id": "d8250352-6072-40dd-b454-d2d8b796fa87",
-      "name": "Test - autenticacion",
-      "webhookId": "dead6216-b902-46f0-a046-ee484fa9fb2a"
-    },
-    {
-      "parameters": {
-        "content": "cambiar value de marca temporal al state del nodo que se va a usar",
-        "height": 80,
-        "width": 192
-      },
-      "type": "n8n-nodes-base.stickyNote",
-      "position": [
-        -1616,
-        80
-      ],
-      "typeVersion": 1,
-      "id": "0a2b5adc-e684-46b5-9f05-a6e635dddf3c",
-      "name": "Sticky Note2"
     },
     {
       "parameters": {
@@ -841,7 +558,7 @@
           "values": [
             {
               "lookupColumn": "Marca temporal",
-              "lookupValue": "={{ $('Test - autenticacion').item.json.query.state }}"
+              "lookupValue": "={{ $('Recibir autenticacion').item.json.query.state }}"
             }
           ]
         },
@@ -850,166 +567,1468 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -1584,
-        256
+        -768,
+        1776
       ],
-      "id": "27085044-8cd3-49f4-b334-87202f26e22b",
+      "id": "f037ab84-702f-4f00-9ada-fcabed2de97e",
       "name": "Extraer solicitud de reserva",
       "executeOnce": true,
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "U0ZzoFnaRUMS9JmW",
+          "id": "gWSCpACgvfwv0eO3",
           "name": "Google Sheets account"
         }
       }
     },
     {
       "parameters": {
-        "path": "oauth2-credential/callback",
+        "jsCode": "function generarIdUnico(timestampStr) {\n  // Suponiendo que viene como \"1/1/12 12:00:00\"\n  const [fechaStr, horaStr] = timestampStr.split(\" \");\n  const [dia, mes, anio] = fechaStr.split(\"/\");\n\n  // Ajusta el año: \"12\" → \"2012\"\n  const anioCompleto = anio.length === 2 ? \"20\" + anio : anio;\n\n  const isoStr = `${anioCompleto}-${mes.padStart(2,\"0\")}-${dia.padStart(2,\"0\")}T${horaStr}`;\n  const fecha = new Date(isoStr);\n\n  return (\n    fecha.getFullYear().toString() +\n    String(fecha.getMonth() + 1).padStart(2, \"0\") +\n    String(fecha.getDate()).padStart(2, \"0\") +\n    String(fecha.getHours()).padStart(2, \"0\") +\n    String(fecha.getMinutes()).padStart(2, \"0\") +\n    String(fecha.getSeconds()).padStart(2, \"0\")\n  );\n}\n\n\nreturn {ID: generarIdUnico($('Extraer solicitud de reserva').first().json['Marca temporal'])}\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        256,
+        1584
+      ],
+      "id": "2d03e287-3a23-4d65-af14-24f3e1b1c282",
+      "name": "Crear ID"
+    },
+    {
+      "parameters": {
+        "jsCode": "const reservasExistentes = $(\"Revisar reservas1\").all().map(item => item.json);\n\nfunction horaEnMinutos(horaStr) {\n  horaStr = horaStr.trim().toLowerCase();\n\n  // Caso 1: formato con am/pm → \"10:00:00 a.m.\"\n  if (horaStr.includes(\"a.m.\") || horaStr.includes(\"p.m.\")) {\n    const [time, meridian] = horaStr.split(\" \");\n    const [hStr, mStr, sStr] = time.split(\":\");\n\n    let horas = parseInt(hStr, 10);\n    const minutos = parseInt(mStr, 10);\n    const segundos = sStr ? parseInt(sStr, 10) : 0;\n\n    if (meridian === \"p.m.\" && horas !== 12) {\n      horas += 12;\n    }\n    if (meridian === \"a.m.\" && horas === 12) {\n      horas = 0;\n    }\n\n    return horas * 60 + minutos + Math.floor(segundos / 60);\n  }\n\n  // Caso 2: formato 24 horas → \"10:00\" o \"14:00\"\n  const [hStr, mStr] = horaStr.split(\":\");\n  const horas = parseInt(hStr, 10);\n  const minutos = parseInt(mStr, 10);\n\n  return horas * 60 + minutos;\n}\n\n\n\nfunction normalizarFecha(fechaStr) {\n  fechaStr = fechaStr.trim();\n\n  // Caso 1: formato DD/MM/YYYY → \"20/12/2025\"\n  if (fechaStr.includes(\"/\")) {\n    const [dia, mes, anio] = fechaStr.split(\"/\");\n    return new Date(`${anio}-${mes.padStart(2,\"0\")}-${dia.padStart(2,\"0\")}`);\n  }\n\n  // Caso 2: formato YYYY-MM-DD → \"2025-12-20\"\n  if (fechaStr.includes(\"-\")) {\n    return new Date(fechaStr);\n  }\n\n  throw new Error(\"Formato de fecha no reconocido: \" + fechaStr);\n}\n\n\n\n\nfunction validarReserva(reservas) {\n  const inicio = horaEnMinutos($input.first().json['Hora Inicio']);\n  const fin = horaEnMinutos($input.first().json['Hora Termino']);\n  const fecha = normalizarFecha($input.first().json.Fecha);\n  \n  for (let index = 0; index < reservas.length; index++) {\n    const r = reservas[index];\n    if(r.Sala === $input.first().json['Selecciona una sala'] && fin > horaEnMinutos(r.HoraInicio) && inicio < horaEnMinutos(r.HoraFin) && fecha.getDate() === normalizarFecha(r.Fecha).getDate()){\n      return false;\n    }\n  }\n  return true;\n}\n\n\n\n\nfunction convertirFecha(fechaStr) {\n  const [dia, mes, anio] = fechaStr.split(\"/\");\n  return `${anio}-${mes.padStart(2, \"0\")}-${dia.padStart(2, \"0\")}`;\n}\n\nfunction minutosAHora(minutos) {\n  const horas = Math.floor(minutos / 60);\n  const mins = minutos % 60;\n\n  // Formateamos con dos dígitos\n  const horasStr = String(horas).padStart(2, \"0\");\n  const minsStr = String(mins).padStart(2, \"0\");\n\n  return `${horasStr}:${minsStr}`;\n}\n\nconst resultado = validarReserva(reservasExistentes);\nconst date = convertirFecha($input.first().json.Fecha);\n\nconst inicio = horaEnMinutos($input.first().json['Hora Inicio'])\nconst fin = horaEnMinutos($input.first().json['Hora Termino'])\nconst HoraInicio = minutosAHora(inicio)\nconst HoraFin = minutosAHora(fin)\n\n\nreturn {\n  resultado,\n  sala: $input.first().json['Selecciona una sala'],\n  date,\n  HoraInicio,\n  HoraFin\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -576,
+        1776
+      ],
+      "id": "c442e451-1813-4d97-95df-5a75ee0ffd4c",
+      "name": "Comparar horarios",
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.resultado }}",
+              "value2": "={{ true }}"
+            }
+          ]
+        }
+      },
+      "id": "84626027-344c-4438-96c5-8ada2dfe87d6",
+      "name": "IF - ¿Disponible?1",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        -432,
+        1776
+      ],
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "proyectoespacioscorporativos@gmail.com",
+          "mode": "list",
+          "cachedResultName": "proyectoespacioscorporativos@gmail.com"
+        },
+        "start": "={{ $('Comparar horarios').item.json.date + \"T\" + $('Comparar horarios').item.json.HoraInicio + \":00-03:00\" }}",
+        "end": "={{ $('Comparar horarios').item.json.date + \"T\" + $('Comparar horarios').item.json.HoraFin + \":00-03:00\" }}",
+        "additionalFields": {
+          "id": "={{ $('Crear ID').first().json.ID }}",
+          "summary": "=Reserva"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        704,
+        1584
+      ],
+      "id": "f6c1d542-85c0-4c40-8315-99fd5dd54825",
+      "name": "Google Calendar1",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "LWS8EKe877hhB3ZS",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M",
+          "mode": "list",
+          "cachedResultName": "Salas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1945850352,
+          "mode": "list",
+          "cachedResultName": "Reservas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit#gid=1945850352"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -928,
+        1776
+      ],
+      "id": "8e90ee4a-d1eb-4f80-8965-3f82869d7536",
+      "name": "Revisar reservas1",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "gWSCpACgvfwv0eO3",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M",
+          "mode": "list",
+          "cachedResultName": "Salas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1945850352,
+          "mode": "list",
+          "cachedResultName": "Reservas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit#gid=1945850352"
+        },
+        "options": {}
+      },
+      "id": "528592c8-8dd0-4547-a7aa-1fac73087ef5",
+      "name": "Google Sheets - Obtener filas",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        1264,
+        2304
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// ID desde el webhook (acepta body.ID o ID plano)\nconst webhook = $('Webhook Cancelar1').first().json;\nconst idToCancel = webhook.body?.ID ?? webhook.ID;\nif (!idToCancel) throw new Error('No se recibió ID en el webhook.');\n\n// Filas del Get Row(s)\nconst rows = $input.all();\nlet found = null;\nlet rowNumber = null;\n\nfor (let i = 0; i < rows.length; i++) {\n  const r = rows[i].json;\n  if (r.ID === idToCancel) {\n    found = r;\n    // 1 = header, 2 = primera fila de datos\n    rowNumber = r.rowNumber ?? r.rowIndex ?? (i + 2);\n    break;\n  }\n}\n\nif (!found || !rowNumber || rowNumber < 2) {\n  throw new Error(`No se encontró reserva válida con ID ${idToCancel}`);\n}\n\nreturn [{\n  json: {\n    id: found.ID,\n    sala: found.Sala,\n    email: found.Correo,\n    fecha: found.Fecha,\n    horaInicio: found.HoraInicio,\n    horaFin: found.HoraFin,\n    titulo: found.Titulo,\n    descripcion: found.Descripcion,\n    participantes: found.Participantes,   // puede venir como string JSON\n    idCalendar: found.ID_Calendar,\n    linkCalendar: found.Link_Calendar,\n    rowNumber\n  }\n}];\n"
+      },
+      "id": "13676912-b23d-4541-9bdb-8ec95d29ccc9",
+      "name": "Code - Buscar reserva por ID",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1504,
+        2304
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## HU-06: \nCancela una reserva - Elimina la fila en google sheet - Elimina el evento en google calendar en base al ID - Registra la cancelacion en otra hoja google sheet - Envia un correo de notificacion",
+        "height": 192
+      },
+      "id": "dd1e612a-aabe-437c-8739-af5a17ce8aa9",
+      "name": "HU-06: Cancelación de reserva",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1024,
+        2032
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M",
+          "mode": "list",
+          "cachedResultName": "Salas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1486633971,
+          "mode": "list",
+          "cachedResultName": "Reservas canceladas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit#gid=1486633971"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ID": "={{ $json.id }}",
+            "HoraInicio": "={{ $json.horaInicio }}",
+            "Fecha": "={{ $json.fecha }}",
+            "HoraFin": "={{ $json.horaFin }}",
+            "Titulo": "={{ $json.titulo }}",
+            "Correo": "={{ $json.email }}",
+            "Participantes": "={{ $json.participantes }}",
+            "ID_Calendar": "={{ $json.idCalendar }}",
+            "Link_Calendar": "={{ $json.linkCalendar }}",
+            "Sala": "={{ $json.sala }}",
+            "Descripcion": "={{ $json.descripcion }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Sala",
+              "displayName": "Sala",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Fecha",
+              "displayName": "Fecha",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "HoraInicio",
+              "displayName": "HoraInicio",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "HoraFin",
+              "displayName": "HoraFin",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Titulo",
+              "displayName": "Titulo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Correo",
+              "displayName": "Correo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Descripcion",
+              "displayName": "Descripcion",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Participantes",
+              "displayName": "Participantes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ID_Calendar",
+              "displayName": "ID_Calendar",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Link_Calendar",
+              "displayName": "Link_Calendar",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "78dd9ee9-d249-4aa0-ae16-1e2af59d75ab",
+      "name": "Google Sheets - Registrar cancelacion",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        1744,
+        2528
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "98bd68b7-6d8d-490a-918a-6b51fd9d5af5",
+        "options": {}
+      },
+      "id": "e03ae4a6-6de4-46fa-b141-3bbe25e87b09",
+      "name": "Webhook Cancelar1",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        1024,
+        2304
+      ],
+      "webhookId": "98bd68b7-6d8d-490a-918a-6b51fd9d5af5"
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "documentId": {
+          "__rl": true,
+          "value": "1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M",
+          "mode": "list",
+          "cachedResultName": "Salas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1945850352,
+          "mode": "list",
+          "cachedResultName": "Reservas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit#gid=1945850352"
+        },
+        "startIndex": "={{ $json.rowNumber }}"
+      },
+      "id": "2c442739-c773-496e-9842-6b4f7c2cc467",
+      "name": "Google Sheets - Eliminar fila1",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        1744,
+        2304
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "calendar": "proyectoespacioscorporativos@gmail.com",
+        "eventId": "={{ $('Code - Buscar reserva por ID').first().json.idCalendar }}",
+        "options": {}
+      },
+      "id": "3a152e84-eda1-4ad8-ada5-5aec1c2dc9c0",
+      "name": "Google Calendar - Eliminar por ID1",
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        1744,
+        2064
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Code - Buscar reserva por ID').first().json.email }}",
+        "subject": "Confirmación de cancelación de reserva",
+        "message": "==<p>Hola,</p>\n<p>Tu reserva con <strong>ID {{ $('Code - Buscar reserva por ID').first().json.id }}</strong> para el <strong>{{ $('Code - Buscar reserva por ID').first().json.fecha }}</strong> a las <strong>{{ $('Code - Buscar reserva por ID').first().json.horaInicio }}</strong> ha sido cancelada exitosamente.</p>\n<p>Saludos.</p>\n",
+        "options": {}
+      },
+      "id": "ad19328c-a3a2-4c0d-a087-801dbb2e7cb0",
+      "name": "Gmail - Enviar notificación cancelación1",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1984,
+        2304
+      ],
+      "webhookId": "57779984-5048-4147-8381-b9984886e33d"
+    },
+    {
+      "parameters": {
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "88395035-f8d2-4220-8d12-4e893a259410",
+      "name": "Responder éxito1",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        2224,
+        2304
+      ]
+    },
+    {
+      "parameters": {
+        "content": "Ejemplo JSON\n{\n\"ID\": \"6nbcrjndbc06a8puu68pbu74b8\"\n}",
+        "height": 96,
+        "width": 288
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        976,
+        2512
+      ],
+      "id": "4e0668e1-bf25-448d-b9f5-227d1609cdc3",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Extraer solicitud de reserva').item.json.Correo }}",
+        "subject": "={{\"Reserva de sala aprobada - \" + $('Extraer solicitud de reserva').item.json.Fecha + \" \" + $('Extraer solicitud de reserva').item.json['Hora Inicio']}}",
+        "message": "=<html>   <body style=\"font-family: Arial, sans-serif; font-size: 14px;\">     <p>Hola {{ $('Extraer solicitud de reserva').item.json.Nombre }},</p>      <p>       Se ha <strong>aprobado</strong> una nueva reserva de sala. A continuación encontrarás el detalle:     </p>      <table border=\"1\" cellpadding=\"6\" cellspacing=\"0\" style=\"border-collapse: collapse;\">       <tr>         <th align=\"left\">Solicitante</th>         <td>{{ $('Extraer solicitud de reserva').item.json.Nombre }} ({{ $('Extraer solicitud de reserva').item.json.Correo }})</td>       </tr>       <tr>         <th align=\"left\">Área / Departamento</th>         <td>{{ $('Extraer solicitud de reserva').item.json['Área/Departamento'] }}</td>       </tr>       <tr>         <th align=\"left\">Sala</th>         <td>{{ $('Extraer solicitud de reserva').item.json.Sala }}</td>       </tr>       <tr>         <th align=\"left\">Fecha</th>         <td>{{ $('Extraer solicitud de reserva').item.json.Fecha }}</td>       </tr>       <tr>         <th align=\"left\">Horario</th>         <td>{{ $('Extraer solicitud de reserva').item.json['Hora Inicio'] }} – {{ $('Extraer solicitud de reserva').item.json['Hora Termino'] }}</td>       </tr>       <tr>         <th align=\"left\">Correos Participantes</th>         <td>{{ $('Extraer solicitud de reserva').item.json['Correos participantes'] }}</td>       </tr>     </table>      <p style=\"margin-top: 16px;\">       Por favor, coordina cualquier cambio directamente con el/la solicitante.     </p>      <p>Saludos cordiales,<br/>     Sistema de reservas</p>   </body> </html>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        528,
+        1584
+      ],
+      "id": "a70d52b9-9646-45c2-9b5e-6ec880fba852",
+      "name": "correo de aprobacion - encargado",
+      "webhookId": "53e8f0fc-7fe0-45a0-b86e-4377686c6ed7",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "irwNL1VCyr8bqWol",
+          "name": "Gmail account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "Salas",
         "options": {}
       },
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2.1,
       "position": [
-        -2032,
-        480
+        3456,
+        2272
       ],
-      "id": "0ab18fee-645b-466f-b572-a37a19c986f3",
-      "name": "Test - auth reserva ocupada",
-      "webhookId": "dead6216-b902-46f0-a046-ee484fa9fb2a"
+      "id": "bc58fd55-3869-491a-b11b-3eff634f4d29",
+      "name": "Webhook",
+      "webhookId": "6a731da8-1093-4629-81ef-5a7e8f648c95"
     },
     {
       "parameters": {
-        "jsCode": "function generarIdUnico(timestampStr) {\n  const fecha = new Date(timestampStr);\n\n  return (\n    fecha.getFullYear().toString() +\n    String(fecha.getMonth() + 1).padStart(2, \"0\") +\n    String(fecha.getDate()).padStart(2, \"0\") +\n    String(fecha.getHours()).padStart(2, \"0\") +\n    String(fecha.getMinutes()).padStart(2, \"0\") +\n    String(fecha.getSeconds()).padStart(2, \"0\")\n  );\n}\n\nreturn {ID: generarIdUnico($('Extraer solicitud de reserva').first().json['Marca temporal'])}\n"
+        "documentId": {
+          "__rl": true,
+          "value": "1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M",
+          "mode": "list",
+          "cachedResultName": "Salas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1702884083,
+          "mode": "list",
+          "cachedResultName": "Solicitud gestion de sala",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit#gid=1702884083"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Marca temporal",
+              "lookupValue": "={{ $json.body.id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        3696,
+        2256
+      ],
+      "id": "376b2253-5305-43b8-b018-36894824bfe1",
+      "name": "Get datos solicitud",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "gWSCpACgvfwv0eO3",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "errorMessage": "Error"
+      },
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        5264,
+        2368
+      ],
+      "id": "3617c285-62db-412c-b068-5a9e9f7b6233",
+      "name": "Stop and Error"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M",
+          "mode": "list",
+          "cachedResultName": "Salas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "SalasDisponibles",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        3920,
+        2256
+      ],
+      "id": "cc780255-b096-46a7-aafe-e86ad9c8d258",
+      "name": "Get lista salas",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "gWSCpACgvfwv0eO3",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const correo = $('Get datos solicitud').first().json['Correo administrador']\nconst nuevaSala = $('Get datos solicitud').first().json['Codigo de sala unico']\nconst capacidad = $('Get datos solicitud').first().json['Capacidad maxima de participantes']\nconst apertura = $('Get datos solicitud').first().json['Hora de apertura']\nconst cierre = $('Get datos solicitud').first().json['Hora de cierre']\nconst ubicacion = $('Get datos solicitud').first().json['Ubicacion (piso, edificio,sector)']\nconst eliminarSala = $('Get datos solicitud').first().json['Codigo sala a eliminar']\n\n// Función auxiliar para verificar si un campo tiene valor\nfunction tieneDato(valor) {\n  return valor !== undefined && valor !== null && String(valor).trim() !== '';\n}\n\nlet tipoSolicitud = \"incompleto\";\n\n// Caso AGREGAR: todos los campos de agregar tienen datos y eliminarSala está vacío\nif (\n  tieneDato(correo) &&\n  tieneDato(nuevaSala) &&\n  tieneDato(capacidad) &&\n  tieneDato(apertura) &&\n  tieneDato(cierre) &&\n  tieneDato(ubicacion) &&\n  !tieneDato(eliminarSala)\n) {\n  tipoSolicitud = \"agregar\";\n}\n\n// Caso ELIMINAR: correo y eliminarSala tienen datos y el resto está vacío\nelse if (\n  tieneDato(correo) &&\n  tieneDato(eliminarSala) &&\n  !tieneDato(nuevaSala) &&\n  !tieneDato(capacidad) &&\n  !tieneDato(apertura) &&\n  !tieneDato(cierre) &&\n  !tieneDato(ubicacion)\n) {\n  tipoSolicitud = \"eliminar\";\n}\n\n// En cualquier otro escenario → incompleto\nreturn [\n  {\n    json: {\n      ...$(\"Get datos solicitud\").first().json,\n      tipoSolicitud\n    }\n  }\n];"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -816,
-        16
+        4144,
+        2256
       ],
-      "id": "2899eadd-8dc9-4533-a630-8a1762b808db",
-      "name": "Crear ID"
+      "id": "484846c9-ee5b-4c49-bc77-bbd41137ae1d",
+      "name": "Tipo formulario"
     },
     {
       "parameters": {
-        "jsCode": "const reservasExistentes = $(\"Revisar reservas\").all().map(item => item.json);\n\nfunction horaEnMinutos(horaStr) {\n  horaStr = horaStr.trim().toLowerCase();\n\n  // Caso 1: formato con am/pm → \"10:00:00 a.m.\"\n  if (horaStr.includes(\"a.m.\") || horaStr.includes(\"p.m.\")) {\n    const [time, meridian] = horaStr.split(\" \");\n    const [hStr, mStr, sStr] = time.split(\":\");\n\n    let horas = parseInt(hStr, 10);\n    const minutos = parseInt(mStr, 10);\n    const segundos = sStr ? parseInt(sStr, 10) : 0;\n\n    if (meridian === \"p.m.\" && horas !== 12) {\n      horas += 12;\n    }\n    if (meridian === \"a.m.\" && horas === 12) {\n      horas = 0;\n    }\n\n    return horas * 60 + minutos + Math.floor(segundos / 60);\n  }\n\n  // Caso 2: formato 24 horas → \"10:00\" o \"14:00\"\n  const [hStr, mStr] = horaStr.split(\":\");\n  const horas = parseInt(hStr, 10);\n  const minutos = parseInt(mStr, 10);\n\n  return horas * 60 + minutos;\n}\n\n\n\nfunction normalizarFecha(fechaStr) {\n  fechaStr = fechaStr.trim();\n\n  // Caso 1: formato DD/MM/YYYY → \"20/12/2025\"\n  if (fechaStr.includes(\"/\")) {\n    const [dia, mes, anio] = fechaStr.split(\"/\");\n    return new Date(`${anio}-${mes.padStart(2,\"0\")}-${dia.padStart(2,\"0\")}`);\n  }\n\n  // Caso 2: formato YYYY-MM-DD → \"2025-12-20\"\n  if (fechaStr.includes(\"-\")) {\n    return new Date(fechaStr);\n  }\n\n  throw new Error(\"Formato de fecha no reconocido: \" + fechaStr);\n}\n\n\n\n\nfunction validarReserva(reservas) {\n  const inicio = horaEnMinutos($input.first().json['Hora Inicio']);\n  const fin = horaEnMinutos($input.first().json['Hora Termino']);\n  const fecha = normalizarFecha($input.first().json.Fecha);\n  \n  for (let index = 0; index < reservas.length; index++) {\n    const r = reservas[index];\n    if(r.Sala === $input.first().json['Selecciona una sala'] && fin > horaEnMinutos(r.HoraInicio) && inicio < horaEnMinutos(r.HoraFin) && fecha.getDate() === normalizarFecha(r.Fecha).getDate()){\n      return false;\n    }\n  }\n  return true;\n}\n\n\n\n\nfunction convertirFecha(fechaStr) {\n  const [dia, mes, anio] = fechaStr.split(\"/\");\n  return `${anio}-${mes.padStart(2, \"0\")}-${dia.padStart(2, \"0\")}`;\n}\n\nfunction minutosAHora(minutos) {\n  const horas = Math.floor(minutos / 60);\n  const mins = minutos % 60;\n\n  // Formateamos con dos dígitos\n  const horasStr = String(horas).padStart(2, \"0\");\n  const minsStr = String(mins).padStart(2, \"0\");\n\n  return `${horasStr}:${minsStr}`;\n}\n\nconst resultado = validarReserva(reservasExistentes);\nconst date = convertirFecha($input.first().json.Fecha);\n\nconst inicio = horaEnMinutos($input.first().json['Hora Inicio'])\nconst fin = horaEnMinutos($input.first().json['Hora Termino'])\nconst HoraInicio = minutosAHora(inicio)\nconst HoraFin = minutosAHora(fin)\n\n\nreturn {\n  resultado,\n  sala: $input.first().json['Selecciona una sala'],\n  date,\n  HoraInicio,\n  HoraFin\n};\n"
+        "jsCode": "const salaEliminar = $('Get datos solicitud').first().json['Codigo sala a eliminar'];\n\n// Obtener todos los items del nodo \"Get lista salas\"\nconst itemsSalas = $('Get lista salas').all();\n\n// Extraer los códigos de sala en un array\nconst salas = itemsSalas.map(item => item.json['Salas']); \n// Ajusta la clave según cómo venga tu JSON\n\n// Confirmar existencia\nconst existe = salas.includes(salaEliminar);\n\n// Buscar la fila completa que coincide\nlet filaCoincidente = null;\nfor (const item of itemsSalas) {\n  // Ajusta la clave según tu estructura real\n  if (item.json['Salas'] === salaEliminar) {\n    filaCoincidente = item.json;\n    break;\n  }\n}\n\nreturn [\n  {\n    json: {\n      salaEliminar,\n      existe,\n      salas,\n      filaCoincidente // aquí devuelves la fila completa si existe\n    }\n  }\n];\n"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -1296,
-        256
+        4592,
+        2256
       ],
-      "id": "75110c77-94b6-45eb-88b6-7f5014fc67fd",
-      "name": "Comparar horarios",
-      "executeOnce": false
+      "id": "b9aa6baf-e564-4e71-84c0-44078c780f5c",
+      "name": "Buscar sala"
+    },
+    {
+      "parameters": {
+        "path": "oauth2-credential/callback/eliminar",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        3472,
+        2688
+      ],
+      "id": "61489b31-179c-46a6-90a2-12f1ae3ff0a2",
+      "name": "Confirmacion eliminacion",
+      "webhookId": "efda54ab-63cb-4ecc-a095-cf604f7eb067"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "a1803664-7c61-45d5-b9da-77919d704577",
+              "leftValue": "={{ $json.existe }}",
+              "rightValue": "true",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        4816,
+        2256
+      ],
+      "id": "95670d44-615c-4991-a53a-c82a787b7a66",
+      "name": "Existe sala?"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "4eae8564-1638-4825-a88a-cfb4519418b0",
+              "leftValue": "={{ $json.filaCoincidente['Correo admin'] }}",
+              "rightValue": "={{ $('Get datos solicitud').first().json['Correo administrador'] }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        5040,
+        2176
+      ],
+      "id": "507fca20-39c3-4066-8beb-c603372a73a2",
+      "name": "mismo admin?"
+    },
+    {
+      "parameters": {
+        "jsCode": "const sala = $('Buscar sala').first().json.filaCoincidente.Salas;\nconst participantes = $('Buscar sala').first().json.filaCoincidente.MaxParticipantes;\nconst apertura = $('Buscar sala').first().json.filaCoincidente['Hora apertura'];\nconst cierre = $('Buscar sala').first().json.filaCoincidente['Hora cierre'];\nconst ubicacion = $('Buscar sala').first().json.filaCoincidente.Ubicacion;\n\nconst clientId = '36788e45-7a1d-4015-8040-9e3e065953fc';\nconst redirectUri = encodeURIComponent('https://jeremy-pily-prediligently.ngrok-free.dev/webhook-test/oauth2-credential/callback/eliminar');\nconst scope = encodeURIComponent('https://graph.microsoft.com/User.Read');\nconst state = encodeURIComponent($('Get datos solicitud').first().json['Marca temporal']);\n\n\n\nconst html = `\n  <html>\n    <body>\n      <p>Usted está intentando eliminar esta sala:</p>\n      <table border=\"1\" cellpadding=\"5\" cellspacing=\"0\" style=\"border-collapse: collapse;\">\n        <tr>\n          <th>Código de sala</th>\n          <td>${sala}</td>\n        </tr>\n        <tr>\n          <th>Capacidad máxima</th>\n          <td>${participantes}</td>\n        </tr>\n        <tr>\n          <th>Hora de apertura</th>\n          <td>${apertura}</td>\n        </tr>\n        <tr>\n          <th>Hora de cierre</th>\n          <td>${cierre}</td>\n        </tr>\n        <tr>\n          <th>Ubicación</th>\n          <td>${ubicacion}</td>\n        </tr>\n      </table>\n      <p>//login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=${clientId}&response_type=code&redirect_uri=${redirectUri}&scope=${scope}&state=${state}<p>\n    </body>\n  </html>\n`;\n\nreturn [\n  {\n    json: {\n      html\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        5264,
+        2080
+      ],
+      "id": "371fdde0-239b-48c1-8d1c-7183629bdaf9",
+      "name": "html correo"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M",
+          "mode": "list",
+          "cachedResultName": "Salas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1702884083,
+          "mode": "list",
+          "cachedResultName": "Solicitud gestion de sala",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit#gid=1702884083"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Marca temporal",
+              "lookupValue": "={{ $json.query.state }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        3696,
+        2688
+      ],
+      "id": "8333cbdc-d8e7-47be-9831-8bf9e0470b30",
+      "name": "Solicitud",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "gWSCpACgvfwv0eO3",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M",
+          "mode": "list",
+          "cachedResultName": "Salas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "SalasDisponibles",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        3920,
+        2688
+      ],
+      "id": "97909062-ec79-4e83-9f53-855bedd630b1",
+      "name": "Salas",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "gWSCpACgvfwv0eO3",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "documentId": {
+          "__rl": true,
+          "value": "1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M",
+          "mode": "list",
+          "cachedResultName": "Salas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "SalasDisponibles",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit#gid=0"
+        },
+        "startIndex": "={{ $json.filaCoincidente.row_number }}"
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        4592,
+        2592
+      ],
+      "id": "16e5c7f2-47db-455d-9ad0-971b77cd921d",
+      "name": "Delete rows or columns from sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "gWSCpACgvfwv0eO3",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "6fdd8a7e-cd52-45fa-bf82-7e2ae56306d1",
+              "leftValue": "={{ $json.salaEliminar }}",
+              "rightValue": "={{ $json.filaCoincidente.Salas }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        4368,
+        2688
+      ],
+      "id": "18193d32-c11a-4069-8395-d5cb753980e3",
+      "name": "Sigue existiendo"
+    },
+    {
+      "parameters": {
+        "errorMessage": "error"
+      },
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        4592,
+        2784
+      ],
+      "id": "b420eb10-9ed2-4ee1-bc8e-11b16be22f4b",
+      "name": "Stop and Error1"
+    },
+    {
+      "parameters": {
+        "errorMessage": "Error"
+      },
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        5040,
+        1984
+      ],
+      "id": "3891c044-2723-45d5-b672-eb9cd78ce5b2",
+      "name": "Stop and Error2"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c06ef8ed-1ec9-4806-ae5b-ef2478913698",
+              "leftValue": "={{ $json.existe.toString() }}",
+              "rightValue": "true",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        4816,
+        1888
+      ],
+      "id": "cd2bb3cc-9a14-49ad-9b1e-a218172e3e3a",
+      "name": "Sala repetida"
+    },
+    {
+      "parameters": {
+        "jsCode": "const salaAgregar = $('Get datos solicitud').first().json['Codigo de sala unico'];\n\n// Obtener todos los items del nodo \"Get lista salas\"\nconst itemsSalas = $('Get lista salas').all();\n\n// Extraer los códigos de sala en un array\nconst salas = itemsSalas.map(item => item.json['Salas']); \n// Ajusta la clave según cómo venga tu JSON\n\n// Confirmar existencia\nconst existe = salas.includes(salaAgregar);\n\n\nreturn [\n  {\n    json: {\n      salaAgregar,\n      existe,\n      salas \n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4592,
+        1888
+      ],
+      "id": "a7e6ed22-4b4c-4ec8-8874-2c6dd053f2a4",
+      "name": "Sala repetida?"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.tipoSolicitud }}",
+                    "rightValue": "agregar",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "5848cfac-f7eb-4970-8ec1-9676a052913a"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Nueva sala"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "b6919c9a-1abd-4f99-8528-a8126969cbbb",
+                    "leftValue": "={{ $json.tipoSolicitud }}",
+                    "rightValue": "=eliminar",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Eliminar sala"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "2ae0a2d7-8317-49b2-84ec-63a0c0b68aa8",
+                    "leftValue": "={{ $json.tipoSolicitud }}",
+                    "rightValue": "incompleto",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "error"
+            }
+          ]
+        },
+        "options": {
+          "ignoreCase": false
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        4368,
+        2240
+      ],
+      "id": "3a0d7235-12b2-41aa-9b62-a33d7ee73d20",
+      "name": "Agregar/Eliminar sala"
+    },
+    {
+      "parameters": {
+        "jsCode": "const sala = $('Get datos solicitud').first().json['Codigo de sala unico'];\nconst participantes = $('Get datos solicitud').first().json['Capacidad maxima de participantes'];\nconst apertura = $('Get datos solicitud').first().json['Hora de apertura'];\nconst cierre = $('Get datos solicitud').first().json['Hora de cierre'];\nconst ubicacion = $('Get datos solicitud').first().json['Ubicacion (piso, edificio,sector)'];\n\nconst clientId = '36788e45-7a1d-4015-8040-9e3e065953fc';\nconst redirectUri = encodeURIComponent('https://jeremy-pily-prediligently.ngrok-free.dev/webhook-test/oauth2-credential/callback/agregar');\nconst scope = encodeURIComponent('https://graph.microsoft.com/User.Read');\nconst state = encodeURIComponent($('Get datos solicitud').first().json['Marca temporal']);\n\n\n\nconst html = `\n  <html>\n    <body>\n      <p>Usted está intentando crear esta sala:</p>\n      <table border=\"1\" cellpadding=\"5\" cellspacing=\"0\" style=\"border-collapse: collapse;\">\n        <tr>\n          <th>Código de sala</th>\n          <td>${sala}</td>\n        </tr>\n        <tr>\n          <th>Capacidad máxima</th>\n          <td>${participantes}</td>\n        </tr>\n        <tr>\n          <th>Hora de apertura</th>\n          <td>${apertura}</td>\n        </tr>\n        <tr>\n          <th>Hora de cierre</th>\n          <td>${cierre}</td>\n        </tr>\n        <tr>\n          <th>Ubicación</th>\n          <td>${ubicacion}</td>\n        </tr>\n      </table>\n      <p>//login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=${clientId}&response_type=code&redirect_uri=${redirectUri}&scope=${scope}&state=${state}<p>\n    </body>\n  </html>\n`;\n\nreturn [\n  {\n    json: {\n      html\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        5040,
+        1792
+      ],
+      "id": "249edf6b-9700-44d6-8eff-2cff048743c3",
+      "name": "Code in JavaScript2"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Get datos solicitud').first().json['Correo administrador'] }}",
+        "subject": "Creacion de nueva sala",
+        "message": "={{ $json.html }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        5264,
+        1792
+      ],
+      "id": "9c4ef200-aa88-4a69-aef8-942bd71b625f",
+      "name": "Send a message2",
+      "webhookId": "53ac9935-d9ec-43c6-8d19-7dc1ce821d76",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "irwNL1VCyr8bqWol",
+          "name": "Gmail account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "path": "oauth2-credential/callback/agregar",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        3472,
+        1472
+      ],
+      "id": "00614da5-106e-42ae-8e5d-e600881191b0",
+      "name": "Webhook2",
+      "webhookId": "f74d2102-4625-4b11-9927-c95cbd49fbf3"
+    },
+    {
+      "parameters": {
+        "jsCode": "const salaAgregar = $('Solicitud agregar').first().json['Codigo de sala unico'];\n\n// Obtener todos los items del nodo \"Get lista salas\"\nconst itemsSalas = $('Lista salas').all();\n\n// Extraer los códigos de sala en un array\nconst salas = itemsSalas.map(item => item.json['Salas']); \n\n// Confirmar existencia\nconst existe = salas.includes(salaAgregar);\n\n\nreturn [\n  {\n    json: {\n      salaAgregar,\n      existe,\n      salas\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4144,
+        1472
+      ],
+      "id": "271d71f3-9f5c-447e-aac4-b6ed2b239c28",
+      "name": "Sigue sin existir?"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M",
+          "mode": "list",
+          "cachedResultName": "Salas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "SalasDisponibles",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        3920,
+        1472
+      ],
+      "id": "8c0b5458-12ee-4972-a514-d16ce8b28b5a",
+      "name": "Lista salas",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "gWSCpACgvfwv0eO3",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "a0689522-05e2-46ff-a1a2-b1dc396de7c1",
+              "leftValue": "={{ $json.existe.toString() }}",
+              "rightValue": "false",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        4368,
+        1472
+      ],
+      "id": "66fa1252-75b9-4b03-b98c-dc8b10323be6",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "errorMessage": "Error"
+      },
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        4592,
+        1568
+      ],
+      "id": "a998f888-b960-4dcf-a5ae-60069e398050",
+      "name": "Stop and Error3"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M",
+          "mode": "list",
+          "cachedResultName": "Salas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1702884083,
+          "mode": "list",
+          "cachedResultName": "Solicitud gestion de sala",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit#gid=1702884083"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Marca temporal",
+              "lookupValue": "={{ $json.query.state }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        3696,
+        1472
+      ],
+      "id": "8916f42e-190f-48b5-8134-b05e7f0bdb9e",
+      "name": "Solicitud agregar",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "gWSCpACgvfwv0eO3",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M",
+          "mode": "list",
+          "cachedResultName": "Salas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "SalasDisponibles",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Salas": "={{ $('Solicitud agregar').first().json['Codigo de sala unico'] }}",
+            "MaxParticipantes": "={{ $('Solicitud agregar').first().json['Capacidad maxima de participantes'] }}",
+            "Hora apertura": "={{ $json.inicio }}",
+            "Hora cierre": "={{ $json.termino }}",
+            "Ubicacion": "={{ $('Solicitud agregar').first().json['Ubicacion (piso, edificio,sector)'] }}",
+            "Correo admin": "={{ $('Solicitud agregar').first().json['Correo administrador'] }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Salas",
+              "displayName": "Salas",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "MaxParticipantes",
+              "displayName": "MaxParticipantes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Hora apertura",
+              "displayName": "Hora apertura",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Hora cierre",
+              "displayName": "Hora cierre",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Ubicacion",
+              "displayName": "Ubicacion",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Correo admin",
+              "displayName": "Correo admin",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        4752,
+        1376
+      ],
+      "id": "9af64cc0-ef08-4fae-b35b-22d8a9ab830b",
+      "name": "Creacion sala nueva",
+      "executeOnce": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "gWSCpACgvfwv0eO3",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Constantes iniciales\nconst inicio = $('Solicitud agregar').first().json['Hora de apertura'];\nconst termino = $('Solicitud agregar').first().json['Hora de cierre'];\n\n/**\n * Convierte strings tipo \"10:00:00 a.m.\" / \"10:00:00 p.m.\" a \"HH:mm\"\n * Acepta también \"10:00 a.m.\" (sin segundos).\n */\nfunction convertirHora(horaStr) {\n  if (!horaStr || typeof horaStr !== 'string') return null;\n\n  // Normalizar: quitar espacios extra, pasar a minúsculas\n  let s = horaStr.trim().toLowerCase();\n\n  // Quitar puntos en el sufijo y espacios raros: \"a.m.\" -> \"am\", \"p.m.\" -> \"pm\"\n  s = s.replace(/\\./g, '');\n\n  // Separar parte de tiempo y sufijo am/pm\n  const match = s.match(/^(\\d{1,2}:\\d{2}(?::\\d{2})?)\\s*(am|pm)$/);\n  if (!match) {\n    // Si no coincide, intentemos sin sufijo (ya en 24h). Ej: \"22:00:00\"\n    const m24 = s.match(/^(\\d{1,2}):(\\d{2})(?::(\\d{2}))?$/);\n    if (m24) {\n      const h = m24[1].padStart(2, '0');\n      const min = m24[2];\n      return `${h}:${min}`;\n    }\n    // Formato desconocido\n    return null;\n  }\n\n  const timePart = match[1]; // \"10:00:00\" o \"10:00\"\n  const suffix = match[2];   // \"am\" o \"pm\"\n\n  // Extraer horas y minutos\n  const tm = timePart.match(/^(\\d{1,2}):(\\d{2})(?::(\\d{2}))?$/);\n  const hour12 = parseInt(tm[1], 10);\n  const minutes = tm[2];\n\n  // Convertir a 24h\n  let hour24 = hour12 % 12; // 12 -> 0\n  if (suffix === 'pm') hour24 += 12;\n  const hh = String(hour24).padStart(2, '0');\n\n  return `${hh}:${minutes}`;\n}\n\n// Convertir\nconst inicioConvertido = convertirHora(inicio);\nconst terminoConvertido = convertirHora(termino);\n\n// Salida como item de n8n\nreturn [\n  {\n    json: {\n      inicio: inicioConvertido,\n      termino: terminoConvertido\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4576,
+        1376
+      ],
+      "id": "85f3fdde-0e71-439f-b8f1-76b56d996e2b",
+      "name": "normalizar horas"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Solicitud agregar').first().json['Correo administrador'] }}",
+        "subject": "Creacion de sala exitosa",
+        "message": "={{ $json.html }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        5184,
+        1376
+      ],
+      "id": "d5737268-4907-4957-a124-a9b57066cd35",
+      "name": "Send a message3",
+      "webhookId": "b7a06b7d-bc11-41d4-8138-87f1790782b6",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "irwNL1VCyr8bqWol",
+          "name": "Gmail account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "\n\n\n// Genera el HTML del correo\nconst htmlEmail = `\n<!DOCTYPE html>\n<html lang=\"es\">\n  <head>\n    <meta charset=\"UTF-8\" />\n    <title>Confirmación de eliminación</title>\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n    <style>\n      /* Mantén estilos simples y compatibles con clientes de correo */\n      body { margin:0; padding:0; background:#f6f7fb; font-family: Arial, Helvetica, sans-serif; color:#222; }\n      .container { max-width:600px; margin:0 auto; padding:24px; }\n      .card { background:#ffffff; border:1px solid #e6e8eb; border-radius:8px; padding:24px; }\n      .title { font-size:18px; font-weight:bold; margin:0 0 12px; }\n      .text { font-size:15px; line-height:1.6; margin:0 0 16px; }\n      .code { display:inline-block; background:#f1f3f7; border:1px solid #dfe3e8; border-radius:6px; padding:6px 10px; font-weight:bold; }\n      .footer { font-size:12px; color:#666; margin-top:16px; }\n    </style>\n  </head>\n  <body>\n    <div class=\"container\">\n      <div class=\"card\">\n        <h1 class=\"title\">Confirmación de creacion</h1>\n        <p class=\"text\">\n          Hemos creado correctamente la sala\n          <span class=\"code\"></span>.\n        </p>\n        <p class=\"footer\">\n          Si no esperabas este correo, por favor ignóralo o responde a este mensaje para más información.\n        </p>\n      </div>\n    </div>\n  </body>\n</html>\n`;\n\n// Si estás en un Function Node de n8n, devuelve el HTML como parte del item\nreturn [\n  {\n    json: {\n      subject: `Sala creada`,\n      html: htmlEmail,\n      text: `Hemos creado correctamente la sala.`, // Versión de texto plano (fallback)\n    },\n  },\n  ]"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4960,
+        1376
+      ],
+      "id": "cfd8af85-04ae-4fd9-a1fa-e02032f59c89",
+      "name": "html"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Get datos solicitud').first().json['Correo administrador'] }}",
+        "subject": "Solicitud de eliminación de sala",
+        "message": "={{ $json.html }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        5488,
+        2080
+      ],
+      "id": "38764407-cfc2-49b5-bafc-aa02a8789bb0",
+      "name": "Send a message4",
+      "webhookId": "fa1595c4-68e6-4c14-9079-f9c0e6d137ab",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "irwNL1VCyr8bqWol",
+          "name": "Gmail account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const salaEliminar = $('Solicitud').first().json['Codigo sala a eliminar'];\n\n// Obtener todos los items del nodo \"Get lista salas\"\nconst itemsSalas = $('Salas').all();\n\n// Extraer los códigos de sala en un array\nconst salas = itemsSalas.map(item => item.json['Salas']); \n// Ajusta la clave según cómo venga tu JSON\n\n// Confirmar existencia\nconst existe = salas.includes(salaEliminar);\n\n// Buscar la fila completa que coincide\nlet filaCoincidente = null;\nfor (const item of itemsSalas) {\n  // Ajusta la clave según tu estructura real\n  if (item.json['Salas'] === salaEliminar) {\n    filaCoincidente = item.json;\n    break;\n  }\n}\n\nreturn [\n  {\n    json: {\n      salaEliminar,\n      existe,\n      salas,\n      filaCoincidente // aquí devuelves la fila completa si existe\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4144,
+        2688
+      ],
+      "id": "07e6749a-b387-43ce-a6cf-6dcb1477b56a",
+      "name": "Code in JavaScript3"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Obtén el código de sala desde el item \"Solicitud\"\nconst sala = $('Solicitud').first().json['Codigo sala a eliminar'];\n\n\n// Genera el HTML del correo\nconst htmlEmail = `\n<!DOCTYPE html>\n<html lang=\"es\">\n  <head>\n    <meta charset=\"UTF-8\" />\n    <title>Confirmación de eliminación</title>\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n    <style>\n      /* Mantén estilos simples y compatibles con clientes de correo */\n      body { margin:0; padding:0; background:#f6f7fb; font-family: Arial, Helvetica, sans-serif; color:#222; }\n      .container { max-width:600px; margin:0 auto; padding:24px; }\n      .card { background:#ffffff; border:1px solid #e6e8eb; border-radius:8px; padding:24px; }\n      .title { font-size:18px; font-weight:bold; margin:0 0 12px; }\n      .text { font-size:15px; line-height:1.6; margin:0 0 16px; }\n      .code { display:inline-block; background:#f1f3f7; border:1px solid #dfe3e8; border-radius:6px; padding:6px 10px; font-weight:bold; }\n      .footer { font-size:12px; color:#666; margin-top:16px; }\n    </style>\n  </head>\n  <body>\n    <div class=\"container\">\n      <div class=\"card\">\n        <h1 class=\"title\">Confirmación de eliminación</h1>\n        <p class=\"text\">\n          Hemos eliminado correctamente la sala\n          <span class=\"code\">${sala}</span>.\n        </p>\n        <p class=\"footer\">\n          Si no esperabas este correo, por favor ignóralo o responde a este mensaje para más información.\n        </p>\n      </div>\n    </div>\n  </body>\n</html>\n`;\n\n// Si estás en un Function Node de n8n, devuelve el HTML como parte del item\nreturn [\n  {\n    json: {\n      subject: `Sala ${sala} eliminada`,\n      html: htmlEmail,\n      text: `Hemos eliminado correctamente la sala ${sala}.`, // Versión de texto plano (fallback)\n    },\n  },\n  ]"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4816,
+        2592
+      ],
+      "id": "9f4b1996-305b-4086-87e4-a678048f716b",
+      "name": "Code in JavaScript4"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Solicitud').first().json['Correo administrador'] }}",
+        "subject": "Sala eliminada",
+        "message": "={{ $json.html }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        5040,
+        2592
+      ],
+      "id": "c8593499-2e62-4dba-95c3-b63c656d275b",
+      "name": "Send a message5",
+      "webhookId": "8bb56b0e-03b0-4eea-8677-9eb4bbacfa57",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "irwNL1VCyr8bqWol",
+          "name": "Gmail account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Gestion de salas"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        3088,
+        1856
+      ],
+      "typeVersion": 1,
+      "id": "7fa6be28-6940-43ba-b757-7e18e68957ee",
+      "name": "Sticky Note1"
     }
   ],
-  "pinData": {
-    "Test - Datos completos": [
-      {
-        "json": {
-          "headers": {
-            "content-type": "application/json",
-            "user-agent": "PostmanRuntime/7.49.1",
-            "accept": "*/*",
-            "postman-token": "3d1cec62-b2a0-4efe-938f-c43438e8a4a0",
-            "host": "localhost:5678",
-            "accept-encoding": "gzip, deflate, br",
-            "connection": "keep-alive",
-            "content-length": "237"
-          },
-          "params": {},
-          "query": {},
-          "body": {
-            "id": "31/10/2025 16:53:14",
-            "nombre": "Nicolás",
-            "correo": "n.torresdaz@uandresbello.edu",
-            "area": "Ingenieria",
-            "fecha": "1/11/2025",
-            "inicio": "10:00:00 a.m.",
-            "fin": "6:00:00 p.m.",
-            "participantes": "100",
-            "sala": "1-B"
-          },
-          "webhookUrl": "http://localhost:5678/webhook-test/reserva",
-          "executionMode": "test"
-        }
-      }
-    ],
-    "Test - autenticacion": [
-      {
-        "json": {
-          "headers": {
-            "host": "jeremy-pily-prediligently.ngrok-free.dev",
-            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 OPR/122.0.0.0",
-            "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
-            "accept-encoding": "gzip, deflate, br, zstd",
-            "accept-language": "es-419,es;q=0.9,en;q=0.8,ja;q=0.7,pt-BR;q=0.6,pt;q=0.5,fr;q=0.4,zh-CN;q=0.3,zh;q=0.2",
-            "cache-control": "max-age=0",
-            "cookie": "rl_anonymous_id=RudderEncrypt%3AU2FsdGVkX1%2BYPMegSPQjJZmOEjI6%2FI3%2FCdYjd1EWFOa5tkIsHPBIpzNChfv2rR9BOMjXxyKWHtFzS%2FkyX4aDXQ%3D%3D; rl_page_init_referrer=RudderEncrypt%3AU2FsdGVkX1%2B32kPyoRK5bTT3MzIEsl%2BoplPnJFtY76c%3D; rl_page_init_referring_domain=RudderEncrypt%3AU2FsdGVkX1%2FEMmtblgTIT%2FwOx9K7LOcvX6CZhMi5lng%3D; rl_session=RudderEncrypt%3AU2FsdGVkX1%2B62oYImXLGB4VF5oSxYjZ2xp%2FMO4zdjcWP7g8P6YJT1kROYZjoSCoIkpza92NPE%2FaUGsPTu5FYJ03fRBpvmfcUkjwmKVrzP27ns72pcM2nFoSOBJu2x99DdvJfIjfmzfn9V%2Bt9DMt9rQ%3D%3D; abuse_interstitial=jeremy-pily-prediligently.ngrok-free.dev",
-            "priority": "u=0, i",
-            "sec-ch-ua": "\"Not)A;Brand\";v=\"8\", \"Chromium\";v=\"138\", \"Opera GX\";v=\"122\"",
-            "sec-ch-ua-mobile": "?0",
-            "sec-ch-ua-platform": "\"Windows\"",
-            "sec-fetch-dest": "document",
-            "sec-fetch-mode": "navigate",
-            "sec-fetch-site": "same-origin",
-            "sec-fetch-user": "?1",
-            "upgrade-insecure-requests": "1",
-            "x-forwarded-for": "2800:300:6e51:4e0:5cb:1757:bf1a:6e27",
-            "x-forwarded-host": "jeremy-pily-prediligently.ngrok-free.dev",
-            "x-forwarded-proto": "https"
-          },
-          "params": {},
-          "query": {
-            "code": "M.C508_BAY.2.U.da1b91e8-2b4b-1547-a0b5-dc22d74a8d47",
-            "state": "8/11/2025 13:02:00"
-          },
-          "body": {},
-          "webhookUrl": "http://localhost:5678/webhook-test/oauth2-credential/callback",
-          "executionMode": "test"
-        }
-      }
-    ],
-    "Test - auth reserva ocupada": [
-      {
-        "json": {
-          "headers": {
-            "host": "jeremy-pily-prediligently.ngrok-free.dev",
-            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 OPR/122.0.0.0",
-            "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
-            "accept-encoding": "gzip, deflate, br, zstd",
-            "accept-language": "es-419,es;q=0.9,en;q=0.8,ja;q=0.7,pt-BR;q=0.6,pt;q=0.5,fr;q=0.4,zh-CN;q=0.3,zh;q=0.2",
-            "cache-control": "max-age=0",
-            "cookie": "rl_anonymous_id=RudderEncrypt%3AU2FsdGVkX1%2BYPMegSPQjJZmOEjI6%2FI3%2FCdYjd1EWFOa5tkIsHPBIpzNChfv2rR9BOMjXxyKWHtFzS%2FkyX4aDXQ%3D%3D; rl_page_init_referrer=RudderEncrypt%3AU2FsdGVkX1%2B32kPyoRK5bTT3MzIEsl%2BoplPnJFtY76c%3D; rl_page_init_referring_domain=RudderEncrypt%3AU2FsdGVkX1%2FEMmtblgTIT%2FwOx9K7LOcvX6CZhMi5lng%3D; rl_session=RudderEncrypt%3AU2FsdGVkX1%2B62oYImXLGB4VF5oSxYjZ2xp%2FMO4zdjcWP7g8P6YJT1kROYZjoSCoIkpza92NPE%2FaUGsPTu5FYJ03fRBpvmfcUkjwmKVrzP27ns72pcM2nFoSOBJu2x99DdvJfIjfmzfn9V%2Bt9DMt9rQ%3D%3D; abuse_interstitial=jeremy-pily-prediligently.ngrok-free.dev",
-            "priority": "u=0, i",
-            "sec-ch-ua": "\"Not)A;Brand\";v=\"8\", \"Chromium\";v=\"138\", \"Opera GX\";v=\"122\"",
-            "sec-ch-ua-mobile": "?0",
-            "sec-ch-ua-platform": "\"Windows\"",
-            "sec-fetch-dest": "document",
-            "sec-fetch-mode": "navigate",
-            "sec-fetch-site": "same-origin",
-            "sec-fetch-user": "?1",
-            "upgrade-insecure-requests": "1",
-            "x-forwarded-for": "2800:300:6e51:4e0:5cb:1757:bf1a:6e27",
-            "x-forwarded-host": "jeremy-pily-prediligently.ngrok-free.dev",
-            "x-forwarded-proto": "https"
-          },
-          "params": {},
-          "query": {
-            "code": "M.C508_BAY.2.U.da1b91e8-2b4b-1547-a0b5-dc22d74a8d47",
-            "state": "8/11/2025 13:15:03"
-          },
-          "body": {},
-          "webhookUrl": "http://localhost:5678/webhook-test/oauth2-credential/callback",
-          "executionMode": "test"
-        }
-      }
-    ]
-  },
+  "pinData": {},
   "connections": {
+    "Validar Participantes": {
+      "main": [
+        [
+          {
+            "node": "IF - ¿Error en correos?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF - ¿Error en correos?": {
+      "main": [
+        [],
+        [
+          {
+            "node": "IF - ¿Disponible?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF - ¿Disponible?": {
+      "main": [
+        [
+          {
+            "node": "Crear ID",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Gmail Rechazo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail Rechazo": {
+      "main": [
+        []
+      ]
+    },
     "Datos completos?": {
       "main": [
         [
@@ -1079,45 +2098,11 @@
         ]
       ]
     },
-    "IF - ¿Disponible?": {
-      "main": [
-        [
-          {
-            "node": "Crear ID",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Rechazo",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Gmail Confirmacion": {
-      "main": [
-        [
-          {
-            "node": "Responder Webhook - OK",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Google Calendar",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Registrar": {
       "main": [
         [
           {
-            "node": "Gmail Confirmacion",
+            "node": "correo de aprobacion - encargado",
             "type": "main",
             "index": 0
           }
@@ -1126,151 +2111,14 @@
     },
     "Rechazo": {
       "main": [
-        [
-          {
-            "node": "Responder Webhook - Rechazo",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Revisar reservas": {
-      "main": [
-        [
-          {
-            "node": "Extraer solicitud de reserva",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Webhook Cancelar": {
-      "main": [
-        [
-          {
-            "node": "Google Sheets - Buscar por ID",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Google Sheets - Buscar por ID": {
-      "main": [
-        [
-          {
-            "node": "Code - Extrae datos",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Code - Extrae datos": {
-      "main": [
-        [
-          {
-            "node": "Google Sheets - Eliminar fila",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Google Sheets - Eliminar fila": {
-      "main": [
-        [
-          {
-            "node": "Gmail - Enviar notificación cancelación",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Google Calendar - Eliminar evento",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Gmail - Enviar notificación cancelación": {
-      "main": [
-        [
-          {
-            "node": "Responder éxito",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Google Calendar - Eliminar evento": {
-      "main": [
-        [
-          {
-            "node": "Gmail - Enviar notificación cancelación",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Code - Extraer Event ID",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Code - Extraer Event ID": {
-      "main": [
-        [
-          {
-            "node": "Google Calendar - Eliminar por ID",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Google Calendar - Eliminar por ID": {
-      "main": [
-        [
-          {
-            "node": "Gmail - Enviar notificación cancelación",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Test - Datos completos": {
-      "main": [
-        [
-          {
-            "node": "Datos completos?",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Recibir autenticacion": {
       "main": [
         [
           {
-            "node": "Revisar reservas",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Test - autenticacion": {
-      "main": [
-        [
-          {
-            "node": "Revisar reservas",
+            "node": "Revisar reservas1",
             "type": "main",
             "index": 0
           }
@@ -1299,17 +2147,6 @@
         ]
       ]
     },
-    "Test - auth reserva ocupada": {
-      "main": [
-        [
-          {
-            "node": "Revisar reservas",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Crear ID": {
       "main": [
         [
@@ -1325,7 +2162,458 @@
       "main": [
         [
           {
-            "node": "IF - ¿Disponible?",
+            "node": "IF - ¿Disponible?1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF - ¿Disponible?1": {
+      "main": [
+        [
+          {
+            "node": "Validar Participantes",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Rechazo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Revisar reservas1": {
+      "main": [
+        [
+          {
+            "node": "Extraer solicitud de reserva",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets - Obtener filas": {
+      "main": [
+        [
+          {
+            "node": "Code - Buscar reserva por ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code - Buscar reserva por ID": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets - Eliminar fila1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Google Calendar - Eliminar por ID1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Google Sheets - Registrar cancelacion",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook Cancelar1": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets - Obtener filas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets - Eliminar fila1": {
+      "main": [
+        [
+          {
+            "node": "Gmail - Enviar notificación cancelación1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail - Enviar notificación cancelación1": {
+      "main": [
+        [
+          {
+            "node": "Responder éxito1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "correo de aprobacion - encargado": {
+      "main": [
+        [
+          {
+            "node": "Google Calendar1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Get datos solicitud",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get datos solicitud": {
+      "main": [
+        [
+          {
+            "node": "Get lista salas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get lista salas": {
+      "main": [
+        [
+          {
+            "node": "Tipo formulario",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tipo formulario": {
+      "main": [
+        [
+          {
+            "node": "Agregar/Eliminar sala",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar sala": {
+      "main": [
+        [
+          {
+            "node": "Existe sala?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Confirmacion eliminacion": {
+      "main": [
+        [
+          {
+            "node": "Solicitud",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Existe sala?": {
+      "main": [
+        [
+          {
+            "node": "mismo admin?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Stop and Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "mismo admin?": {
+      "main": [
+        [
+          {
+            "node": "html correo",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Stop and Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "html correo": {
+      "main": [
+        [
+          {
+            "node": "Send a message4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Solicitud": {
+      "main": [
+        [
+          {
+            "node": "Salas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Salas": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sigue existiendo": {
+      "main": [
+        [
+          {
+            "node": "Delete rows or columns from sheet",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Stop and Error1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delete rows or columns from sheet": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sala repetida": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Stop and Error2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sala repetida?": {
+      "main": [
+        [
+          {
+            "node": "Sala repetida",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agregar/Eliminar sala": {
+      "main": [
+        [
+          {
+            "node": "Sala repetida?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Buscar sala",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Stop and Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript2": {
+      "main": [
+        [
+          {
+            "node": "Send a message2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook2": {
+      "main": [
+        [
+          {
+            "node": "Solicitud agregar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lista salas": {
+      "main": [
+        [
+          {
+            "node": "Sigue sin existir?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sigue sin existir?": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "normalizar horas",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Stop and Error3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Solicitud agregar": {
+      "main": [
+        [
+          {
+            "node": "Lista salas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "normalizar horas": {
+      "main": [
+        [
+          {
+            "node": "Creacion sala nueva",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Creacion sala nueva": {
+      "main": [
+        [
+          {
+            "node": "html",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "html": {
+      "main": [
+        [
+          {
+            "node": "Send a message3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript3": {
+      "main": [
+        [
+          {
+            "node": "Sigue existiendo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript4": {
+      "main": [
+        [
+          {
+            "node": "Send a message5",
             "type": "main",
             "index": 0
           }
@@ -1333,19 +2621,15 @@
       ]
     }
   },
-  "active": true,
+  "active": false,
   "settings": {
-    "executionOrder": "v1",
-    "callerPolicy": "workflowsFromSameOwner",
-    "availableInMCP": false,
-    "errorWorkflow": "TKv6ipo4nI363US7",
-    "timeSavedPerExecution": 0
+    "executionOrder": "v1"
   },
-  "versionId": "18618296-27c9-4afb-b61e-3ef282e07737",
+  "versionId": "a73cbe03-fbe6-43a7-8d0b-a8524c65028a",
   "meta": {
     "templateCredsSetupCompleted": true,
-    "instanceId": "d4c9b3ce393a220acee21dac452e47e92f8db10620fe87691ea485c77483a9f5"
+    "instanceId": "329da24686c0fb2dc28fa0c9c962e549e2a0d4f6a8ac08a0b7b38a0d77558624"
   },
-  "id": "n3utUVKmu0gP3Osb",
+  "id": "EPApBFqM61d20zif",
   "tags": []
 }
