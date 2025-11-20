@@ -1,0 +1,97 @@
+{
+  "name": "HU-04: Notificacion al encargado",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "d1e185d0-acfe-4dc5-aa8f-b48bc37bb5cd",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -176,
+        -128
+      ],
+      "id": "cb1eed8b-a0a8-4c06-b26f-a78796bb4537",
+      "name": "Webhook",
+      "webhookId": "d1e185d0-acfe-4dc5-aa8f-b48bc37bb5cd"
+    },
+    {
+      "parameters": {
+        "content": "## HU-04: Notificacion al encargado\nEnvia un correo automatico al encargado cuando alguna reserva se confirme",
+        "height": 192
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -208,
+        -528
+      ],
+      "id": "16e75795-79c1-4df5-959b-5667d991c570",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "Ejemplo de JSON\n{\n  \"correo_encargado\": \"franciscojespinozav@gmail.com\",\n  \"nombre_encargado\": \"Francisco Espinoza\",\n  \"nombre_solicitante\": \"María López\",\n  \"correo_solicitante\": \"maria.lopez@empresa.cl\",\n  \"area_departamento\": \"Recursos Humanos\",\n  \"fecha\": \"2025-11-20\",\n  \"hora_inicio\": \"10:00\",\n  \"hora_termino\": \"12:00\",\n  \"numero_participantes\": 8,\n  \"sala\": \"Sala de Reuniones 3\"\n}",
+        "height": 368
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        112,
+        -528
+      ],
+      "id": "bece72a5-1081-4be9-8ef8-a6770d2a3965",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.body.correo_encargado }}",
+        "subject": "={{\"Reserva de sala aprobada - \" + $json.body[\"fecha\"] + \" \" + $json.body[\"hora_inicio\"]}}",
+        "message": "=<html>   <body style=\"font-family: Arial, sans-serif; font-size: 14px;\">     <p>Hola {{ $json.body[\"nombre_encargado\"] }},</p>      <p>       Se ha <strong>aprobado</strong> una nueva reserva de sala. A continuación encontrarás el detalle:     </p>      <table border=\"1\" cellpadding=\"6\" cellspacing=\"0\" style=\"border-collapse: collapse;\">       <tr>         <th align=\"left\">Solicitante</th>         <td>{{ $json.body[\"nombre_solicitante\"] }} ({{ $json.body[\"correo_solicitante\"] }})</td>       </tr>       <tr>         <th align=\"left\">Área / Departamento</th>         <td>{{ $json.body[\"area_departamento\"] }}</td>       </tr>       <tr>         <th align=\"left\">Sala</th>         <td>{{ $json.body[\"sala\"] }}</td>       </tr>       <tr>         <th align=\"left\">Fecha</th>         <td>{{ $json.body[\"fecha\"] }}</td>       </tr>       <tr>         <th align=\"left\">Horario</th>         <td>{{ $json.body[\"hora_inicio\"] }} – {{ $json.body[\"hora_termino\"] }}</td>       </tr>       <tr>         <th align=\"left\">N° Participantes</th>         <td>{{ $json.body[\"numero_participantes\"] }}</td>       </tr>     </table>      <p style=\"margin-top: 16px;\">       Por favor, coordina cualquier cambio directamente con el/la solicitante.     </p>      <p>Saludos cordiales,<br/>     Sistema de reservas</p>   </body> </html>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        128,
+        -128
+      ],
+      "id": "d5b75dd5-81a9-49a8-b479-5ed9e97e48f9",
+      "name": "correo de aprobacion - encargado",
+      "webhookId": "53e8f0fc-7fe0-45a0-b86e-4377686c6ed7",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "LGezdq22HDgoCHcX",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "correo de aprobacion - encargado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "cf8b21df-285b-469c-b9f4-c813bf124b5e",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "4bbe6dcbdeac6e58e31d8870bdb4658b96b3a51b38c763a613f7198406b04293"
+  },
+  "id": "Y0KT2bTVA0W2lCSm",
+  "tags": []
+}
