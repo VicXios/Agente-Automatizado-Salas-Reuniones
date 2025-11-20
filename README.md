@@ -1,5 +1,5 @@
 # Agente-Automatizado-Salas-Reuniones
-Flujos de automatización n8n del proyecto Sistema de Reservas de Salas Institucionales (Sprint 1)
+Flujos de automatización n8n del proyecto Sistema de Reservas de Salas Institucionales (Sprint 2)
 
 Sistema de Reservas - Flujos n8n
 
