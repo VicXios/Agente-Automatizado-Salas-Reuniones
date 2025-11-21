@@ -198,7 +198,7 @@ Permite al encargado:
 9.1 Pruebas con Postman
 
 - Simulaciones POST enviando JSON a Webhooks:
-- POST https://xxxxxx.ngrok-free.app/webhook-test/reserva-sala
+- POST https://xxxxxx.ngrok-free.app/webhook-test/reserva-sala (Metodo para probar los flujos de manera manual dandole un post prueba, asignar link del webhook de cada historia para utlizarlo)
 
 Ejemplo JSON:
 {
