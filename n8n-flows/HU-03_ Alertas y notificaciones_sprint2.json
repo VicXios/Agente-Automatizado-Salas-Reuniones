@@ -1,0 +1,124 @@
+{
+  "name": "HU-03: Alertas y notificaciones",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "3cd1f5f7-3e2a-4d70-8d8b-a4c4ae8e4354",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "33707e5b-0f01-4149-868c-ff8bb645bfc9",
+      "name": "Webhook",
+      "webhookId": "3cd1f5f7-3e2a-4d70-8d8b-a4c4ae8e4354"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.body.correo_solicitante }}",
+        "subject": "={{\"Reserva de sala modificada - \" + $json.body[\"fecha\"] + \" \" + $json.body[\"hora_inicio\"]}}",
+        "message": "=<html>\n  <body style=\"font-family: Arial, sans-serif; font-size: 14px;\">\n    <p>Hola {{ $json.body[\"nombre_solicitante\"] }},</p>\n\n    <p>\n      Se ha <strong>modificado</strong> una nueva reserva de sala. A continuación encontrarás el detalle:\n    </p>\n\n    <table border=\"1\" cellpadding=\"6\" cellspacing=\"0\" style=\"border-collapse: collapse;\">\n      <tr>\n        <th align=\"left\">Solicitante</th>\n        <td>{{ $json.body[\"nombre_solicitante\"] }} ({{ $json.body[\"correo_solicitante\"] }})</td>\n      </tr>\n      <tr>\n        <th align=\"left\">Área / Departamento</th>\n        <td>{{ $json.body[\"area_departamento\"] }}</td>\n      </tr>\n      <tr>\n        <th align=\"left\">Sala</th>\n        <td>{{ $json.body[\"sala\"] }}</td>\n      </tr>\n      <tr>\n        <th align=\"left\">Fecha</th>\n        <td>{{ $json.body[\"fecha\"] }}</td>\n      </tr>\n      <tr>\n        <th align=\"left\">Horario</th>\n        <td>{{ $json.body[\"hora_inicio\"] }} – {{ $json.body[\"hora_termino\"] }}</td>\n      </tr>\n      <tr>\n        <th align=\"left\">N° Participantes</th>\n        <td>{{ $json.body[\"numero_participantes\"] }}</td>\n      </tr>\n    </table>\n\n    <p style=\"margin-top: 16px;\">\n      actualización de cambio\n    </p>\n\n    <table border=\"1\" cellpadding=\"6\" cellspacing=\"0\" style=\"border-collapse: collapse;\">\n      <tr>\n        <th align=\"left\">Solicitante</th>\n        <td>{{ $json.body[\"nombre_solicitante\"] }} ({{ $json.body[\"correo_solicitante\"] }})</td>\n      </tr>\n      <tr>\n        <th align=\"left\">Área / Departamento</th>\n        <td>{{ $json.body[\"area_departamento_nuevo\"] }}</td>\n      </tr>\n      <tr>\n        <th align=\"left\">Sala</th>\n        <td>{{ $json.body[\"sala_nuevo\"] }}</td>\n      </tr>\n      <tr>\n        <th align=\"left\">Fecha</th>\n        <td>{{ $json.body[\"fecha_nuevo\"] }}</td>\n      </tr>\n      <tr>\n        <th align=\"left\">Horario</th>\n        <td>{{ $json.body[\"hora_inicio_nuevo\"] }} – {{ $json.body[\"hora_termino_nuevo\"] }}</td>\n      </tr>\n      <tr>\n        <th align=\"left\">N° Participantes</th>\n        <td>{{ $json.body[\"numero_participantes_nuevo\"] }}</td>\n      </tr>\n    </table>\n\n    <p>Saludos cordiales,<br/>\n    Sistema de reservas</p>\n  </body>\n</html>\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "812ea28b-4467-4eb4-ab9e-5cbb919b9629",
+      "name": "Correo de modificación - solicitante",
+      "webhookId": "8eb6ecbc-e2ef-4156-9ad4-a152d8c9955b",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "LGezdq22HDgoCHcX",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.body.correo_encargado }}",
+        "subject": "={{\"Reserva de sala modificada - \" + $json.body[\"fecha\"] + \" \" + $json.body[\"hora_inicio\"]}}",
+        "message": "=<html>   <body style=\"font-family: Arial, sans-serif; font-size: 14px;\">     <p>Hola {{ $json.body[\"nombre_encargado\"] }},</p>      <p>       Se ha <strong>modificado</strong> una nueva reserva de sala. A continuación encontrarás el detalle:     </p>      <table border=\"1\" cellpadding=\"6\" cellspacing=\"0\" style=\"border-collapse: collapse;\">       <tr>         <th align=\"left\">Solicitante</th>         <td>{{ $json.body[\"nombre_solicitante\"] }} ({{ $json.body[\"correo_solicitante\"] }})</td>       </tr>       <tr>         <th align=\"left\">Área / Departamento</th>         <td>{{ $json.body[\"area_departamento\"] }}</td>       </tr>       <tr>         <th align=\"left\">Sala</th>         <td>{{ $json.body[\"sala\"] }}</td>       </tr>       <tr>         <th align=\"left\">Fecha</th>         <td>{{ $json.body[\"fecha\"] }}</td>       </tr>       <tr>         <th align=\"left\">Horario</th>         <td>{{ $json.body[\"hora_inicio\"] }} – {{ $json.body[\"hora_termino\"] }}</td>       </tr>       <tr>         <th align=\"left\">N° Participantes</th>         <td>{{ $json.body[\"numero_participantes\"] }}</td>       </tr>     </table>      <p style=\"margin-top: 16px;\">       actualización de cambio     </p>      <table border=\"1\" cellpadding=\"6\" cellspacing=\"0\" style=\"border-collapse: collapse;\">       <tr>         <th align=\"left\">Solicitante</th>         <td>{{ $json.body[\"nombre_solicitante\"] }} ({{ $json.body[\"correo_solicitante\"] }})</td>       </tr>       <tr>         <th align=\"left\">Área / Departamento</th>         <td>{{ $json.body[\"area_departamento_nuevo\"] }}</td>       </tr>       <tr>         <th align=\"left\">Sala</th>         <td>{{ $json.body[\"sala_nuevo\"] }}</td>       </tr>       <tr>         <th align=\"left\">Fecha</th>         <td>{{ $json.body[\"fecha_nuevo\"] }}</td>       </tr>       <tr>         <th align=\"left\">Horario</th>         <td>{{ $json.body[\"hora_inicio_nuevo\"] }} – {{ $json.body[\"hora_termino_nuevo\"] }}</td>       </tr>       <tr>         <th align=\"left\">N° Participantes</th>         <td>{{ $json.body[\"numero_participantes_nuevo\"] }}</td>       </tr>     </table>      <p>Saludos cordiales,<br/>     Sistema de reservas</p>   </body> </html>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        208,
+        -208
+      ],
+      "id": "30a2cc39-640b-48bc-aab4-3b48d693a7fd",
+      "name": "correo de modificación - encargado",
+      "webhookId": "b78d1aa6-ba74-4d11-85e6-4cbfc5f9a9c6",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "LGezdq22HDgoCHcX",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "HU-03: Alerta y notificaciones\nse define html de notificacion y se envia notificacion de modificacion a solicitante y a encargado"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -80,
+        -368
+      ],
+      "id": "f09b5726-a5e5-4e52-9873-80f052b11719",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "Ejemplo de JSON\n{\n  \"correo_encargado\": \"franciscojespinozav@gmail.com\",\n  \"nombre_encargado\": \"Francisco Espinoza\",\n  \"nombre_solicitante\": \"María López\",\n  \"correo_solicitante\": \"franciscojespinozav@gmail.com\",\n  \"area_departamento\": \"Recursos Humanos\",\n  \"fecha\": \"2025-11-20\",\n  \"hora_inicio\": \"10:00\",\n  \"hora_termino\": \"12:00\",\n  \"numero_participantes\": 8,\n  \"sala\": \"Sala de Reuniones 3\",\n  \n  \"area_departamento_nuevo\": \"Recursos Humanos\",\n  \"fecha_nuevo\": \"2025-11-20\",\n  \"hora_inicio_nuevo\": \"11:00\",\n  \"hora_termino_nuevo\": \"13:00\",\n  \"numero_participantes_nuevo\": 8,\n  \"sala_nuevo\": \"Sala de Reuniones 4\"\n}",
+        "height": 576
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        464,
+        -368
+      ],
+      "id": "995dcc2b-c698-4ed5-910d-5cc0f58dcc75",
+      "name": "Sticky Note1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Correo de modificación - solicitante",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "correo de modificación - encargado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "25949fc3-850f-46eb-855b-030dfad792f3",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "4bbe6dcbdeac6e58e31d8870bdb4658b96b3a51b38c763a613f7198406b04293"
+  },
+  "id": "FEAtERYelTt4eumt",
+  "tags": []
+}

@@ -1,0 +1,629 @@
+{
+  "name": "HU-09: Gestion de salas",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "Salas",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        208,
+        96
+      ],
+      "id": "06f1e9f6-bec7-4a26-b67d-c83e4e75b3ba",
+      "name": "Webhook",
+      "webhookId": "6a731da8-1093-4629-81ef-5a7e8f648c95"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M",
+          "mode": "list",
+          "cachedResultName": "Salas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1702884083,
+          "mode": "list",
+          "cachedResultName": "Solicitud gestion de sala",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit#gid=1702884083"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Marca temporal",
+              "lookupValue": "={{ $json.body.id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        416,
+        0
+      ],
+      "id": "24785de6-b849-4ece-9f3b-0e46627b8116",
+      "name": "Get datos solicitud",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "gWSCpACgvfwv0eO3",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.tipoSolicitud }}",
+                    "rightValue": "agregar",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "5848cfac-f7eb-4970-8ec1-9676a052913a"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Nueva sala"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "b6919c9a-1abd-4f99-8528-a8126969cbbb",
+                    "leftValue": "={{ $json.tipoSolicitud }}",
+                    "rightValue": "=eliminar",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Eliminar sala"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "2ae0a2d7-8317-49b2-84ec-63a0c0b68aa8",
+                    "leftValue": "={{ $json.tipoSolicitud }}",
+                    "rightValue": "incompleto",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "error"
+            }
+          ]
+        },
+        "options": {
+          "ignoreCase": false
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        832,
+        -16
+      ],
+      "id": "dfdb4f63-29dc-4e4f-98c8-d46fada83ba6",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "Salas",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        208,
+        -128
+      ],
+      "id": "33c9137e-225e-41e3-8852-7ffd54626871",
+      "name": "Webhook1",
+      "webhookId": "6a731da8-1093-4629-81ef-5a7e8f648c95"
+    },
+    {
+      "parameters": {
+        "errorMessage": "Error"
+      },
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        1696,
+        240
+      ],
+      "id": "91eb0edd-2fa3-4c88-8de9-611514446912",
+      "name": "Stop and Error"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M",
+          "mode": "list",
+          "cachedResultName": "Salas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "SalasDisponibles",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        576,
+        0
+      ],
+      "id": "a92d17f8-2e28-45e4-af6d-eadef4ded8c5",
+      "name": "Get lista salas",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "gWSCpACgvfwv0eO3",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const correo = $('Get datos solicitud').first().json['Correo administrador']\nconst nuevaSala = $('Get datos solicitud').first().json['Codigo de sala unico']\nconst capacidad = $('Get datos solicitud').first().json['Capacidad maxima de participantes']\nconst apertura = $('Get datos solicitud').first().json['Hora de apertura']\nconst cierre = $('Get datos solicitud').first().json['Hora de cierre']\nconst ubicacion = $('Get datos solicitud').first().json['Ubicacion (piso, edificio,sector)']\nconst eliminarSala = $('Get datos solicitud').first().json['Codigo sala a eliminar']\n\n// Función auxiliar para verificar si un campo tiene valor\nfunction tieneDato(valor) {\n  return valor !== undefined && valor !== null && String(valor).trim() !== '';\n}\n\nlet tipoSolicitud = \"incompleto\";\n\n// Caso AGREGAR: todos los campos de agregar tienen datos y eliminarSala está vacío\nif (\n  tieneDato(correo) &&\n  tieneDato(nuevaSala) &&\n  tieneDato(capacidad) &&\n  tieneDato(apertura) &&\n  tieneDato(cierre) &&\n  tieneDato(ubicacion) &&\n  !tieneDato(eliminarSala)\n) {\n  tipoSolicitud = \"agregar\";\n}\n\n// Caso ELIMINAR: correo y eliminarSala tienen datos y el resto está vacío\nelse if (\n  tieneDato(correo) &&\n  tieneDato(eliminarSala) &&\n  !tieneDato(nuevaSala) &&\n  !tieneDato(capacidad) &&\n  !tieneDato(apertura) &&\n  !tieneDato(cierre) &&\n  !tieneDato(ubicacion)\n) {\n  tipoSolicitud = \"eliminar\";\n}\n\n// En cualquier otro escenario → incompleto\nreturn [\n  {\n    json: {\n      ...$(\"Get datos solicitud\").first().json,\n      tipoSolicitud\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        704,
+        0
+      ],
+      "id": "b65d2a64-4de5-4e45-aabd-82cd6ea926b0",
+      "name": "Tipo formulario"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "a1803664-7c61-45d5-b9da-77919d704577",
+              "leftValue": "={{ $json.existe }}",
+              "rightValue": "true",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1344,
+        0
+      ],
+      "id": "4a7cbb37-4a5f-4328-9cf8-575515a9a213",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "jsCode": "const salaEliminar = $('Get datos solicitud').first().json['Codigo sala a eliminar'];\n\n// Obtener todos los items del nodo \"Get lista salas\"\nconst itemsSalas = $('Get lista salas').all();\n\n// Extraer los códigos de sala en un array\nconst salas = itemsSalas.map(item => item.json['Salas']); \n// Ajusta la clave según cómo venga tu JSON\n\n// Confirmar existencia\nconst existe = salas.includes(salaEliminar);\n\n// Buscar la fila completa que coincide\nlet filaCoincidente = null;\nfor (const item of itemsSalas) {\n  // Ajusta la clave según tu estructura real\n  if (item.json['Salas'] === salaEliminar) {\n    filaCoincidente = item.json;\n    break;\n  }\n}\n\nreturn [\n  {\n    json: {\n      salaEliminar,\n      existe,\n      salas,\n      filaCoincidente // aquí devuelves la fila completa si existe\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1136,
+        0
+      ],
+      "id": "4cba7a44-39b0-4583-beff-b3e375430c03",
+      "name": "Buscar sala"
+    },
+    {
+      "parameters": {
+        "jsCode": "const sala = $('Buscar sala').first().json.filaCoincidente.Salas;\nconst participantes = $('Buscar sala').first().json.filaCoincidente.MaxParticipantes;\nconst apertura = $('Buscar sala').first().json.filaCoincidente['Hora apertura'];\nconst cierre = $('Buscar sala').first().json.filaCoincidente['Hora cierre'];\nconst ubicacion = $('Buscar sala').first().json.filaCoincidente.Ubicacion;\n\nconst clientId = '36788e45-7a1d-4015-8040-9e3e065953fc';\nconst redirectUri = encodeURIComponent('https://jeremy-pily-prediligently.ngrok-free.dev/webhook-test/oauth2-credential/callback/eliminar');\nconst scope = encodeURIComponent('https://graph.microsoft.com/User.Read');\nconst state = encodeURIComponent($('Get datos solicitud').first().json['Marca temporal']);\n\n\n\nconst html = `\n  <html>\n    <body>\n      <p>Usted está intentando eliminar esta sala:</p>\n      <table border=\"1\" cellpadding=\"5\" cellspacing=\"0\" style=\"border-collapse: collapse;\">\n        <tr>\n          <th>Código de sala</th>\n          <td>${sala}</td>\n        </tr>\n        <tr>\n          <th>Capacidad máxima</th>\n          <td>${participantes}</td>\n        </tr>\n        <tr>\n          <th>Hora de apertura</th>\n          <td>${apertura}</td>\n        </tr>\n        <tr>\n          <th>Hora de cierre</th>\n          <td>${cierre}</td>\n        </tr>\n        <tr>\n          <th>Ubicación</th>\n          <td>${ubicacion}</td>\n        </tr>\n      </table>\n      <p>//login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=${clientId}&response_type=code&redirect_uri=${redirectUri}&scope=${scope}&state=${state}<p>\n    </body>\n  </html>\n`;\n\nreturn [\n  {\n    json: {\n      html\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1808,
+        -144
+      ],
+      "id": "53e70398-4b40-4b31-b667-c741dac78ca9",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "4eae8564-1638-4825-a88a-cfb4519418b0",
+              "leftValue": "={{ $json.filaCoincidente['Correo admin'] }}",
+              "rightValue": "={{ $('Get datos solicitud').first().json['Correo administrador'] }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1552,
+        -96
+      ],
+      "id": "bbb319aa-3ef7-4874-8935-4929ebb7b7c0",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Get datos solicitud').first().json['Correo administrador'] }}",
+        "subject": "Solicitud de eliminación de sala",
+        "message": "={{ $json.html }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        2016,
+        -144
+      ],
+      "id": "a2c2f9a0-8e23-4a2b-9b6c-247ed9f7ffa7",
+      "name": "Send a message",
+      "webhookId": "fa1595c4-68e6-4c14-9079-f9c0e6d137ab",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "irwNL1VCyr8bqWol",
+          "name": "Gmail account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        992,
+        368
+      ],
+      "id": "e0760c41-fb40-441a-b970-adb6b259ba97",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "gWSCpACgvfwv0eO3",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "path": "oauth2-credential/callback/eliminar",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        784,
+        368
+      ],
+      "id": "6e71eedf-e950-4e89-895f-68b74fd839ce",
+      "name": "Confirmacion",
+      "webhookId": "efda54ab-63cb-4ecc-a095-cf604f7eb067"
+    }
+  ],
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "jeremy-pily-prediligently.ngrok-free.dev",
+            "user-agent": "Mozilla/5.0 (compatible; Google-Apps-Script; beanserver; +https://script.google.com; id: UAEmdDd9BY3vrcnO5EVquSyGnLTuW6Gcikw)",
+            "content-length": "28",
+            "accept-encoding": "gzip, deflate, br",
+            "content-type": "application/json",
+            "x-forwarded-for": "107.178.192.42",
+            "x-forwarded-host": "jeremy-pily-prediligently.ngrok-free.dev",
+            "x-forwarded-proto": "https"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "id": "13/11/2025 11:25:35"
+          },
+          "webhookUrl": "http://localhost:5678/webhook-test/Salas",
+          "executionMode": "test"
+        }
+      }
+    ],
+    "Webhook1": [
+      {
+        "json": {
+          "headers": {
+            "host": "jeremy-pily-prediligently.ngrok-free.dev",
+            "user-agent": "Mozilla/5.0 (compatible; Google-Apps-Script; beanserver; +https://script.google.com; id: UAEmdDd9BY3vrcnO5EVquSyGnLTuW6Gcikw)",
+            "content-length": "28",
+            "accept-encoding": "gzip, deflate, br",
+            "content-type": "application/json",
+            "x-forwarded-for": "107.178.192.42",
+            "x-forwarded-host": "jeremy-pily-prediligently.ngrok-free.dev",
+            "x-forwarded-proto": "https"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "id": "13/11/2025 12:08:12"
+          },
+          "webhookUrl": "http://localhost:5678/webhook-test/Salas",
+          "executionMode": "test"
+        }
+      }
+    ],
+    "Confirmacion": [
+      {
+        "json": {
+          "headers": {
+            "host": "jeremy-pily-prediligently.ngrok-free.dev",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 OPR/123.0.0.0",
+            "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+            "accept-encoding": "gzip, deflate, br, zstd",
+            "accept-language": "es-419,es;q=0.9,en;q=0.8,ja;q=0.7,pt-BR;q=0.6,pt;q=0.5,fr;q=0.4,zh-CN;q=0.3,zh;q=0.2",
+            "cookie": "rl_anonymous_id=RudderEncrypt%3AU2FsdGVkX1%2BYPMegSPQjJZmOEjI6%2FI3%2FCdYjd1EWFOa5tkIsHPBIpzNChfv2rR9BOMjXxyKWHtFzS%2FkyX4aDXQ%3D%3D; rl_page_init_referrer=RudderEncrypt%3AU2FsdGVkX1%2B32kPyoRK5bTT3MzIEsl%2BoplPnJFtY76c%3D; rl_page_init_referring_domain=RudderEncrypt%3AU2FsdGVkX1%2FEMmtblgTIT%2FwOx9K7LOcvX6CZhMi5lng%3D; rl_session=RudderEncrypt%3AU2FsdGVkX1%2B62oYImXLGB4VF5oSxYjZ2xp%2FMO4zdjcWP7g8P6YJT1kROYZjoSCoIkpza92NPE%2FaUGsPTu5FYJ03fRBpvmfcUkjwmKVrzP27ns72pcM2nFoSOBJu2x99DdvJfIjfmzfn9V%2Bt9DMt9rQ%3D%3D; abuse_interstitial=jeremy-pily-prediligently.ngrok-free.dev",
+            "priority": "u=0, i",
+            "referer": "https://login.microsoftonline.com/",
+            "sec-ch-ua": "\"Not;A=Brand\";v=\"99\", \"Opera GX\";v=\"123\", \"Chromium\";v=\"139\"",
+            "sec-ch-ua-mobile": "?0",
+            "sec-ch-ua-platform": "\"Windows\"",
+            "sec-fetch-dest": "document",
+            "sec-fetch-mode": "navigate",
+            "sec-fetch-site": "cross-site",
+            "sec-fetch-user": "?1",
+            "upgrade-insecure-requests": "1",
+            "x-forwarded-for": "2800:300:6e51:4e0:349b:d8d6:140f:f833",
+            "x-forwarded-host": "jeremy-pily-prediligently.ngrok-free.dev",
+            "x-forwarded-proto": "https"
+          },
+          "params": {},
+          "query": {
+            "code": "M.C508_SN1.2.U.620a0d0d-f6f4-78eb-7efc-af1682b5cd10",
+            "state": "13/11/2025 11:25:35"
+          },
+          "body": {},
+          "webhookUrl": "http://localhost:5678/webhook-test/oauth2-credential/callback/eliminar",
+          "executionMode": "test"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Get datos solicitud",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get datos solicitud": {
+      "main": [
+        [
+          {
+            "node": "Get lista salas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook1": {
+      "main": [
+        [
+          {
+            "node": "Get datos solicitud",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Buscar sala",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Stop and Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get lista salas": {
+      "main": [
+        [
+          {
+            "node": "Tipo formulario",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tipo formulario": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar sala": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Stop and Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Stop and Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Confirmacion": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "3558b820-ae51-4a9f-a98b-d18ea088b21f",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "329da24686c0fb2dc28fa0c9c962e549e2a0d4f6a8ac08a0b7b38a0d77558624"
+  },
+  "id": "lHBulavQtPFjbxR7",
+  "tags": []
+}
