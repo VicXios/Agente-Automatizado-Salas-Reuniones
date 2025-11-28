@@ -1,39 +1,6 @@
 {
-  "name": "HU-09: Gestion de salas",
+  "name": "Flujo principal",
   "nodes": [
-    {
-      "parameters": {
-        "functionCode": "// --- Obtener datos, sea directo o dentro de body ---\nconst data = $(\"Extraer solicitud de reserva\").all().map(item => item.json);\nlet participantes = data.map(item => item[\"Correos participantes\"]);\n\n// Si no hay participantes, error\nif (!participantes || participantes.length === 0) {\n  return [{\n    json: {\n      error: true,\n      mensaje: 'Debe incluir al menos un participante en el campo \"participantes\".'\n    }\n  }];\n}\n\n// Si llega como texto separado por comas\nif (!Array.isArray(participantes)) {\n  participantes = typeof participantes === 'string'\n    ? participantes.split(',').map(c => c.trim())\n    : [];\n}\n\n// Validación de formato\nconst regexCorreo = /^[\\w.-]+@[\\w.-]+\\.[A-Za-z]{2,}$/;\nconst validos = participantes.filter((c, i, self) => regexCorreo.test(c) && self.indexOf(c) === i);\nconst invalidos = participantes.filter(c => !regexCorreo.test(c));\n\n// Si hay inválidos, error\nif (invalidos.length > 0) {\n  return [{\n    json: {\n      error: true,\n      mensaje: `❌ Correos inválidos detectados: ${invalidos.join(', ')}`\n    }\n  }];\n}\n\nreturn [{\n  json: {\n    ...data,\n    participantesValidos: validos,\n    totalParticipantes: validos.length\n  }\n}];\n"
-      },
-      "id": "e68de4a0-be26-4451-b71c-83713cb42bfe",
-      "name": "Validar Participantes",
-      "type": "n8n-nodes-base.function",
-      "typeVersion": 1,
-      "position": [
-        -272,
-        1648
-      ]
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "boolean": [
-            {
-              "value1": "={{ $json.error }}",
-              "value2": "={{ true }}"
-            }
-          ]
-        }
-      },
-      "id": "16cc6801-c2fc-4eb0-ac87-21c91f7907cb",
-      "name": "IF - ¿Error en correos?",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 1,
-      "position": [
-        -128,
-        1632
-      ]
-    },
     {
       "parameters": {
         "conditions": {
@@ -45,13 +12,13 @@
           ]
         }
       },
-      "id": "84ee129b-7bc6-4482-a2ce-62c3437ceadb",
+      "id": "0e805cdb-dbfe-4f19-8531-f70e5ac18128",
       "name": "IF - ¿Disponible?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
-        48,
-        1648
+        -4656,
+        304
       ]
     },
     {
@@ -61,13 +28,13 @@
         "message": "Hola! Informamos que tu reserva fue rechazada, ya existe una en ese horario.",
         "options": {}
       },
-      "id": "fad0ce8b-3ec0-4f3c-9353-27513ccfa70f",
+      "id": "fde6dd24-e5e2-4d28-9541-e801a71e1b59",
       "name": "Gmail Rechazo",
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        272,
-        1712
+        -4464,
+        448
       ],
       "webhookId": "c1112f79-322b-4846-9cab-bdee4819f5c7",
       "credentials": {
@@ -155,10 +122,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -528,
-        2432
+        -5104,
+        1056
       ],
-      "id": "30a739d6-2b23-425b-a7a4-863c4113ca5b",
+      "id": "1d82c3d6-7ac9-4186-91e5-cb892ee15430",
       "name": "Datos completos?"
     },
     {
@@ -182,10 +149,10 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -272,
-        2544
+        -4848,
+        1168
       ],
-      "id": "dde0bd87-249c-454d-ac41-d4e56a56e023",
+      "id": "1fc1af32-8135-4cc8-9778-20463bf2ed0b",
       "name": "salasDisponibles",
       "credentials": {
         "googleSheetsOAuth2Api": {
@@ -201,10 +168,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -80,
-        2528
+        -4656,
+        1152
       ],
-      "id": "f22c0a8b-3b34-49ba-aa37-3e1fff25145b",
+      "id": "12515fe9-5ef1-412f-b95e-b32c8731e566",
       "name": "Code in JavaScript"
     },
     {
@@ -217,10 +184,10 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        160,
-        2688
+        -4416,
+        1312
       ],
-      "id": "8a64ebfd-2d00-4910-bdae-f7b24bd29089",
+      "id": "5277f1d2-50fb-4154-9b75-7169cdaad6b9",
       "name": "Send a message",
       "webhookId": "e1452d47-c4eb-4d4c-a3ea-669e4a43dd6b",
       "credentials": {
@@ -257,10 +224,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -128,
-        2288
+        -4704,
+        912
       ],
-      "id": "21d662de-ed39-496b-ab5f-dace5d6dc144",
+      "id": "b00efaa5-6f9a-4f80-a6be-7234e2d00bbb",
       "name": "Filtrar dominio institucional"
     },
     {
@@ -270,10 +237,10 @@
       "type": "n8n-nodes-base.stopAndError",
       "typeVersion": 1,
       "position": [
-        176,
-        2416
+        -4400,
+        1040
       ],
-      "id": "02a396cd-d8e8-4408-bf81-f10bac303e61",
+      "id": "59073a0e-a907-461a-9bd2-917043d2807b",
       "name": "correo invalido"
     },
     {
@@ -284,10 +251,10 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2.1,
       "position": [
-        -1072,
-        1776
+        -5648,
+        400
       ],
-      "id": "80caeb28-16cd-49b0-bcb4-0ebac49186c0",
+      "id": "b9baf895-8ff8-40f7-a912-523739050139",
       "name": "Recibir autenticacion",
       "webhookId": "dead6216-b902-46f0-a046-ee484fa9fb2a"
     },
@@ -301,10 +268,10 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        432,
-        2224
+        -4144,
+        848
       ],
-      "id": "51818962-52ad-4b2c-bedb-c95bcfdd1668",
+      "id": "bcb9d344-74f1-48f6-94a7-88dfda9985bc",
       "name": "Send a message1",
       "webhookId": "50d3be20-271b-48d3-9d00-1a9341671f61",
       "credentials": {
@@ -321,10 +288,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        176,
-        2224
+        -4400,
+        848
       ],
-      "id": "5fe6cd71-89da-499e-999f-38f43b009d2e",
+      "id": "19c70e86-e2a7-4ce1-b6d0-a252b6a729a1",
       "name": "Code in JavaScript1"
     },
     {
@@ -471,10 +438,10 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        384,
-        1584
+        -4320,
+        304
       ],
-      "id": "5d12883c-b078-482c-98e2-4a4c912561e9",
+      "id": "81fb1553-d16d-4a9d-8663-bf03a31ab2ba",
       "name": "Registrar",
       "alwaysOutputData": true,
       "credentials": {
@@ -494,10 +461,10 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        -256,
-        1888
+        -4832,
+        512
       ],
-      "id": "98e0b180-5050-4a24-8cc2-702408bc4915",
+      "id": "fda148d7-e13b-425c-bf60-43b935067d1b",
       "name": "Rechazo",
       "webhookId": "70d27376-afc5-457e-9a85-42c6ebf0d87c",
       "credentials": {
@@ -516,10 +483,10 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -1056,
-        2432
+        -5632,
+        1056
       ],
-      "id": "87662dc6-4f64-4792-8382-c4b3e959c115",
+      "id": "57dedfa1-c661-49a8-a5b4-96759613a711",
       "name": "Sticky Note"
     },
     {
@@ -531,10 +498,10 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2.1,
       "position": [
-        -688,
-        2432
+        -5264,
+        1056
       ],
-      "id": "17103094-c482-4c2c-802c-e93f628bee40",
+      "id": "aa1ef223-81ee-43aa-a888-ffcf4cb91140",
       "name": "Datos formulario",
       "webhookId": "26c8edf5-34de-459c-a2d0-b75c527f4b3c"
     },
@@ -567,10 +534,10 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -768,
-        1776
+        -5344,
+        400
       ],
-      "id": "f037ab84-702f-4f00-9ada-fcabed2de97e",
+      "id": "a3328139-6f25-427d-a4bd-8ddc242993f9",
       "name": "Extraer solicitud de reserva",
       "executeOnce": true,
       "credentials": {
@@ -587,10 +554,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        256,
-        1584
+        -4464,
+        304
       ],
-      "id": "2d03e287-3a23-4d65-af14-24f3e1b1c282",
+      "id": "eac90aa2-3d47-4c14-ad7f-0a6d3cbff0c5",
       "name": "Crear ID"
     },
     {
@@ -600,10 +567,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -576,
-        1776
+        -5152,
+        400
       ],
-      "id": "c442e451-1813-4d97-95df-5a75ee0ffd4c",
+      "id": "071c4a03-416a-4901-8b12-94df5eaf680b",
       "name": "Comparar horarios",
       "executeOnce": false
     },
@@ -618,13 +585,13 @@
           ]
         }
       },
-      "id": "84626027-344c-4438-96c5-8ada2dfe87d6",
+      "id": "dd3c3e04-f1e1-43c6-a47b-2691fb5be1d0",
       "name": "IF - ¿Disponible?1",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
-        -432,
-        1776
+        -5008,
+        400
       ],
       "alwaysOutputData": false
     },
@@ -646,10 +613,10 @@
       "type": "n8n-nodes-base.googleCalendar",
       "typeVersion": 1.3,
       "position": [
-        704,
-        1584
+        -4016,
+        304
       ],
-      "id": "f6c1d542-85c0-4c40-8315-99fd5dd54825",
+      "id": "149403d7-f845-4452-ab9f-75fd0355b45e",
       "name": "Google Calendar1",
       "credentials": {
         "googleCalendarOAuth2Api": {
@@ -679,10 +646,10 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -928,
-        1776
+        -5504,
+        400
       ],
-      "id": "8e90ee4a-d1eb-4f80-8965-3f82869d7536",
+      "id": "6e35b988-deb2-43b4-b8dd-de77fe4b3bfb",
       "name": "Revisar reservas1",
       "alwaysOutputData": true,
       "credentials": {
@@ -710,26 +677,26 @@
         },
         "options": {}
       },
-      "id": "528592c8-8dd0-4547-a7aa-1fac73087ef5",
+      "id": "ee841a32-fdcb-471b-8a91-f4e134786e2b",
       "name": "Google Sheets - Obtener filas",
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4,
       "position": [
-        1264,
-        2304
+        -3312,
+        928
       ]
     },
     {
       "parameters": {
         "jsCode": "// ID desde el webhook (acepta body.ID o ID plano)\nconst webhook = $('Webhook Cancelar1').first().json;\nconst idToCancel = webhook.body?.ID ?? webhook.ID;\nif (!idToCancel) throw new Error('No se recibió ID en el webhook.');\n\n// Filas del Get Row(s)\nconst rows = $input.all();\nlet found = null;\nlet rowNumber = null;\n\nfor (let i = 0; i < rows.length; i++) {\n  const r = rows[i].json;\n  if (r.ID === idToCancel) {\n    found = r;\n    // 1 = header, 2 = primera fila de datos\n    rowNumber = r.rowNumber ?? r.rowIndex ?? (i + 2);\n    break;\n  }\n}\n\nif (!found || !rowNumber || rowNumber < 2) {\n  throw new Error(`No se encontró reserva válida con ID ${idToCancel}`);\n}\n\nreturn [{\n  json: {\n    id: found.ID,\n    sala: found.Sala,\n    email: found.Correo,\n    fecha: found.Fecha,\n    horaInicio: found.HoraInicio,\n    horaFin: found.HoraFin,\n    titulo: found.Titulo,\n    descripcion: found.Descripcion,\n    participantes: found.Participantes,   // puede venir como string JSON\n    idCalendar: found.ID_Calendar,\n    linkCalendar: found.Link_Calendar,\n    rowNumber\n  }\n}];\n"
       },
-      "id": "13676912-b23d-4541-9bdb-8ec95d29ccc9",
+      "id": "ac179c4a-c18a-4bd5-b23d-73bd9bab3054",
       "name": "Code - Buscar reserva por ID",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1504,
-        2304
+        -3072,
+        928
       ]
     },
     {
@@ -737,13 +704,13 @@
         "content": "## HU-06: \nCancela una reserva - Elimina la fila en google sheet - Elimina el evento en google calendar en base al ID - Registra la cancelacion en otra hoja google sheet - Envia un correo de notificacion",
         "height": 192
       },
-      "id": "dd1e612a-aabe-437c-8739-af5a17ce8aa9",
+      "id": "7eca968c-14a3-4de9-a425-839ad7f4d6da",
       "name": "HU-06: Cancelación de reserva",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        1024,
-        2032
+        -3552,
+        656
       ]
     },
     {
@@ -885,13 +852,13 @@
         },
         "options": {}
       },
-      "id": "78dd9ee9-d249-4aa0-ae16-1e2af59d75ab",
+      "id": "73931642-bbb2-4187-9c5c-5e269dfdb565",
       "name": "Google Sheets - Registrar cancelacion",
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4,
       "position": [
-        1744,
-        2528
+        -2832,
+        1152
       ]
     },
     {
@@ -900,13 +867,13 @@
         "path": "98bd68b7-6d8d-490a-918a-6b51fd9d5af5",
         "options": {}
       },
-      "id": "e03ae4a6-6de4-46fa-b141-3bbe25e87b09",
+      "id": "a11b45d7-2812-4344-a36d-c9ecced1f9a5",
       "name": "Webhook Cancelar1",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 1,
       "position": [
-        1024,
-        2304
+        -3552,
+        928
       ],
       "webhookId": "98bd68b7-6d8d-490a-918a-6b51fd9d5af5"
     },
@@ -929,13 +896,13 @@
         },
         "startIndex": "={{ $json.rowNumber }}"
       },
-      "id": "2c442739-c773-496e-9842-6b4f7c2cc467",
+      "id": "b5e8254b-9937-4c8a-865c-1e5d54e9787c",
       "name": "Google Sheets - Eliminar fila1",
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4,
       "position": [
-        1744,
-        2304
+        -2832,
+        928
       ]
     },
     {
@@ -945,13 +912,13 @@
         "eventId": "={{ $('Code - Buscar reserva por ID').first().json.idCalendar }}",
         "options": {}
       },
-      "id": "3a152e84-eda1-4ad8-ada5-5aec1c2dc9c0",
+      "id": "b10d4a04-b622-401c-8ad0-3e813e787c3d",
       "name": "Google Calendar - Eliminar por ID1",
       "type": "n8n-nodes-base.googleCalendar",
       "typeVersion": 1.3,
       "position": [
-        1744,
-        2064
+        -2832,
+        688
       ]
     },
     {
@@ -961,13 +928,13 @@
         "message": "==<p>Hola,</p>\n<p>Tu reserva con <strong>ID {{ $('Code - Buscar reserva por ID').first().json.id }}</strong> para el <strong>{{ $('Code - Buscar reserva por ID').first().json.fecha }}</strong> a las <strong>{{ $('Code - Buscar reserva por ID').first().json.horaInicio }}</strong> ha sido cancelada exitosamente.</p>\n<p>Saludos.</p>\n",
         "options": {}
       },
-      "id": "ad19328c-a3a2-4c0d-a087-801dbb2e7cb0",
+      "id": "49e5e3c4-7bcd-4ff0-883d-c19e1b057c48",
       "name": "Gmail - Enviar notificación cancelación1",
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        1984,
-        2304
+        -2592,
+        928
       ],
       "webhookId": "57779984-5048-4147-8381-b9984886e33d"
     },
@@ -977,13 +944,13 @@
           "responseCode": 200
         }
       },
-      "id": "88395035-f8d2-4220-8d12-4e893a259410",
+      "id": "3286460b-f1ea-43a5-aab8-f39cf92e544e",
       "name": "Responder éxito1",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1,
       "position": [
-        2224,
-        2304
+        -2352,
+        928
       ]
     },
     {
@@ -995,10 +962,10 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        976,
-        2512
+        -3600,
+        1136
       ],
-      "id": "4e0668e1-bf25-448d-b9f5-227d1609cdc3",
+      "id": "6f3325c3-e383-406f-a2a8-2b30f8431fe2",
       "name": "Sticky Note2"
     },
     {
@@ -1011,10 +978,10 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        528,
-        1584
+        -4160,
+        304
       ],
-      "id": "a70d52b9-9646-45c2-9b5e-6ec880fba852",
+      "id": "20d79629-c739-48c6-83d1-e105eff4c0e9",
       "name": "correo de aprobacion - encargado",
       "webhookId": "53e8f0fc-7fe0-45a0-b86e-4377686c6ed7",
       "credentials": {
@@ -1033,10 +1000,10 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2.1,
       "position": [
-        3456,
-        2272
+        -1120,
+        896
       ],
-      "id": "bc58fd55-3869-491a-b11b-3eff634f4d29",
+      "id": "6a989438-a223-4455-8ffa-7649409ce062",
       "name": "Webhook",
       "webhookId": "6a731da8-1093-4629-81ef-5a7e8f648c95"
     },
@@ -1069,10 +1036,10 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        3696,
-        2256
+        -880,
+        880
       ],
-      "id": "376b2253-5305-43b8-b018-36894824bfe1",
+      "id": "2bb560a2-b449-42fb-80a4-fd92063c2dae",
       "name": "Get datos solicitud",
       "credentials": {
         "googleSheetsOAuth2Api": {
@@ -1088,10 +1055,10 @@
       "type": "n8n-nodes-base.stopAndError",
       "typeVersion": 1,
       "position": [
-        5264,
-        2368
+        688,
+        992
       ],
-      "id": "3617c285-62db-412c-b068-5a9e9f7b6233",
+      "id": "7e1e420f-4bb9-4249-8eb2-b459ae9dba36",
       "name": "Stop and Error"
     },
     {
@@ -1115,10 +1082,10 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        3920,
-        2256
+        -656,
+        880
       ],
-      "id": "cc780255-b096-46a7-aafe-e86ad9c8d258",
+      "id": "cf6402d5-66b1-4a48-b62f-873dadca98f7",
       "name": "Get lista salas",
       "credentials": {
         "googleSheetsOAuth2Api": {
@@ -1134,10 +1101,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        4144,
-        2256
+        -432,
+        880
       ],
-      "id": "484846c9-ee5b-4c49-bc77-bbd41137ae1d",
+      "id": "bc46cc07-6575-41c0-943a-f4b90c52cbe7",
       "name": "Tipo formulario"
     },
     {
@@ -1147,10 +1114,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        4592,
-        2256
+        16,
+        880
       ],
-      "id": "b9aa6baf-e564-4e71-84c0-44078c780f5c",
+      "id": "d4231d1a-315a-481d-b933-acab7a7f351c",
       "name": "Buscar sala"
     },
     {
@@ -1161,10 +1128,10 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2.1,
       "position": [
-        3472,
-        2688
+        -1104,
+        1312
       ],
-      "id": "61489b31-179c-46a6-90a2-12f1ae3ff0a2",
+      "id": "d430d9f2-ada1-451a-b826-60526785b494",
       "name": "Confirmacion eliminacion",
       "webhookId": "efda54ab-63cb-4ecc-a095-cf604f7eb067"
     },
@@ -1196,10 +1163,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        4816,
-        2256
+        240,
+        880
       ],
-      "id": "95670d44-615c-4991-a53a-c82a787b7a66",
+      "id": "a7e82da1-4529-4d43-b6d0-f1bee9177664",
       "name": "Existe sala?"
     },
     {
@@ -1230,10 +1197,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        5040,
-        2176
+        464,
+        800
       ],
-      "id": "507fca20-39c3-4066-8beb-c603372a73a2",
+      "id": "debf8ee6-0855-463c-96e0-7b7aeff91045",
       "name": "mismo admin?"
     },
     {
@@ -1243,10 +1210,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        5264,
-        2080
+        688,
+        704
       ],
-      "id": "371fdde0-239b-48c1-8d1c-7183629bdaf9",
+      "id": "acd18e2f-366b-4783-973c-d0e882892791",
       "name": "html correo"
     },
     {
@@ -1278,10 +1245,10 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        3696,
-        2688
+        -880,
+        1312
       ],
-      "id": "8333cbdc-d8e7-47be-9831-8bf9e0470b30",
+      "id": "64fbb90e-877f-4c8f-8adc-61778598aec5",
       "name": "Solicitud",
       "credentials": {
         "googleSheetsOAuth2Api": {
@@ -1311,10 +1278,10 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        3920,
-        2688
+        -656,
+        1312
       ],
-      "id": "97909062-ec79-4e83-9f53-855bedd630b1",
+      "id": "543bb06c-51d8-4cee-9b4f-8200cf3948a2",
       "name": "Salas",
       "credentials": {
         "googleSheetsOAuth2Api": {
@@ -1345,10 +1312,10 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        4592,
-        2592
+        16,
+        1216
       ],
-      "id": "16e5c7f2-47db-455d-9ad0-971b77cd921d",
+      "id": "4c8ed3cb-72ca-402c-b33b-6fcd95cadcd4",
       "name": "Delete rows or columns from sheet",
       "credentials": {
         "googleSheetsOAuth2Api": {
@@ -1385,10 +1352,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        4368,
-        2688
+        -208,
+        1312
       ],
-      "id": "18193d32-c11a-4069-8395-d5cb753980e3",
+      "id": "cbb765b8-cb3c-490a-aeb1-21911b8cdb23",
       "name": "Sigue existiendo"
     },
     {
@@ -1398,10 +1365,10 @@
       "type": "n8n-nodes-base.stopAndError",
       "typeVersion": 1,
       "position": [
-        4592,
-        2784
+        16,
+        1408
       ],
-      "id": "b420eb10-9ed2-4ee1-bc8e-11b16be22f4b",
+      "id": "7896b7b6-8c82-4366-bc36-fccea790ee2a",
       "name": "Stop and Error1"
     },
     {
@@ -1411,10 +1378,10 @@
       "type": "n8n-nodes-base.stopAndError",
       "typeVersion": 1,
       "position": [
-        5040,
-        1984
+        464,
+        608
       ],
-      "id": "3891c044-2723-45d5-b672-eb9cd78ce5b2",
+      "id": "bdc06f8c-6ba9-4f91-b77e-4b4785546151",
       "name": "Stop and Error2"
     },
     {
@@ -1444,10 +1411,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        4816,
-        1888
+        240,
+        512
       ],
-      "id": "cd2bb3cc-9a14-49ad-9b1e-a218172e3e3a",
+      "id": "7d458956-0ffd-4d2a-8733-da8aee9eacec",
       "name": "Sala repetida"
     },
     {
@@ -1457,10 +1424,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        4592,
-        1888
+        16,
+        512
       ],
-      "id": "a7e6ed22-4b4c-4ec8-8874-2c6dd053f2a4",
+      "id": "89da8fc9-fb17-4d51-a8ae-c810efef8a53",
       "name": "Sala repetida?"
     },
     {
@@ -1550,10 +1517,10 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.3,
       "position": [
-        4368,
-        2240
+        -208,
+        864
       ],
-      "id": "3a0d7235-12b2-41aa-9b62-a33d7ee73d20",
+      "id": "86ff9ece-656e-4c52-9361-3a45fba35d95",
       "name": "Agregar/Eliminar sala"
     },
     {
@@ -1563,10 +1530,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        5040,
-        1792
+        464,
+        416
       ],
-      "id": "249edf6b-9700-44d6-8eff-2cff048743c3",
+      "id": "0c272a84-9fd4-457a-91df-d339d47c0d86",
       "name": "Code in JavaScript2"
     },
     {
@@ -1579,10 +1546,10 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        5264,
-        1792
+        688,
+        416
       ],
-      "id": "9c4ef200-aa88-4a69-aef8-942bd71b625f",
+      "id": "18397cbe-e231-4aff-a687-cd01b67cc406",
       "name": "Send a message2",
       "webhookId": "53ac9935-d9ec-43c6-8d19-7dc1ce821d76",
       "credentials": {
@@ -1600,10 +1567,10 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2.1,
       "position": [
-        3472,
-        1472
+        -1104,
+        96
       ],
-      "id": "00614da5-106e-42ae-8e5d-e600881191b0",
+      "id": "6640a108-6191-413c-96eb-2e1771f128d5",
       "name": "Webhook2",
       "webhookId": "f74d2102-4625-4b11-9927-c95cbd49fbf3"
     },
@@ -1614,10 +1581,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        4144,
-        1472
+        -432,
+        96
       ],
-      "id": "271d71f3-9f5c-447e-aac4-b6ed2b239c28",
+      "id": "e5fa4266-445b-4263-9411-501dc2e10094",
       "name": "Sigue sin existir?"
     },
     {
@@ -1641,10 +1608,10 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        3920,
-        1472
+        -656,
+        96
       ],
-      "id": "8c0b5458-12ee-4972-a514-d16ce8b28b5a",
+      "id": "871fc422-3ba6-45eb-9a92-403f7c4596e5",
       "name": "Lista salas",
       "credentials": {
         "googleSheetsOAuth2Api": {
@@ -1681,10 +1648,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        4368,
-        1472
+        -208,
+        96
       ],
-      "id": "66fa1252-75b9-4b03-b98c-dc8b10323be6",
+      "id": "4ba515e1-1ac3-4e35-bde6-b97d88c19a0a",
       "name": "If"
     },
     {
@@ -1694,10 +1661,10 @@
       "type": "n8n-nodes-base.stopAndError",
       "typeVersion": 1,
       "position": [
-        4592,
-        1568
+        16,
+        192
       ],
-      "id": "a998f888-b960-4dcf-a5ae-60069e398050",
+      "id": "a78721ce-382e-48ca-a168-c12f19554175",
       "name": "Stop and Error3"
     },
     {
@@ -1729,10 +1696,10 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        3696,
-        1472
+        -880,
+        96
       ],
-      "id": "8916f42e-190f-48b5-8134-b05e7f0bdb9e",
+      "id": "631446af-f4f5-4101-8d35-47a0ceb315eb",
       "name": "Solicitud agregar",
       "credentials": {
         "googleSheetsOAuth2Api": {
@@ -1833,10 +1800,10 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        4752,
-        1376
+        176,
+        0
       ],
-      "id": "9af64cc0-ef08-4fae-b35b-22d8a9ab830b",
+      "id": "bb0b089d-d981-4b30-9cad-da9e5751ca11",
       "name": "Creacion sala nueva",
       "executeOnce": true,
       "credentials": {
@@ -1853,10 +1820,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        4576,
-        1376
+        0,
+        0
       ],
-      "id": "85f3fdde-0e71-439f-b8f1-76b56d996e2b",
+      "id": "783c1e68-8aca-4aac-b13f-6dbd743306c7",
       "name": "normalizar horas"
     },
     {
@@ -1869,10 +1836,10 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        5184,
-        1376
+        608,
+        0
       ],
-      "id": "d5737268-4907-4957-a124-a9b57066cd35",
+      "id": "4cf438e4-27c3-4b52-89ba-a0dd2a454793",
       "name": "Send a message3",
       "webhookId": "b7a06b7d-bc11-41d4-8138-87f1790782b6",
       "credentials": {
@@ -1889,10 +1856,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        4960,
-        1376
+        384,
+        0
       ],
-      "id": "cfd8af85-04ae-4fd9-a1fa-e02032f59c89",
+      "id": "2e9485f9-0f5e-4b28-ae7f-23a404fe4d38",
       "name": "html"
     },
     {
@@ -1905,10 +1872,10 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        5488,
-        2080
+        912,
+        704
       ],
-      "id": "38764407-cfc2-49b5-bafc-aa02a8789bb0",
+      "id": "746b32e1-00b8-4485-b771-1d901d6319bf",
       "name": "Send a message4",
       "webhookId": "fa1595c4-68e6-4c14-9079-f9c0e6d137ab",
       "credentials": {
@@ -1925,10 +1892,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        4144,
-        2688
+        -432,
+        1312
       ],
-      "id": "07e6749a-b387-43ce-a6cf-6dcb1477b56a",
+      "id": "906e64b1-47b3-4bec-8cd8-39a86f583270",
       "name": "Code in JavaScript3"
     },
     {
@@ -1938,10 +1905,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        4816,
-        2592
+        240,
+        1216
       ],
-      "id": "9f4b1996-305b-4086-87e4-a678048f716b",
+      "id": "bc9ca56b-7376-4c1d-8aec-7c46d9577fc3",
       "name": "Code in JavaScript4"
     },
     {
@@ -1954,10 +1921,10 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        5040,
-        2592
+        464,
+        1216
       ],
-      "id": "c8593499-2e62-4dba-95c3-b63c656d275b",
+      "id": "b8d01034-7f3f-4f7c-bdb3-b1d882331f0b",
       "name": "Send a message5",
       "webhookId": "8bb56b0e-03b0-4eea-8677-9eb4bbacfa57",
       "credentials": {
@@ -1973,44 +1940,72 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        3088,
-        1856
+        -1488,
+        480
       ],
       "typeVersion": 1,
-      "id": "7fa6be28-6940-43ba-b757-7e18e68957ee",
+      "id": "3fd5a46a-4003-4e37-a20e-d3473351281f",
       "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Obtenemos el string desde el nodo anterior\nconst correos = $('Extraer solicitud de reserva').first().json['Correos participantes'];\n\n// Convertimos el string en un array, separando por coma y limpiando espacios\nconst correosArray = correos\n  .split(',')\n  .map(correo => correo.trim())\n  .filter(correo => correo.length > 0); // evita entradas vacías\n\n// Retornamos cada correo como item independiente\nreturn correosArray.map(correo => ({\n  json: { correo }\n}));\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -4800,
+        304
+      ],
+      "id": "606ae1cf-d5ac-4460-ae65-4307e7ae6848",
+      "name": "Participantes"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Participantes').item.json.correo }}",
+        "subject": "Test",
+        "message": "tests",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        -4512,
+        80
+      ],
+      "id": "bed20ac3-76dc-43eb-9391-ca6c2e345236",
+      "name": "Confirmacion participantes",
+      "webhookId": "763bc991-6fc7-4959-a023-ec4855677d6a",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "irwNL1VCyr8bqWol",
+          "name": "Gmail account 2"
+        }
+      }
     }
   ],
-  "pinData": {},
+  "pinData": {
+    "Recibir autenticacion": [
+      {
+        "json": {
+          "query": {
+            "state": "18/11/2025 21:03:55"
+          }
+        }
+      }
+    ]
+  },
   "connections": {
-    "Validar Participantes": {
-      "main": [
-        [
-          {
-            "node": "IF - ¿Error en correos?",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "IF - ¿Error en correos?": {
-      "main": [
-        [],
-        [
-          {
-            "node": "IF - ¿Disponible?",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "IF - ¿Disponible?": {
       "main": [
         [
           {
             "node": "Crear ID",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Confirmacion participantes",
             "type": "main",
             "index": 0
           }
@@ -2022,11 +2017,6 @@
             "index": 0
           }
         ]
-      ]
-    },
-    "Gmail Rechazo": {
-      "main": [
-        []
       ]
     },
     "Datos completos?": {
@@ -2109,11 +2099,6 @@
         ]
       ]
     },
-    "Rechazo": {
-      "main": [
-        []
-      ]
-    },
     "Recibir autenticacion": {
       "main": [
         [
@@ -2173,7 +2158,7 @@
       "main": [
         [
           {
-            "node": "Validar Participantes",
+            "node": "Participantes",
             "type": "main",
             "index": 0
           }
@@ -2619,17 +2604,27 @@
           }
         ]
       ]
+    },
+    "Participantes": {
+      "main": [
+        [
+          {
+            "node": "IF - ¿Disponible?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": false,
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "a73cbe03-fbe6-43a7-8d0b-a8524c65028a",
+  "versionId": "794e486f-b647-4038-b3e9-c24f15b1675a",
   "meta": {
-    "templateCredsSetupCompleted": true,
     "instanceId": "329da24686c0fb2dc28fa0c9c962e549e2a0d4f6a8ac08a0b7b38a0d77558624"
   },
-  "id": "EPApBFqM61d20zif",
+  "id": "4qzxTLEhyqJovKzP",
   "tags": []
 }
