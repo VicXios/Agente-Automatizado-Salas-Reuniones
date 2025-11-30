@@ -1,0 +1,917 @@
+{
+  "name": "HU-10: Implementacion cancelar",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "oauth2-credential/cancelar",
+        "options": {}
+      },
+      "id": "5e632d4d-283f-4a68-873e-0b11a75381e0",
+      "name": "Webhook Cancelar",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -1424,
+        352
+      ],
+      "webhookId": "98bd68b7-6d8d-490a-918a-6b51fd9d5af5"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M",
+          "mode": "list",
+          "cachedResultName": "Salas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1945850352,
+          "mode": "list",
+          "cachedResultName": "Reservas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit#gid=1945850352"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "ID",
+              "lookupValue": "={{ $json.timestamp }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "576982de-02d0-4ead-ad4f-9f150b08f9a6",
+      "name": "Google Sheets - Obtener filas",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        -592,
+        352
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "gWSCpACgvfwv0eO3",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "documentId": {
+          "__rl": true,
+          "value": "1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M",
+          "mode": "list",
+          "cachedResultName": "Salas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1945850352,
+          "mode": "list",
+          "cachedResultName": "Reservas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit#gid=1945850352"
+        },
+        "startIndex": "={{ $('Google Sheets - Obtener filas').item.json.row_number }}"
+      },
+      "id": "374a89ef-c0f2-4c47-8b87-17dcb5e2cd33",
+      "name": "Google Sheets - Eliminar fila",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        192,
+        336
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "gWSCpACgvfwv0eO3",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "calendar": "proyectoespacioscorporativos@gmail.com",
+        "eventId": "={{ $('Separacion timestamp/uuid cancelar').item.json.timestamp }}",
+        "options": {}
+      },
+      "id": "565f695f-4d4e-4c1b-9f66-f14936bccb51",
+      "name": "Google Calendar - Eliminar por ID",
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        224,
+        176
+      ],
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "LWS8EKe877hhB3ZS",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Google Sheets - Obtener filas').item.json.Correo }}",
+        "subject": "Confirmación de cancelación de reserva",
+        "message": "==<p>Hola,</p>\n<p>Tu reserva con <strong>ID {{ $('Google Sheets - Obtener filas').item.json.ID }}</strong> para el <strong>{{ $('Google Sheets - Obtener filas').item.json.Fecha }}</strong> a las <strong>{{ $('Google Sheets - Obtener filas').item.json.HoraInicio }}</strong> ha sido cancelada exitosamente.</p>\n<p>Saludos.</p>\n",
+        "options": {}
+      },
+      "id": "d506a30e-776c-4533-ab1d-11953f6f3cb2",
+      "name": "Gmail - Enviar notificación cancelación",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        336,
+        336
+      ],
+      "webhookId": "57779984-5048-4147-8381-b9984886e33d",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "irwNL1VCyr8bqWol",
+          "name": "Gmail account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "d3097140-af32-462a-93e9-d5823a0c0253",
+      "name": "Responder éxito",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        496,
+        336
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M",
+          "mode": "list",
+          "cachedResultName": "Salas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1486633971,
+          "mode": "list",
+          "cachedResultName": "Reservas canceladas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit#gid=1486633971"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ID": "={{ $('Google Sheets - Obtener filas').item.json.ID }}",
+            "HoraInicio": "={{ $('Google Sheets - Obtener filas').item.json.HoraInicio }}",
+            "Fecha": "={{ $('Google Sheets - Obtener filas').item.json.Fecha }}",
+            "HoraFin": "={{ $('Google Sheets - Obtener filas').item.json.HoraFin }}",
+            "Titulo": "={{ $('Google Sheets - Obtener filas').item.json.Titulo }}",
+            "Correo": "={{ $('Google Sheets - Obtener filas').item.json.Correo }}",
+            "Participantes": "={{ $('Google Sheets - Obtener filas').item.json.Participantes }}",
+            "Sala": "={{ $('Google Sheets - Obtener filas').item.json.Sala }}",
+            "Descripcion": "={{ $('Google Sheets - Obtener filas').item.json.Descripcion }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Sala",
+              "displayName": "Sala",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Fecha",
+              "displayName": "Fecha",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "HoraInicio",
+              "displayName": "HoraInicio",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "HoraFin",
+              "displayName": "HoraFin",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Titulo",
+              "displayName": "Titulo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Correo",
+              "displayName": "Correo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Descripcion",
+              "displayName": "Descripcion",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Participantes",
+              "displayName": "Participantes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ID_Calendar",
+              "displayName": "ID_Calendar",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Link_Calendar",
+              "displayName": "Link_Calendar",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "f0aa34e4-6d53-492d-a78d-654bc232fff4",
+      "name": "Google Sheets - Registrar cancelacion",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        240,
+        16
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "gWSCpACgvfwv0eO3",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M",
+          "mode": "list",
+          "cachedResultName": "Salas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1945850352,
+          "mode": "list",
+          "cachedResultName": "Reservas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit#gid=1945850352"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "ID",
+              "lookupValue": "20251120201208"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -368,
+        816
+      ],
+      "id": "ec95df34-e8fb-4db9-89d5-6548b9712a1d",
+      "name": "Datos correo confirmacion",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "gWSCpACgvfwv0eO3",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Function Node en n8n\nfunction uuidv4() {\n  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {\n    const r = Math.random() * 16 | 0;\n    const v = c === 'x' ? r : (r & 0x3 | 0x8);\n    return v.toString(16);\n  });\n}\n\nreturn {\n  json: {\n    uuid: uuidv4()\n  }\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -192,
+        816
+      ],
+      "id": "9f24a4b8-1a42-4266-9c89-37f21f134175",
+      "name": "Generacion UUID segura"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M",
+          "mode": "list",
+          "cachedResultName": "Salas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1945850352,
+          "mode": "list",
+          "cachedResultName": "Reservas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit#gid=1945850352"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ID": "={{ $('Datos correo confirmacion').item.json.ID }}",
+            "UUID": "={{ $('Generacion UUID segura').item.json.uuid }}"
+          },
+          "matchingColumns": [
+            "ID"
+          ],
+          "schema": [
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Sala",
+              "displayName": "Sala",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Fecha",
+              "displayName": "Fecha",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "HoraInicio",
+              "displayName": "HoraInicio",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "HoraFin",
+              "displayName": "HoraFin",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Titulo",
+              "displayName": "Titulo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Correo",
+              "displayName": "Correo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Descripcion",
+              "displayName": "Descripcion",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Participantes",
+              "displayName": "Participantes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "UUID",
+              "displayName": "UUID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        16,
+        816
+      ],
+      "id": "3ee1f7c4-9276-4adf-8708-b9a9dfb3e7f9",
+      "name": "Vincular UUID a reserva",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "gWSCpACgvfwv0eO3",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const clientId = '36788e45-7a1d-4015-8040-9e3e065953fc';\nconst redirectUri = encodeURIComponent('https://jeremy-pily-prediligently.ngrok-free.dev/webhook-test/oauth2-credential/cancelar');\nconst scope = encodeURIComponent('https://graph.microsoft.com/User.Read');\n\n// ID proveniente de la respuesta de formulario\nconst stateId = $('Datos correo confirmacion').first().json.ID;\n\n// UUID generado en tu otro flujo\nconst uuid = $('Generacion UUID segura').first().json.uuid;\n\n// Concatenamos ambos con un delimitador claro\nconst state = `${stateId}|${uuid}`;\n\nreturn {\n  json: {\n    authLink: `https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=${clientId}&response_type=code&redirect_uri=${redirectUri}&scope=${scope}&state=${encodeURIComponent(state)}`\n  }\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        224,
+        816
+      ],
+      "id": "4a94a62f-171f-44b9-a68b-9f2c4bcfcfb8",
+      "name": "Generacion enlace cancelacion"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Datos correo confirmacion').item.json.Correo }}",
+        "subject": "Test",
+        "message": "={{ $('Generacion enlace cancelacion').item.json.authLink }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        432,
+        816
+      ],
+      "id": "237bde23-2885-488b-83e7-483a9d7678cc",
+      "name": "Mensaje recordatorio/cancelacion",
+      "webhookId": "12b238a4-3737-4573-99d9-04df2fcaba81",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "irwNL1VCyr8bqWol",
+          "name": "Gmail account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://login.microsoftonline.com/common/oauth2/v2.0/token",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/x-www-form-urlencoded"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "client_id",
+              "value": "36788e45-7a1d-4015-8040-9e3e065953fc"
+            },
+            {
+              "name": "client_secret"
+            },
+            {
+              "name": "code",
+              "value": "={{ $json.query.code }}"
+            },
+            {
+              "name": "redirect_uri",
+              "value": "https://jeremy-pily-prediligently.ngrok-free.dev/webhook-test/oauth2-credential/cancelar"
+            },
+            {
+              "name": "grant_type",
+              "value": "authorization_code"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1264,
+        352
+      ],
+      "id": "9a72c764-e94d-49d7-a58f-aa3bf346404a",
+      "name": "Access token"
+    },
+    {
+      "parameters": {
+        "url": "https://graph.microsoft.com/v1.0/me",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "authorization",
+              "value": "=Bearer {{ $json.access_token }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1056,
+        352
+      ],
+      "id": "d64d2af4-e8fe-4b56-8400-9e613282b35a",
+      "name": "Datos usuario"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        -256,
+        528
+      ],
+      "id": "099b960b-097a-4e86-9774-3bd3ffa74e26",
+      "name": "No es el mismo correo"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        -48,
+        544
+      ],
+      "id": "7ae994fc-8f53-44bb-a526-2d6e8f0239f3",
+      "name": "uuid invalida/inexistente"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Obtenemos el state completo desde el Webhook\nconst state = $('Webhook Cancelar').first().json.query.state;\n\n// Lo separamos usando el delimitador \"|\"\nconst [timestamp, uuid] = state.split('|');\n\n// Retornamos ambos valores por separado\nreturn {\n  json: {\n    timestamp,\n    uuid\n  }\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -848,
+        352
+      ],
+      "id": "acc696e2-f01c-4989-a695-24171cf1843b",
+      "name": "Separacion timestamp/uuid cancelar"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "7f74e252-03a8-48dc-85d0-642a7841765d",
+              "leftValue": "={{ $json.Correo }}",
+              "rightValue": "={{ $('Datos usuario').item.json.mail }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -416,
+        352
+      ],
+      "id": "99c581de-9271-49f2-8d5a-5cc7021f9f08",
+      "name": "mismo correo solicitud cancelar"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "e7295080-4fa5-43e8-a990-94ac1c1e0c34",
+              "leftValue": "={{ $('Separacion timestamp/uuid cancelar').item.json.uuid }}",
+              "rightValue": "={{ $('Google Sheets - Obtener filas').item.json.UUID }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -192,
+        352
+      ],
+      "id": "d804e99d-088c-47f4-9f64-be783cd9c2d9",
+      "name": "mismo uuid cancelar"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook Cancelar": {
+      "main": [
+        [
+          {
+            "node": "Access token",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets - Obtener filas": {
+      "main": [
+        [
+          {
+            "node": "mismo correo solicitud cancelar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets - Eliminar fila": {
+      "main": [
+        [
+          {
+            "node": "Gmail - Enviar notificación cancelación",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail - Enviar notificación cancelación": {
+      "main": [
+        [
+          {
+            "node": "Responder éxito",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Datos correo confirmacion": {
+      "main": [
+        [
+          {
+            "node": "Generacion UUID segura",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generacion UUID segura": {
+      "main": [
+        [
+          {
+            "node": "Vincular UUID a reserva",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Vincular UUID a reserva": {
+      "main": [
+        [
+          {
+            "node": "Generacion enlace cancelacion",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generacion enlace cancelacion": {
+      "main": [
+        [
+          {
+            "node": "Mensaje recordatorio/cancelacion",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Access token": {
+      "main": [
+        [
+          {
+            "node": "Datos usuario",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Datos usuario": {
+      "main": [
+        [
+          {
+            "node": "Separacion timestamp/uuid cancelar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Separacion timestamp/uuid cancelar": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets - Obtener filas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "mismo correo solicitud cancelar": {
+      "main": [
+        [
+          {
+            "node": "mismo uuid cancelar",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "mismo uuid cancelar",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "No es el mismo correo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "mismo uuid cancelar": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets - Eliminar fila",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Google Calendar - Eliminar por ID",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Google Sheets - Registrar cancelacion",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "uuid invalida/inexistente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "15701554-19fc-48bd-b7a6-6968771834ab",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "329da24686c0fb2dc28fa0c9c962e549e2a0d4f6a8ac08a0b7b38a0d77558624"
+  },
+  "id": "E22u3aXs0B7TipC7",
+  "tags": []
+}
