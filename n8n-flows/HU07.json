@@ -1,0 +1,314 @@
+{
+  "name": "HU-07 Recordatorios Automáticos",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {}
+          ]
+        }
+      },
+      "id": "8fd57378-ae36-4926-9c00-bc17a439b0d2",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1568,
+        -32
+      ],
+      "notes": "Se ejecuta cada 15 minutos para verificar reuniones próximas"
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "proyectoespacioscorporativos@gmail.com",
+          "mode": "id"
+        },
+        "additionalFields": {
+          "maxResults": 100,
+          "showDeleted": false,
+          "singleEvents": true
+        }
+      },
+      "id": "663ec5ac-46aa-409e-9227-421af31b9e78",
+      "name": "Google Calendar - Obtener Eventos",
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        -1344,
+        -32
+      ],
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "vr7vDj7dPKxuUPLZ",
+          "name": "Google Calendar account 2"
+        }
+      },
+      "notes": "Obtiene eventos del calendario"
+    },
+    {
+      "parameters": {
+        "functionCode": "console.log('\\n=== OBTENER EVENTOS DESDE SHEET (ALTERNATIVO) ===');\nconsole.log('Total items recibidos:', items.length);\n\nif (items.length === 0) {\n  console.log('❌ No hay filas en el Sheet');\n  throw new Error('No hay registros en el Sheet');\n}\n\n// El Sheet ya contiene los datos de los eventos\n// Simplemente filtramos los que NO tienen RecordatorioCalendar = TRUE\n\nconst eventosParaRecordar = [];\n\nitems.forEach(item => {\n  const data = item.json;\n  \n  // Limpiar claves que pueden tener espacios\n  const dataLimpio = {};\n  Object.keys(data).forEach(key => {\n    dataLimpio[key.trim()] = data[key];\n  });\n  \n  // Solo procesar filas que:\n  // 1. Tengan ID_Calendar\n  // 2. NO tengan RecordatorioCalendar = TRUE\n  const tieneIdCalendar = dataLimpio.ID_Calendar && dataLimpio.ID_Calendar.trim() !== '';\n  const yaEnviado = dataLimpio.RecordatorioCalendar === 'TRUE' || dataLimpio.RecordatorioCalendar === true;\n  \n  console.log(`\\n📋 Fila ${dataLimpio.row_number}:`);\n  console.log(`  Título: ${dataLimpio.Titulo}`);\n  console.log(`  ID_Calendar: \"${dataLimpio.ID_Calendar}\"`);\n  console.log(`  RecordatorioCalendar: \"${dataLimpio.RecordatorioCalendar}\"`);\n  console.log(`  ¿Tiene ID?: ${tieneIdCalendar}`);\n  console.log(`  ¿Ya enviado?: ${yaEnviado}`);\n  \n  // Convertir a formato de evento para mantener compatibilidad\n  if (tieneIdCalendar && !yaEnviado) {\n    console.log(`  ✅ INCLUIDO PARA PROCESAR`);\n    \n    try {\n      // Parsear participantes\n      let participantes = [];\n      if (dataLimpio.Participantes) {\n        try {\n          const parsed = JSON.parse(dataLimpio.Participantes);\n          participantes = Array.isArray(parsed) ? parsed : [dataLimpio.Correo];\n        } catch (e) {\n          participantes = [dataLimpio.Correo];\n        }\n      }\n      \n      // Crear objeto de evento compatible\n      const evento = {\n        // Datos del Sheet\n        ...dataLimpio,\n        \n        // Campos adicionales requeridos por el flujo\n        id: dataLimpio.ID_Calendar,\n        summary: dataLimpio.Titulo,\n        description: dataLimpio.Descripcion || '',\n        location: dataLimpio.Sala || '',\n        htmlLink: dataLimpio.Link_Calendar || '',\n        \n        // Participantes como array de objetos\n        attendees: participantes.length > 0 ? \n          participantes.map(email => ({email: email.trim ? email.trim() : email})) :\n          [{email: dataLimpio.Correo || ''}],\n        \n        // Crear objeto start compatible\n        start: {\n          dateTime: dataLimpio.Fecha && dataLimpio.HoraInicio ? \n            new Date(`${dataLimpio.Fecha}T${dataLimpio.HoraInicio}`).toISOString() :\n            new Date().toISOString()\n        },\n        end: {\n          dateTime: dataLimpio.Fecha && dataLimpio.HoraFin ? \n            new Date(`${dataLimpio.Fecha}T${dataLimpio.HoraFin}`).toISOString() :\n            new Date(Date.now() + 3600000).toISOString()\n        },\n        \n        // Datos para actualizar después\n        row_number: dataLimpio.row_number,\n        ID_Calendar: dataLimpio.ID_Calendar\n      };\n      \n      eventosParaRecordar.push({ json: evento });\n      console.log(`  📦 Evento preparado para procesar`);\n    } catch (err) {\n      console.log(`  ❌ Error procesando evento:`, err.message);\n    }\n  } else if (yaEnviado) {\n    console.log(`  ⏭️ SALTADO - Ya fue enviado`);\n  } else {\n    console.log(`  ⏭️ SALTADO - Sin ID_Calendar`);\n  }\n});\n\nconsole.log(`\\n✅ RESULTADO: ${eventosParaRecordar.length} evento(s) para procesar`);\nif (eventosParaRecordar.length === 0) {\n  console.log('⚠️ Ningún evento necesita recordatorio');\n}\nconsole.log('================================\\n');\n\nreturn eventosParaRecordar;"
+      },
+      "id": "71638252-d996-4d23-bb86-c306c7642190",
+      "name": "Detectar Recordatorios",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        -1120,
+        -32
+      ],
+      "notes": "Obtiene eventos del Sheet que necesitan recordatorio"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M",
+          "mode": "list",
+          "cachedResultName": "Salas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1945850352,
+          "mode": "list",
+          "cachedResultName": "Reservas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit#gid=1945850352"
+        },
+        "options": {}
+      },
+      "id": "d7dcc26b-be1e-4a34-9620-4434c5bd3c75",
+      "name": "Leer Registro de Recordatorios",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -896,
+        -32
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "ruJWFuUh3fOxO0aM",
+          "name": "Google Sheets account 2"
+        }
+      },
+      "notes": "Lee todas las filas del sheet Salas para comparar qué recordatorios ya fueron enviados"
+    },
+    {
+      "parameters": {
+        "functionCode": "console.log('\\n=== VERIFICAR RECORDATORIOS ACTIVOS ===');\nconsole.log('Total items recibidos:', items.length);\nconsole.log('ITEMS COMPLETOS:');\nconsole.log(JSON.stringify(items, null, 2).substring(0, 500));\n\n// El flujo trae 2 grupos de datos:\n// 1. Eventos del Calendar (de \"Detectar Recordatorios\")\n// 2. Filas del Sheet (de \"Leer Registro de Recordatorios\")\n\nlet eventosCalendar = [];\nlet eventosSheet = [];\n\nitems.forEach((item, idx) => {\n  const data = item.json;\n  \n  console.log(`\\n[Item ${idx}] Claves:`, Object.keys(data).slice(0, 10));\n  \n  // Identificar si es del Calendar o del Sheet\n  // Calendar: tiene 'id', 'start', 'summary'\n  // Sheet: tiene 'row_number', 'ID_Calendar', 'RecordatorioCalendar'\n  \n  if (data.row_number !== undefined) {\n    // Es del Sheet - IMPORTANTE: Eliminar espacios de las claves\n    const dataLimpio = {};\n    Object.keys(data).forEach(key => {\n      dataLimpio[key.trim()] = data[key];\n    });\n    \n    eventosSheet.push(dataLimpio);\n    console.log(`  ✅ SHEET ROW ${dataLimpio.row_number}`);\n    console.log(`     ID_Calendar limpio: \"${dataLimpio.ID_Calendar}\"`);\n  } else if (data.id && data.start && data.summary) {\n    // Es del Calendar\n    eventosCalendar.push(data);\n    console.log(`  ✅ CALENDAR EVENT: ${data.summary}`);\n  } else {\n    console.log(`  ⚠️ DESCONOCIDO - No es Calendar ni Sheet`);\n  }\n});\n\nconsole.log('\\n📊 RESUMEN ENCONTRADO:');\nconsole.log('  - Eventos del Calendar:', eventosCalendar.length);\nconsole.log('  - Registros del Sheet:', eventosSheet.length);\n\nif (eventosCalendar.length === 0) {\n  console.log('\\n❌ ERROR CRÍTICO: No hay eventos del Calendar!');\n  console.log('Esto significa que \"Detectar Recordatorios\" no envió ningún evento.');\n  throw new Error('No hay eventos del Calendar para procesar');\n}\n\n// Crear mapa de IDs que YA tienen recordatorio enviado\nconst recordatoriosYaEnviados = new Set();\neventosSheet.forEach(row => {\n  const idCal = (row.ID_Calendar || '').trim();\n  if (row.RecordatorioCalendar === 'TRUE' || row.RecordatorioCalendar === true) {\n    recordatoriosYaEnviados.add(idCal);\n    console.log(`  ✅ REGISTRO: \"${idCal}\" - Ya enviado: TRUE`);\n  } else {\n    console.log(`  ⚪ REGISTRO: \"${idCal}\" - RecordatorioCalendar: \"${row.RecordatorioCalendar}\"`);\n  }\n});\n\nconsole.log('\\n🔍 FILTRANDO EVENTOS NUEVOS:');\n// Filtrar: eventos del Calendar que NO están en el mapa de enviados\nconst eventosNuevos = eventosCalendar.filter(evento => {\n  const idCal = evento.id;\n  const yaFueEnviado = recordatoriosYaEnviados.has(idCal);\n  \n  console.log(`  📌 ${evento.summary}`);\n  console.log(`     ID: \"${idCal}\"`);\n  console.log(`     ¿Ya enviado?: ${yaFueEnviado ? 'SÍ ✓' : 'NO ✗'}`);\n  \n  return !yaFueEnviado; // Retorna SOLO si NO fue enviado\n});\n\nconsole.log('\\n📤 RESULTADO FINAL:');\nconsole.log('  Eventos NUEVOS encontrados:', eventosNuevos.length);\n\nif (eventosNuevos.length === 0) {\n  console.log('  ⚠️ TODOS LOS EVENTOS YA HAN SIDO ENVIADOS - Se terminará sin error');\n  throw new Error('Todos los recordatorios ya fueron enviados');\n}\n\neventosNuevos.forEach((evt, i) => {\n  console.log(`    ${i + 1}. ${evt.summary} (ID: \"${evt.id}\")`);\n});\n\nconsole.log('\\n✅ Continuando con', eventosNuevos.length, 'evento(s)');\nconsole.log('================================\\n');\n\nreturn eventosNuevos;"
+      },
+      "id": "edccc9f4-a63c-4ca6-acc3-aac6af60b19e",
+      "name": "Verificar Recordatorios Activos",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        -672,
+        -32
+      ],
+      "notes": "Verifica que no existan duplicados de recordatorios enviados comparando con RecordatorioCalendar"
+    },
+    {
+      "parameters": {
+        "functionCode": "// Crear contenido HTML de la plantilla\nconsole.log('\\n=== GENERAR PLANTILLA DE EMAIL ===');\nconsole.log('Total eventos a procesar:', items.length);\n\nif (items.length === 0) {\n  console.log('❌ Sin eventos recibidos');\n  throw new Error('Sin eventos a procesar');\n}\n\nconst resultados = [];\n\nitems.forEach((item, idx) => {\n  const evento = item.json;\n  console.log(`\\n[Evento ${idx + 1}] Procesando...`);\n  \n  // Validar que tengamos el evento completo\n  if (!evento || !evento.id) {\n    console.log('  ❌ ERROR: Evento sin ID');\n    return; // Saltar este evento\n  }\n\n  if (!evento.start || !evento.start.dateTime) {\n    console.log('  ❌ ERROR: Evento sin fecha de inicio');\n    return; // Saltar este evento\n  }\n\n  console.log('  ✅ Evento validado - ID:', evento.id);\n\n  const inicio = new Date(evento.start.dateTime);\n  const fin = evento.end && evento.end.dateTime ? new Date(evento.end.dateTime) : new Date(inicio.getTime() + 60 * 60 * 1000);\n\n  const formatoFecha = inicio.toLocaleDateString('es-CO', { \n    weekday: 'long', \n    year: 'numeric', \n    month: 'long', \n    day: 'numeric' \n  });\n\n  const formatoHora = (fecha) => fecha.toLocaleTimeString('es-CO', { \n    hour: '2-digit', \n    minute: '2-digit' \n  });\n\n  // Obtener destinatarios\n  const destinatarios = evento.attendees \n    ? evento.attendees.map(a => a.email).filter(e => e && e.trim())\n    : (evento.organizer?.email ? [evento.organizer.email] : []);\n\n  if (destinatarios.length === 0) {\n    console.log('  ⚠️ No se encontraron destinatarios, usando email por defecto');\n    destinatarios.push('proyectoespacioscorporativos@gmail.com');\n  }\n\n  console.log('  ✅ Destinatarios:', destinatarios.length);\n\n  const plantillaHTML = `\n<!DOCTYPE html>\n<html>\n<head>\n  <meta charset='UTF-8'>\n  <style>\n    body { font-family: Arial, sans-serif; background-color: #f5f5f5; }\n    .container { max-width: 600px; margin: 0 auto; background-color: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }\n    .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 8px; text-align: center; margin-bottom: 20px; }\n    .header h1 { margin: 0; font-size: 24px; }\n    .content { padding: 20px; }\n    .detail { margin: 12px 0; padding: 10px; background-color: #f9f9f9; border-left: 4px solid #667eea; }\n    .label { font-weight: bold; color: #333; }\n    .value { color: #666; margin-left: 8px; }\n    .button { display: inline-block; background-color: #667eea; color: white; padding: 12px 30px; text-decoration: none; border-radius: 4px; margin-top: 20px; }\n    .footer { text-align: center; font-size: 12px; color: #999; margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee; }\n  </style>\n</head>\n<body>\n  <div class=\"container\">\n    <div class=\"header\">\n      <h1>⏰ Recordatorio de Reunión</h1>\n      <p>Tu reunión está próxima a comenzar</p>\n    </div>\n    \n    <div class=\"content\">\n      <p>Hola,</p>\n      <p>Te recordamos que tienes una reunión programada que está próxima a iniciar:</p>\n      \n      <div class=\"detail\">\n        <span class=\"label\">📌 Sala/Ubicación:</span>\n        <span class=\"value\">${evento.location || 'No especificada'}</span>\n      </div>\n      \n      <div class=\"detail\">\n        <span class=\"label\">📅 Fecha:</span>\n        <span class=\"value\">${formatoFecha}</span>\n      </div>\n      \n      <div class=\"detail\">\n        <span class=\"label\">⏱️ Hora:</span>\n        <span class=\"value\">${formatoHora(inicio)} - ${formatoHora(fin)}</span>\n      </div>\n      \n      <div class=\"detail\">\n        <span class=\"label\">📝 Título:</span>\n        <span class=\"value\">${evento.summary || 'Reunión'}</span>\n      </div>\n      \n      ${evento.description ? `<div class=\"detail\"><span class=\"label\">ℹ️ Descripción:</span><span class=\"value\">${evento.description}</span></div>` : ''}\n      \n      <p style=\"margin-top: 20px; color: #666;\">Por favor, prepárate y asegúrate de estar listo para participar en la reunión.</p>\n      \n      ${evento.htmlLink ? `<a href=\"${evento.htmlLink}\" class=\"button\">Ver Evento en Calendario</a>` : ''}\n    </div>\n    \n    <div class=\"footer\">\n      <p>Este es un recordatorio automático del sistema. Si no esperas este recordatorio, por favor contacta al administrador.</p>\n    </div>\n  </div>\n</body>\n</html>\n`;\n\n  const resultado = {\n    ...evento,\n    plantillaHTML: plantillaHTML,\n    asuntoCorreo: `⏰ Recordatorio: ${evento.summary || 'Reunión'} en ${formatoFecha} a las ${formatoHora(inicio)}`,\n    destinatarios: destinatarios\n  };\n\n  console.log('  ✅ Plantilla generada correctamente para ID:', evento.id);\n  resultados.push({ json: resultado });\n});\n\nconsole.log('\\n📊 RESULTADO: Generadas', resultados.length, 'plantillas');\nconsole.log('================================\\n');\n\nif (resultados.length === 0) {\n  throw new Error('No se pudieron generar plantillas válidas');\n}\n\nreturn resultados;"
+      },
+      "id": "31591c08-a9d6-45aa-90fd-80911d98f107",
+      "name": "Generar Plantilla de Email",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        -224,
+        -120
+      ],
+      "notes": "Crea la plantilla HTML personalizada del correo de recordatorio"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.destinatarios.join(',') }}",
+        "subject": "={{ $json.asuntoCorreo }}",
+        "message": "={{ $json.plantillaHTML }}",
+        "emailType": "html",
+        "options": {}
+      },
+      "id": "b57d27cc-f460-4b51-bd8a-ab08ea469bb2",
+      "name": "Enviar Correo Recordatorio",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        -120
+      ],
+      "webhookId": "21a37d6f-9b10-41fb-ae98-fd9173936699",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": null,
+          "name": ""
+        }
+      },
+      "notes": "Envía el correo con la plantilla HTML a todos los asistentes"
+    },
+    {
+      "parameters": {
+        "functionCode": "console.log('\\n=== PREPARAR ACTUALIZACIÓN DEL SHEET ===');\n\nconst evento = $json;\nconsole.log('Evento ID:', evento.id);\nconsole.log('Destinatarios:', evento.destinatarios);\n\n// Preparar los datos para actualizar\nconst dataActualizar = {\n  // El Sheet usa estos valores para identificar QUÉ fila actualizar\n  ID_Calendar: evento.id,\n  \n  // Estos son los valores que se actualizarán\n  RecordatorioCalendar: 'TRUE', // Marcamos como enviado\n  Correo: evento.destinatarios?.join(', ') || '',\n  Titulo: evento.summary || 'Reunión',\n  Descripcion: evento.description || '',\n  Link_Calendar: evento.htmlLink || ''\n};\n\nconsole.log('\\n📝 Datos para actualizar:');\nconsole.log('  ID_Calendar:', dataActualizar.ID_Calendar);\nconsole.log('  RecordatorioCalendar:', dataActualizar.RecordatorioCalendar);\nconsole.log('  Correos:', dataActualizar.Correo);\n\nreturn [{ json: dataActualizar }];"
+      },
+      "id": "prep-update-sheet",
+      "name": "Preparar Actualización",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        100,
+        -120
+      ],
+      "notes": "Prepara los datos para actualizar el Sheet"
+    },
+    {
+      "parameters": {
+        "functionCode": "console.log('\\n=== LOG DE ÉXITO ===');\nconsole.log('Recordatorio enviado y registrado correctamente');\nconsole.log('ID_Calendar:', $json.ID_Calendar);\nconsole.log('RecordatorioCalendar:', $json.RecordatorioCalendar);\nconsole.log('Timestamp:', new Date().toISOString());\n\nreturn [{\n  json: {\n    exito: true,\n    mensaje: 'Recordatorio procesado y marcado como enviado',\n    ID_Calendar: $json.ID_Calendar,\n    timestamp: new Date().toISOString()\n  }\n}];"
+      },
+      "id": "8e9b8168-7dd5-475b-8901-e40ea232c9a0",
+      "name": "Log de Éxito",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        300,
+        -120
+      ],
+      "notes": "Registra el envío exitoso del recordatorio"
+    },
+    {
+      "parameters": {
+        "functionCode": "// Manejo de errores\nreturn [{\n  json: {\n    error: true,\n    mensaje: 'No hay eventos a recordar en esta ejecución',\n    timestamp: new Date().toISOString()\n  }\n}];"
+      },
+      "id": "0db0f3f9-7755-48fe-9150-498cb9c2421a",
+      "name": "Sin Recordatorios",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        -1568,
+        192
+      ],
+      "notes": "Se ejecuta cuando no hay recordatorios pendientes"
+    },
+    {
+      "parameters": {
+        "functionCode": "console.log('\\n=== FILTRAR EVENTOS PARA ENVIAR ===');\nconsole.log('Items recibidos de verificación:', items.length);\n\nif (items.length === 0) {\n  console.log('❌ DETENER: No hay eventos nuevos para procesar');\n  throw new Error('No hay recordatorios nuevos');\n}\n\n// Validar que todos los eventos tengan ID antes de procesarlos\nconst eventosValidos = items.filter(item => {\n  const evento = item.json;\n  if (!evento.id) {\n    console.log('⚠️ Evento rechazado: sin ID');\n    return false;\n  }\n  if (!evento.start || !evento.start.dateTime) {\n    console.log('⚠️ Evento rechazado: sin fecha de inicio');\n    return false;\n  }\n  console.log('✅ Evento válido:', evento.summary);\n  return true;\n});\n\nif (eventosValidos.length === 0) {\n  console.log('❌ DETENER: Ningún evento válido después del filtrado');\n  throw new Error('No hay eventos válidos a recordar');\n}\n\nconsole.log('✅ Eventos válidos para procesar:', eventosValidos.length);\nconsole.log('================================\\n');\n\nreturn eventosValidos;"
+      },
+      "id": "if-node-verificar-eventos",
+      "name": "Filtrar para Enviar",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        -448,
+        -32
+      ],
+      "notes": "Verifica si hay eventos; si no, marca para ir a Sin Recordatorios"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Leer Registro de Recordatorios",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Leer Registro de Recordatorios": {
+      "main": [
+        [
+          {
+            "node": "Detectar Recordatorios",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Detectar Recordatorios": {
+      "main": [
+        [
+          {
+            "node": "Filtrar para Enviar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filtrar para Enviar": {
+      "main": [
+        [
+          {
+            "node": "Generar Plantilla de Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ],
+      "error": [
+        [
+          {
+            "node": "Sin Recordatorios",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generar Plantilla de Email": {
+      "main": [
+        [
+          {
+            "node": "Enviar Correo Recordatorio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar Correo Recordatorio": {
+      "main": [
+        [
+          {
+            "node": "Preparar Actualización",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar Actualización": {
+      "main": [
+        [
+          {
+            "node": "Log de Éxito",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log de Éxito": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "3bf9f134-c748-4c77-920c-d485510dd65a",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "da64bfcd864e9aee246dea7ad158240ca6236afe6fbc6f458fa745d786cff46f"
+  },
+  "id": "QvsI0CGjCzPaiBgO",
+  "tags": []
+}
