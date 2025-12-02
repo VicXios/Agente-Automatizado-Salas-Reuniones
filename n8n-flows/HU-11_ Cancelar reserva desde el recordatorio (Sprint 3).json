@@ -1,0 +1,404 @@
+{
+  "name": "HU-11: Cancelar reserva desde el recordatorio (Sprint 3)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "reservas/enviar",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "cca68c5a-7c98-4e63-b5cc-ea2457c09821",
+      "name": "W1 - Webhook enviar correo",
+      "webhookId": "b7af5069-6497-4db3-8972-ce194f302986"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M",
+          "mode": "list",
+          "cachedResultName": "Salas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1945850352,
+          "mode": "list",
+          "cachedResultName": "Reservas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit#gid=1945850352"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "ID",
+              "lookupValue": "={{ $json.body.ID }}"
+            }
+          ]
+        },
+        "options": {
+          "returnFirstMatch": true
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        208,
+        0
+      ],
+      "id": "b08ec002-819c-4825-aa14-8b567ec47f7b",
+      "name": "W1 - Buscar reserva por ID",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "M9S5GWOfIYFeuaNB",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const r = $input.first().json;\n\n// Cambiar esta URL por la del webhook de respuesta cuando se integre el flujo\nconst baseUrl = 'http://localhost:5678/webhook-test/reservas/respuesta';\n\nconst confirmUrl = `${baseUrl}?action=confirm&id=${encodeURIComponent(r.ID)}`;\nconst cancelUrl  = `${baseUrl}?action=cancel&id=${encodeURIComponent(r.ID)}`;\n\nconst html = `\n  <div style=\"font-family: Arial, sans-serif; max-width: 600px;\">\n    <h2>Detalle de tu reserva</h2>\n    <p>Hola, te enviamos el resumen de tu reserva para confirmación:</p>\n\n    <table style=\"border-collapse: collapse; width: 100%; margin-bottom: 16px;\">\n      <tr>\n        <th style=\"border: 1px solid #ddd; padding: 8px;\">Sala</th>\n        <th style=\"border: 1px solid #ddd; padding: 8px;\">Fecha</th>\n        <th style=\"border: 1px solid #ddd; padding: 8px;\">Inicio</th>\n        <th style=\"border: 1px solid #ddd; padding: 8px;\">Fin</th>\n      </tr>\n      <tr>\n        <td style=\"border: 1px solid #ddd; padding: 8px;\">${r.Sala}</td>\n        <td style=\"border: 1px solid #ddd; padding: 8px;\">${r.Fecha}</td>\n        <td style=\"border: 1px solid #ddd; padding: 8px;\">${r.HoraInicio}</td>\n        <td style=\"border: 1px solid #ddd; padding: 8px;\">${r.HoraFin}</td>\n      </tr>\n    </table>\n\n    <p><strong>Título:</strong> ${r.Titulo || ''}</p>\n    <p><strong>Descripción:</strong><br>${r.Descripcion || ''}</p>\n\n    <p style=\"margin-top: 24px; margin-bottom: 8px;\">Por favor selecciona una opción:</p>\n\n    <div style=\"display: flex; gap: 12px; margin-bottom: 24px;\">\n      <a href=\"${confirmUrl}\" \n         style=\"background-color:#16a34a;color:white;padding:10px 16px;text-decoration:none;border-radius:4px;\">\n        Confirmar reserva\n      </a>\n      <a href=\"${cancelUrl}\" \n         style=\"background-color:#dc2626;color:white;padding:10px 16px;text-decoration:none;border-radius:4px;\">\n        Cancelar reserva\n      </a>\n    </div>\n\n    <p style=\"font-size: 12px; color: #555;\">Si no solicitaste esta reserva, ignora este correo.</p>\n  </div>\n`;\n\nreturn [\n  {\n    json: {\n      email: r.Correo,\n      subject: `Confirmación de reserva: ${r.Titulo || r.Sala}`,\n      html,\n      id_reserva: r.ID,\n    },\n  },\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        416,
+        0
+      ],
+      "id": "5d49ad56-f554-43d4-8a10-0aa3d110b87d",
+      "name": "W1 - Construir HTML correo"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.email }}",
+        "subject": "={{ $json.subject }}",
+        "message": "={{ $json.html }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        624,
+        0
+      ],
+      "id": "a9e8f577-e70f-4795-8810-8be7a352a0de",
+      "name": "W1 - Enviar correo",
+      "webhookId": "012b69ac-dbe4-4946-990e-5d438bb87bb7",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "LGezdq22HDgoCHcX",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "path": "reservas/respuesta",
+        "options": {
+          "responseData": "{   \"ok\": true,   \"message\": \"Webhook recibido\" }"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        352
+      ],
+      "id": "fb16253a-1902-49a1-92f0-4fd35ee8f0de",
+      "name": "W2 - Webhook respuesta botones",
+      "webhookId": "8c29a38f-d2ac-4f3f-96d5-98f7fa0aa8a9"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c6959e9f-7a81-4a50-8e6a-6a377f6884fa",
+              "leftValue": "={{$json[\"query\"][\"action\"]}}",
+              "rightValue": "confirm",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        208,
+        352
+      ],
+      "id": "026a73a8-2efb-4911-ba4e-0757f97bd46d",
+      "name": "W2 - IF es confirmación"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M",
+          "mode": "list",
+          "cachedResultName": "Salas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1948528201,
+          "mode": "list",
+          "cachedResultName": "Confirmaciones de reservas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit#gid=1948528201"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ID": "={{ $('W2 - Webhook respuesta botones').item.json.query.id }}",
+            "Mensaje": "reserva confirmada",
+            "FechaHora": "={{ $now.setZone('America/Santiago').toFormat('yyyy-LL-dd HH:mm:ss') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Mensaje",
+              "displayName": "Mensaje",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "FechaHora",
+              "displayName": "FechaHora",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        416,
+        256
+      ],
+      "id": "5bd4d1dc-699b-45b2-9b5c-e6eb842c598a",
+      "name": "W2 - Guardar confirmación",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "M9S5GWOfIYFeuaNB",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://localhost:5678/webhook-test/cancelar",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "ID",
+              "value": "={{ $('W2 - Webhook respuesta botones').item.json.query.id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        416,
+        448
+      ],
+      "id": "55fc55cc-57a9-4762-a7e0-71a5c3bec834",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "content": "## HU-11: Cancelar reserva desde el recordatorio",
+        "height": 80,
+        "width": 384
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -48,
+        -160
+      ],
+      "id": "bd32ed87-6306-4f38-8f02-ce8b494bc424",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "primera parte del flujo:\n- recibe id de la reserva a la que se le enviará un  recordatorio\n- se busca la reserva en google sheet por ID\n- construye un formato HTML para el correo\n- envia un correo con boton confirma o botob cancelar reserva\n\nejemplo:\n\n{\n  \"ID\": \"bdnvuo6e9hlbdjqhv2537qh6i8\"\n}\n",
+        "height": 240,
+        "width": 464,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        832,
+        -48
+      ],
+      "id": "3faa04e2-9ef5-49d8-b0e5-7ab04f56cc5e",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "segunda parte del flujo:\n- se activa cuando el webhook recibe la respuesta del correo de confirmacion (usuario da click al boton confirmar o boton cancelar).\n- define dos caminos\n- si confirma, se respalda en una hoja de google sheet la confirmacion con los datos: ID, mensaje, fechaHora\n- si cancela, se envia un post al flujo de cancelacion de reserva con el respectivo ID de reserva a cancelar (flujo creado en HU-06)",
+        "height": 384,
+        "width": 464,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        832,
+        224
+      ],
+      "id": "30c33555-bc44-4199-be23-b44f6b72de6e",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "",
+        "height": 240,
+        "width": 864,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -48,
+        -48
+      ],
+      "id": "471ab6d0-c905-4bbc-9f6d-cc8504770de9",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "Segunda parte",
+        "height": 384,
+        "width": 864,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -48,
+        224
+      ],
+      "id": "c4e8bdb5-8fa9-402d-9ac9-ca63c44d0e8e",
+      "name": "Sticky Note4"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "W1 - Webhook enviar correo": {
+      "main": [
+        [
+          {
+            "node": "W1 - Buscar reserva por ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "W1 - Buscar reserva por ID": {
+      "main": [
+        [
+          {
+            "node": "W1 - Construir HTML correo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "W1 - Construir HTML correo": {
+      "main": [
+        [
+          {
+            "node": "W1 - Enviar correo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "W2 - Webhook respuesta botones": {
+      "main": [
+        [
+          {
+            "node": "W2 - IF es confirmación",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "W2 - IF es confirmación": {
+      "main": [
+        [
+          {
+            "node": "W2 - Guardar confirmación",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "67621fd2-015f-4671-9101-d89f4c639f25",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "4bbe6dcbdeac6e58e31d8870bdb4658b96b3a51b38c763a613f7198406b04293"
+  },
+  "id": "vhq4Sjd9qK5Villp",
+  "tags": []
+}
