@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Reservar Sala</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Barra superior -->
+  <header class="navbar">
+    <img src="images/UNAB.png" alt="Logo Universidad" class="logo">
+  </header>
+
+      <!-- Botón regresar arriba a la izquierda -->
+    <div class="back-button">
+      <button onclick="window.location.href='index.html'">← Regresar</button>
+    </div>
+    
+<!-- Espacio centrado arriba de las dos columnas -->
+<div class="calendar-info">
+  <h2>Consulta las reservas existentes</h2>
+  <p>
+    Antes de realizar tu reserva, revisa el calendario compartido para ver las salas y horarios ya ocupados.
+  </p>
+  <p>
+    ➡️ Haz clic en el siguiente enlace para abrir el calendario:
+    <br>
+    <a href="https://calendar.google.com/calendar/u/1?cid=cHJveWVjdG9lc3BhY2lvc2NvcnBvcmF0aXZvc0BnbWFpbC5jb20" 
+       target="_blank" rel="noopener noreferrer">
+       Ver calendario de reservas
+    </a>
+  </p>
+  <p>
+    En el calendario puedes:
+    <ul style="text-align:left; display:inline-block;">
+      <li>Ver todas las reservas como eventos.</li>
+      <li>Usar el buscador del calendario para escribir el <strong>código de una sala</strong> y filtrar sus horarios ocupados.</li>
+      <li>Copiar el <strong>código de sala</strong> directamente desde la tabla de salas en esta página (haz clic sobre el código y se copiará al portapapeles).</li>
+    </ul>
+  </p>
+</div>
+
+
+  <!-- Contenido principal dividido en dos columnas -->
+  <main class="main-container two-columns">
+
+    <!-- Columna izquierda: formulario -->
+    <section class="form-section">
+      <h2>Formulario de Reserva</h2>
+<form id="reserva-form">
+  <!-- Correo -->
+  <label for="correo">Correo:</label>
+  <input type="email" id="correo" name="correo" required>
+
+  <!-- Nombre -->
+  <label for="nombre">Nombre:</label>
+  <input type="text" id="nombre" name="nombre" required>
+
+  <!-- Título -->
+  <label for="titulo">Título:</label>
+  <input type="text" id="titulo" name="titulo" required>
+
+  <!-- Descripción (opcional) -->
+  <label for="descripcion">Descripción (opcional):</label>
+  <input type="text" id="descripcion" name="descripcion">
+
+  <!-- Sala -->
+  <label for="sala">Sala:</label>
+  <select id="sala" name="sala" required>
+    <option value="">Seleccione sala...</option>
+    <!-- opciones dinámicas desde script.js -->
+  </select>
+
+  <!-- Fecha -->
+  <label for="fecha">Fecha:</label>
+  <input type="date" id="fecha" name="fecha" required>
+
+  <!-- Hora inicio -->
+  <label for="hora-inicio">Hora inicio:</label>
+  <select id="hora-inicio" name="hora-inicio" required>
+    <option value="">Seleccione...</option>
+    <!-- opciones dinámicas desde script.js -->
+  </select>
+
+  <!-- Hora término -->
+  <label for="hora-termino">Hora término:</label>
+  <select id="hora-termino" name="hora-termino" required>
+    <option value="">Seleccione...</option>
+    <!-- opciones dinámicas desde script.js -->
+  </select>
+
+  <!-- Área/Departamento -->
+  <label for="area">Área/Departamento:</label>
+  <input type="text" id="area" name="area" required>
+
+  <!-- Número de participantes -->
+  <label for="participantes">Número de participantes:</label>
+  <input type="number" id="participantes" name="participantes" maxlength="3" min="1" required>
+
+  <!-- Correos participantes (opcional) -->
+  <label for="correos-participantes">Correos participantes (separados por coma):</label>
+  <textarea id="correos-participantes" name="correos-participantes"></textarea>
+
+  <!-- Botón enviar -->
+  <button type="submit">Enviar Reserva</button>
+</form>
+
+    </section>
+
+    <!-- Columna derecha: información de salas -->
+    <section class="horarios-section">
+      <div id="info-sala" class="info-cuadro">
+        <h3>Información de la sala</h3>
+        <div id="detalle-sala"></div>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="script.js"></script>
+</body>
+</html>

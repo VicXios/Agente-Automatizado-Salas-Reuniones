@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Gestión de Salas - MVP Reservas</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Barra superior -->
+  <header class="navbar">
+    <img src="images/UNAB.png" alt="Logo Universidad" class="logo">
+  </header>
+
+  <!-- Botón de regresar -->
+  <div class="back-button">
+    <button onclick="window.location.href='index.html'">← Regresar</button>
+  </div>
+
+  <!-- Contenido principal dividido en dos columnas -->
+  <main class="main-container two-columns">
+    <!-- Columna izquierda: Crear sala -->
+    <section class="form-section">
+      <h2>Crear Sala</h2>
+      <form id="crear-sala-form">
+        <label for="correo-admin">Correo administrador:</label>
+        <input type="email" id="correo-admin" name="correo-admin" required>
+
+        <label for="nombre-sala">Código único (máx. 5 caracteres):</label>
+        <input type="text" id="nombre-sala" name="nombre-sala" maxlength="5" required>
+
+        <label for="max-participantes">Capacidad participantes:</label>
+        <input type="number" id="max-participantes" name="max-participantes" maxlength="3" required>
+
+        <label for="hora-apertura">Hora apertura:</label>
+        <select id="hora-apertura" name="hora-apertura" required>
+          <option value="">Seleccione...</option>
+        </select>
+
+        <label for="hora-cierre">Hora cierre:</label>
+        <select id="hora-cierre" name="hora-cierre" required>
+          <option value="">Seleccione...</option>
+        </select>
+
+        <label for="ubicacion">Ubicación:</label>
+        <input type="text" id="ubicacion" name="ubicacion" required>
+
+        <button type="submit">Crear Sala</button>
+      </form>
+    </section>
+
+    <!-- Columna derecha: Eliminar sala -->
+    <section class="form-section">
+      <h2>Solicitar Eliminación de Sala</h2>
+      <form id="eliminar-sala-form">
+        <label for="correo-eliminar">Correo:</label>
+        <input type="email" id="correo-eliminar" name="correo-eliminar" required>
+
+        <label for="sala-eliminar">Seleccione sala:</label>
+        <select id="sala-eliminar" name="sala-eliminar" required>
+          <option value="">Cargando salas...</option>
+        </select>
+
+        <button type="submit">Solicitar Eliminación</button>
+      </form>
+    </section>
+  </main>
+
+  <script type="module" src="script.js"></script>
+</body>
+</html>
