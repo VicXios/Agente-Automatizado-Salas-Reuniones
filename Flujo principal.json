@@ -10,10 +10,10 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -8672,
-        1280
+        -3488,
+        1648
       ],
-      "id": "b770a31e-e34e-4414-9946-872d0366c4e6",
+      "id": "d986abf8-2187-4eb6-9732-6c29de703f49",
       "name": "Sticky Note"
     },
     {
@@ -45,10 +45,10 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -8080,
-        384
+        -2560,
+        512
       ],
-      "id": "fc16e323-a9c0-4429-9620-381e811c6eaa",
+      "id": "fc1e4b2b-883a-4d3e-b90d-416796a615e6",
       "name": "Extraer solicitud de reserva",
       "executeOnce": true,
       "alwaysOutputData": true,
@@ -69,10 +69,10 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        -4848,
-        368
+        672,
+        496
       ],
-      "id": "9ce89f9d-53a1-4598-9281-7c9d6fedd32e",
+      "id": "024537d1-4c06-4bd4-a29d-d316d5d36936",
       "name": "correo de aprobacion - encargado",
       "webhookId": "53e8f0fc-7fe0-45a0-b86e-4377686c6ed7",
       "credentials": {
@@ -84,21 +84,6 @@
     },
     {
       "parameters": {
-        "content": "## Gestion de salas",
-        "height": 224,
-        "width": 320
-      },
-      "type": "n8n-nodes-base.stickyNote",
-      "position": [
-        -2128,
-        1248
-      ],
-      "typeVersion": 1,
-      "id": "9df85879-4ede-49d1-baa1-018a064fcf3f",
-      "name": "Sticky Note1"
-    },
-    {
-      "parameters": {
         "sendTo": "={{ $('Crear ID reserva y sanitizar campos').item.json.correos_participantes }}",
         "subject": "=Invitacion reunion ",
         "message": "={{ $json.html_invitacion_reunion }}",
@@ -107,10 +92,10 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        -4944,
-        32
+        528,
+        64
       ],
-      "id": "24d1bb54-590b-4b93-b88c-081460c81f1b",
+      "id": "86b663d8-c6ce-4c12-8f51-a371b1b72dcb",
       "name": "Confirmacion participantes",
       "webhookId": "763bc991-6fc7-4959-a023-ec4855677d6a",
       "credentials": {
@@ -129,10 +114,10 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2.1,
       "position": [
-        -8416,
-        1264
+        -3232,
+        1632
       ],
-      "id": "ab181ed8-cf06-4832-aff1-390d82ada63a",
+      "id": "3e0e17d9-1dc3-47f0-a71b-dce566475965",
       "name": "Solicitud reserva",
       "webhookId": "26c8edf5-34de-459c-a2d0-b75c527f4b3c"
     },
@@ -143,10 +128,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -5632,
-        1024
+        -448,
+        1392
       ],
-      "id": "303faea5-8a48-42d6-b7e0-088f01fe608d",
+      "id": "c2c10cb2-78d4-45e8-82bb-9459ee5e929e",
       "name": "correo con url de validacion solicitud"
     },
     {
@@ -182,10 +167,10 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -6496,
-        352
+        -976,
+        480
       ],
-      "id": "3bffcaca-b504-4dbb-9bb6-fbbda88b64b8",
+      "id": "d4ddc4d2-6f6e-44f6-b69c-1c6890307786",
       "name": "Todas las reservas tomadas",
       "alwaysOutputData": true,
       "credentials": {
@@ -237,10 +222,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -8624,
-        400
+        -3104,
+        528
       ],
-      "id": "f12c3dfc-9e65-4501-8a99-3d0ead3e273c",
+      "id": "448548aa-d71f-44b3-a9e0-705ad11d6cb0",
       "name": "Access token reserva",
       "alwaysOutputData": true,
       "onError": "continueRegularOutput"
@@ -262,10 +247,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -8464,
-        400
+        -2944,
+        528
       ],
-      "id": "5eeaadb2-20dd-45b7-ad1b-0c966d11e744",
+      "id": "3f062607-f6bf-4e0c-bd7f-bc2552f33616",
       "name": "Datos usuario solicitud reserva",
       "alwaysOutputData": true,
       "onError": "continueRegularOutput"
@@ -446,10 +431,10 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -5312,
-        368
+        208,
+        496
       ],
-      "id": "8235f09c-a38d-4804-9465-c3f458c5ec1a",
+      "id": "c61727eb-4d04-4925-8f4c-99d9fe1da03b",
       "name": "Agregar reserva confirmada",
       "credentials": {
         "googleSheetsOAuth2Api": {
@@ -478,10 +463,10 @@
       "type": "n8n-nodes-base.googleCalendar",
       "typeVersion": 1.3,
       "position": [
-        -5552,
-        368
+        -32,
+        496
       ],
-      "id": "d30a6a45-1e81-4b11-9f44-1eea75e0765e",
+      "id": "4ae4dace-6342-45e4-8ae2-41b2025a02ae",
       "name": "Registrar reserva en el calendario",
       "credentials": {
         "googleCalendarOAuth2Api": {
@@ -495,10 +480,10 @@
       "type": "n8n-nodes-base.noOp",
       "typeVersion": 1,
       "position": [
-        -5136,
-        192
+        336,
+        224
       ],
-      "id": "7da2c75a-2d03-4745-bb5b-91021078570b",
+      "id": "78300446-bf9c-4d05-901e-ca3f544003e9",
       "name": "Sin participantes"
     },
     {
@@ -507,13 +492,13 @@
         "responseMode": "responseNode",
         "options": {}
       },
-      "id": "47a5d25d-3e98-4eee-8ef1-9ec7cda36389",
+      "id": "9d33cee5-b10b-4995-a04f-1309ca6b0f45",
       "name": "Webhook Cancelar",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 1,
       "position": [
-        -5264,
-        2256
+        256,
+        2384
       ],
       "webhookId": "98bd68b7-6d8d-490a-918a-6b51fd9d5af5"
     },
@@ -524,13 +509,13 @@
         "message": "=<!DOCTYPE html>\n<html lang=\"es\">\n  <head>\n    <meta charset=\"UTF-8\" />\n    <title>Reserva cancelada con éxito</title>\n    <style>\n      body { font-family: Arial, sans-serif; background:#f6f7fb; color:#222; }\n      .container { max-width:600px; margin:0 auto; padding:24px; }\n      .card { background:#ffffff; border:1px solid #e6e8eb; border-radius:8px; padding:24px; }\n      .title { font-size:18px; font-weight:bold; margin-bottom:12px; color:#2e7d32; }\n      .text { font-size:15px; line-height:1.6; margin-bottom:16px; }\n      .notice { font-size:14px; color:#555; margin-top:16px; }\n    </style>\n  </head>\n  <body>\n    <div class=\"container\">\n      <div class=\"card\">\n        <h1 class=\"title\">Reserva cancelada con éxito</h1>\n        <p class=\"text\">\n          Estimado/a {{ $('Google Sheets - Obtener filas para cancelar').item.json.nombre }},\n        </p>\n        <p class=\"text\">\n          Le informamos que su reserva ha sido cancelada correctamente. Los detalles de la reserva cancelada son los siguientes:\n        </p>\n        <table>\n          <tr><th>Título</th><td>{{ $('Google Sheets - Obtener filas para cancelar').item.json.Titulo }}</td></tr>\n          <tr><th>Fecha</th><td>{{ $('Google Sheets - Obtener filas para cancelar').item.json.Fecha }}</td></tr>\n        </table>\n        <p class=\"text\">\n          Ya no se encuentra activa en el sistema y no será necesario realizar ninguna acción adicional.\n        </p>\n        <p class=\"notice\">\n          Gracias por utilizar nuestro servicio de reservas.\n        </p>\n      </div>\n    </div>\n  </body>\n</html>\n",
         "options": {}
       },
-      "id": "07c420fb-8c95-4a4f-8f8e-b00a6aa7e00a",
+      "id": "9fe9a017-f754-41ef-9e54-a2f17c1112c4",
       "name": "Gmail - Enviar notificación cancelación",
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        -2832,
-        2368
+        2688,
+        2496
       ],
       "webhookId": "57779984-5048-4147-8381-b9984886e33d",
       "credentials": {
@@ -681,13 +666,13 @@
         },
         "options": {}
       },
-      "id": "a1755a35-152b-4fb4-8772-6a26fbd989d5",
+      "id": "5eca0928-b001-487c-9359-3e39d8eaeda2",
       "name": "Google Sheets - Registrar cancelacion",
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4,
       "position": [
-        -3024,
-        2032
+        2496,
+        2160
       ],
       "credentials": {
         "googleSheetsOAuth2Api": {
@@ -703,10 +688,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -4672,
-        2256
+        848,
+        2384
       ],
-      "id": "42369b4d-c9d9-43b9-b403-120de0c26b4f",
+      "id": "c3285557-cba6-4d14-a8af-645db749ba1f",
       "name": "Separacion timestamp/uuid cancelar"
     },
     {
@@ -737,10 +722,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -3856,
-        2240
+        1664,
+        2368
       ],
-      "id": "6baed1d9-137d-45e8-97a5-5bddca0ffd41",
+      "id": "c3abeec0-f8a7-4eb6-91c5-1bc96ed2af44",
       "name": "mismo correo solicitud cancelar"
     },
     {
@@ -771,10 +756,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -3568,
-        2224
+        1952,
+        2352
       ],
-      "id": "0d498175-c14d-4fc1-9224-9a1f29021e40",
+      "id": "599fea54-8205-4195-9a1e-e2d05eee0d18",
       "name": "mismo uuid cancelar"
     },
     {
@@ -819,10 +804,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -5088,
-        2256
+        432,
+        2384
       ],
-      "id": "4d9f45bf-3801-48d7-8dd3-ec087e42a21a",
+      "id": "5ba26098-8fef-4cd1-8f5d-04f067b04252",
       "name": "Access token cancelar reserva"
     },
     {
@@ -842,10 +827,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -4880,
-        2256
+        640,
+        2384
       ],
-      "id": "ebdf1988-4192-473d-b884-fa277ef5d4e1",
+      "id": "abc79cc2-b843-4189-9532-544ea1450627",
       "name": "Datos usuario cancelar reserva"
     },
     {
@@ -874,13 +859,13 @@
         },
         "options": {}
       },
-      "id": "ca1af898-e9cb-458b-ae4c-17c9c59e1544",
+      "id": "6820d3ec-5f68-4cf1-91f6-5447ca91a690",
       "name": "Google Sheets - Obtener filas para cancelar",
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4,
       "position": [
-        -4480,
-        2256
+        1040,
+        2384
       ],
       "alwaysOutputData": true,
       "credentials": {
@@ -909,13 +894,13 @@
         },
         "startIndex": "={{ $('Google Sheets - Obtener filas para cancelar').item.json.row_number }}"
       },
-      "id": "aef7a499-42b7-4ebe-b942-a6460bb19e20",
+      "id": "1744dc8a-8be6-46b6-bedf-00aed8172841",
       "name": "Google Sheets - Eliminar reserva",
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4,
       "position": [
-        -3024,
-        2368
+        2496,
+        2496
       ],
       "credentials": {
         "googleSheetsOAuth2Api": {
@@ -931,13 +916,13 @@
         "eventId": "={{ $('Separacion timestamp/uuid cancelar').item.json.timestamp }}",
         "options": {}
       },
-      "id": "5f9a4316-861d-4f6e-904d-4a2404d66f6c",
+      "id": "cbf7b04c-e8e2-4ecd-8436-8348dc2185e5",
       "name": "Google Calendar - Eliminar reserva por ID",
       "type": "n8n-nodes-base.googleCalendar",
       "typeVersion": 1.3,
       "position": [
-        -3024,
-        2176
+        2496,
+        2304
       ],
       "credentials": {
         "googleCalendarOAuth2Api": {
@@ -956,13 +941,13 @@
           ]
         }
       },
-      "id": "2faf3bca-edb4-4efc-8d75-ecd4749b1520",
+      "id": "8facb78d-a3fc-4464-a07b-13300507bc84",
       "name": "Revision diaria de reservas",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1,
       "position": [
-        -5360,
-        2960
+        160,
+        3424
       ],
       "notes": "Se ejecuta cada 15 minutos para verificar reuniones próximas"
     },
@@ -987,10 +972,10 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -5200,
-        2960
+        320,
+        3424
       ],
-      "id": "e6e16b50-f52f-4eed-b119-43d408d51d4b",
+      "id": "f2c638b2-cc6e-42a9-ae5a-0bf2b1ab5756",
       "name": "Leer reservas para recordatorio",
       "credentials": {
         "googleSheetsOAuth2Api": {
@@ -1006,10 +991,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -5040,
-        2960
+        480,
+        3424
       ],
-      "id": "aef6f597-c996-40e1-bde5-04322d1b0643",
+      "id": "08579e7b-3fcd-4c74-9439-7c312004e9f7",
       "name": "Reservas para mañana"
     },
     {
@@ -1040,10 +1025,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -4880,
-        2960
+        640,
+        3424
       ],
-      "id": "14181a7c-451f-4ed1-bf70-369ca98ff890",
+      "id": "e07c6b4e-c4a6-4e07-a3e5-1e6fe82994bf",
       "name": "Hay reservas para mañana?"
     },
     {
@@ -1051,10 +1036,10 @@
       "type": "n8n-nodes-base.noOp",
       "typeVersion": 1,
       "position": [
-        -4224,
-        3136
+        1296,
+        3600
       ],
-      "id": "71eeac40-fe44-4ea5-8399-bd5062a8ee92",
+      "id": "fc9dfdc0-7caa-4720-9e81-8a8cb5d12234",
       "name": "No hay reservas para mañana"
     },
     {
@@ -1064,10 +1049,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -4320,
-        2928
+        1200,
+        3392
       ],
-      "id": "c7f9b118-a034-4688-9f1c-34aaa3eaf868",
+      "id": "07f96dfe-139b-452f-a5d9-e04b297236d7",
       "name": "HTML correo para participantes",
       "executeOnce": false
     },
@@ -1078,10 +1063,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -4384,
-        2736
+        1136,
+        3200
       ],
-      "id": "866c2bb5-1463-4a38-bd9b-cf5b40ef370e",
+      "id": "7409157d-c0bd-42d1-8715-5e4d319048ff",
       "name": "HTML recordatorio al solicitante"
     },
     {
@@ -1094,10 +1079,10 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        -4144,
-        2928
+        1376,
+        3392
       ],
-      "id": "4139cf33-cca9-4dd5-9eb9-d75c1998fbd3",
+      "id": "d1f7c97a-8ade-4333-8a7f-8ef059287130",
       "name": "Recordatorio para participantes",
       "webhookId": "ec399467-032c-40cc-8982-414fc812b533",
       "credentials": {
@@ -1118,10 +1103,10 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        -4208,
-        2736
+        1312,
+        3200
       ],
-      "id": "789754c9-857c-483c-a9bd-37639838c45a",
+      "id": "7cce6685-3f3c-4f3a-a81e-bc762a768e50",
       "name": "Correo recordatorio solicitante reserva",
       "webhookId": "1bc26cfd-799c-4aba-9e71-9ffd50ab3776",
       "credentials": {
@@ -1308,10 +1293,10 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -4544,
-        2736
+        976,
+        3200
       ],
-      "id": "87d4ab93-1d77-4b8d-ac9b-aa831172442d",
+      "id": "de746375-bdc9-4bfa-a27e-2c766ce9c416",
       "name": "Generacion de uuid para cancelar reserva",
       "credentials": {
         "googleSheetsOAuth2Api": {
@@ -1330,10 +1315,10 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        -5472,
-        1024
+        -288,
+        1392
       ],
-      "id": "133fdd95-5af6-4f50-bc07-3b4435439ddb",
+      "id": "3dddfc83-7dd4-4c53-978e-8ffd0ff075f2",
       "name": "envio validacion de solicitud reserva",
       "webhookId": "50d3be20-271b-48d3-9d00-1a9341671f61",
       "credentials": {
@@ -1350,10 +1335,10 @@
       "type": "n8n-nodes-base.stopAndError",
       "typeVersion": 1,
       "position": [
-        -7568,
-        1408
+        -2384,
+        1776
       ],
-      "id": "38a7d6fc-fabd-4c16-a8d7-302aa0398b60",
+      "id": "4d8ffefb-c27b-49a6-83ad-0daf54a09967",
       "name": "correo invalido de reserva"
     },
     {
@@ -1365,10 +1350,10 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2.1,
       "position": [
-        -8784,
-        400
+        -3264,
+        528
       ],
-      "id": "4559069c-ad9d-4d06-a8c6-f1ddff474ad3",
+      "id": "e96b52ed-8172-4504-b98e-d607deafd2da",
       "name": "Autenticacion reserva",
       "webhookId": "dead6216-b902-46f0-a046-ee484fa9fb2a"
     },
@@ -1383,13 +1368,13 @@
           ]
         }
       },
-      "id": "4a795f6a-f772-4ba7-8125-669114274305",
+      "id": "de225b3b-3c85-45eb-a5d6-040ee09b44dd",
       "name": "IF - ¿Hora Disponible?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
-        -6096,
-        352
+        -576,
+        480
       ],
       "alwaysOutputData": false
     },
@@ -1400,10 +1385,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -5104,
-        32
+        368,
+        64
       ],
-      "id": "f7549b5d-04b0-4707-b9c3-0e960d59375b",
+      "id": "ad0440bc-d194-40ae-b171-8205839dc46a",
       "name": "Correo para participantes"
     },
     {
@@ -1413,10 +1398,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -5008,
-        368
+        512,
+        496
       ],
-      "id": "b3ed7f49-40d7-4942-b8b9-b85dacc24ec8",
+      "id": "f36cd2cf-b151-4a38-91cf-222f92789876",
       "name": "Correo reserva encargado"
     },
     {
@@ -1447,10 +1432,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -8288,
-        1264
+        -3104,
+        1632
       ],
-      "id": "b379edc8-1370-4ce4-addc-7bf924cada59",
+      "id": "4f892eaa-27f3-4c54-974b-38aaa733828f",
       "name": "Token reserva"
     },
     {
@@ -1481,23 +1466,23 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -7792,
-        1232
+        -2608,
+        1600
       ],
-      "id": "ed111bee-0a64-40f2-ae7d-13f9db6664c3",
+      "id": "f4b55170-a2ab-4b73-a078-84a7a967981f",
       "name": "correo valido solicitud"
     },
     {
       "parameters": {
-        "jsCode": "// --- Entradas ---\nconst correo = $('Extraer solicitud de reserva').first().json.Correo;\nconst nombre = $('Extraer solicitud de reserva').first().json.Nombre;\nconst titulo = $('Extraer solicitud de reserva').first().json.Titulo;\nconst descripcion = $('Extraer solicitud de reserva').first().json.Descripcion;\nconst fecha = $('Extraer solicitud de reserva').first().json.Fecha;\nconst inicio = $('Extraer solicitud de reserva').first().json['Hora inicio'];\nconst termino = $('Extraer solicitud de reserva').first().json['Hora termino'];\nconst area = $('Extraer solicitud de reserva').first().json.Area;\nconst NumeroParticipantes = $('Extraer solicitud de reserva').first().json.Participantes;\nconst sala = $('Extraer solicitud de reserva').first().json.Sala;\nconst correos = $('Extraer solicitud de reserva').first().json['Correos Participantes'];\n\n// --- Funciones auxiliares ---\nfunction sanitize(value) {\n  if (value === undefined || value === null) return null;\n\n  if (typeof value === 'string') {\n    // Limpiar espacios y eliminar caracteres < >\n    const clean = value.trim().replace(/[<>]/g, \"\");\n    return clean.length > 0 ? clean : null;\n  }\n\n  if (typeof value === 'number') {\n    return isNaN(value) ? null : value;\n  }\n\n  return null;\n}\n\nfunction validarCorreo(email) {\n  if (!email) return false;\n  const regex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$/;\n  return regex.test(email.trim());\n}\n\nfunction toCalendarDate(fechaStr, horaStr) {\n  if (!fechaStr || !horaStr) return null;\n  // fecha: YYYY-MM-DD, hora: HH:MM\n  const date = new Date(`${fechaStr}T${horaStr}:00`);\n  if (isNaN(date.getTime())) return null;\n  return date.toISOString().slice(0,16)+\":00\"; // formato YYYY-MM-DDTHH:MM:00\n}\n\n// --- Sanitizar campos ---\nconst correoSanitizado = sanitize(correo);\nconst correoLimpio = validarCorreo(correoSanitizado) ? correoSanitizado : null;\n\nconst nombreLimpio = sanitize(nombre);\nconst tituloLimpio = sanitize(titulo);\nconst descripcionLimpio = sanitize(descripcion);\nconst fechaLimpia = sanitize(fecha);\nconst inicioLimpio = sanitize(inicio);\nconst terminoLimpio = sanitize(termino);\nconst areaLimpia = sanitize(area);\nconst participantesLimpio = sanitize(NumeroParticipantes);\nconst salaLimpia = sanitize(sala);\n\n// --- Correos participantes ---\nlet correosValidos = null;\nif (correos && typeof correos === 'string') {\n  let lista = [];\n  try {\n    // Intentar parsear como JSON (ej. [\"correo1\",\"correo2\"])\n    lista = JSON.parse(correos);\n  } catch (e) {\n    // Si no es JSON válido, fallback: split por coma\n    lista = correos.split(',');\n  }\n\n  const filtrados = lista\n    .map(c => sanitize(c))\n    .filter(c => c && validarCorreo(c));\n\n  if (filtrados.length > 0) {\n    // Unir en formato que Gmail acepta: \"correo1,correo2\"\n    correosValidos = filtrados.join(',');\n  }\n}\n\n// --- Fechas para Google Calendar ---\nconst inicioCalendar = toCalendarDate(fechaLimpia, inicioLimpio);\nconst terminoCalendar = toCalendarDate(fechaLimpia, terminoLimpio);\n\n// --- ID para Calendar ---\nconst calendarId = Date.now().toString(); // solo números\n\n// --- Salida ---\nreturn [\n  {\n    json: {\n      correo: correoLimpio,\n      nombre: nombreLimpio,\n      titulo: tituloLimpio,\n      descripcion: descripcionLimpio,\n      fecha: fechaLimpia,\n      inicio: inicioLimpio,\n      termino: terminoLimpio,\n      area: areaLimpia,\n      participantes: participantesLimpio,\n      sala: salaLimpia,\n      correos_participantes: correosValidos,\n      inicio_calendar: inicioCalendar,\n      termino_calendar: terminoCalendar,\n      calendar_id: calendarId\n    }\n  }\n];\n"
+        "jsCode": "// --- Entradas ---\nconst correo = $('Extraer solicitud de reserva').first().json.Correo;\nconst nombre = $('Extraer solicitud de reserva').first().json.Nombre;\nconst titulo = $('Extraer solicitud de reserva').first().json.Titulo;\nconst descripcion = $('Extraer solicitud de reserva').first().json.Descripcion;\nconst fecha = $('Extraer solicitud de reserva').first().json.Fecha;\nconst inicio = $('Extraer solicitud de reserva').first().json['Hora inicio'];\nconst termino = $('Extraer solicitud de reserva').first().json['Hora termino'];\nconst area = $('Extraer solicitud de reserva').first().json.Area;\nconst NumeroParticipantes = $('Extraer solicitud de reserva').first().json.Participantes;\nconst sala = $('Extraer solicitud de reserva').first().json.Sala;\nconst correos = $('Extraer solicitud de reserva').first().json['Correos Participantes'];\n\n// --- Funciones auxiliares ---\nfunction sanitize(value) {\n  if (value === undefined || value === null) return null;\n\n  if (typeof value === 'string') {\n    // Limpiar espacios y eliminar caracteres < >\n    const clean = value.trim().replace(/[<>]/g, \"\");\n    return clean.length > 0 ? clean : null;\n  }\n\n  if (typeof value === 'number') {\n    return isNaN(value) ? null : value;\n  }\n\n  return null;\n}\n\nfunction validarCorreo(email) {\n  if (!email) return false;\n  const regex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$/;\n  return regex.test(email.trim());\n}\n\nfunction normalizeHour(horaStr) {\n  if (!horaStr) return null;\n  const [h, m] = horaStr.split(':');\n  const hh = h.padStart(2, '0'); // asegura dos dígitos\n  return `${hh}:${m}`;\n}\n\nfunction toCalendarDate(fechaStr, horaStr) {\n  if (!fechaStr || !horaStr) return null;\n  const horaNormalizada = normalizeHour(horaStr);\n  const date = new Date(`${fechaStr}T${horaNormalizada}:00`);\n  if (isNaN(date.getTime())) return null;\n  return date.toISOString().slice(0,16)+\":00\"; // formato YYYY-MM-DDTHH:MM:00\n}\n\n// --- Sanitizar campos ---\nconst correoSanitizado = sanitize(correo);\nconst correoLimpio = validarCorreo(correoSanitizado) ? correoSanitizado : null;\n\nconst nombreLimpio = sanitize(nombre);\nconst tituloLimpio = sanitize(titulo);\nconst descripcionLimpio = sanitize(descripcion);\nconst fechaLimpia = sanitize(fecha);\nconst inicioLimpio = sanitize(inicio);\nconst terminoLimpio = sanitize(termino);\nconst areaLimpia = sanitize(area);\nconst participantesLimpio = sanitize(NumeroParticipantes);\nconst salaLimpia = sanitize(sala);\n\n// --- Correos participantes ---\nlet correosValidos = null;\nif (correos && typeof correos === 'string') {\n  let lista = [];\n  try {\n    // Intentar parsear como JSON (ej. [\"correo1\",\"correo2\"])\n    lista = JSON.parse(correos);\n  } catch (e) {\n    // Si no es JSON válido, fallback: split por coma\n    lista = correos.split(',');\n  }\n\n  const filtrados = lista\n    .map(c => sanitize(c))\n    .filter(c => c && validarCorreo(c));\n\n  if (filtrados.length > 0) {\n    // Unir en formato que Gmail acepta: \"correo1,correo2\"\n    correosValidos = filtrados.join(',');\n  }\n}\n\n// --- Fechas para Google Calendar ---\nconst inicioCalendar = toCalendarDate(fechaLimpia, inicioLimpio);\nconst terminoCalendar = toCalendarDate(fechaLimpia, terminoLimpio);\n\n// --- ID para Calendar ---\nconst calendarId = Date.now().toString(); // solo números\n\n// --- Salida ---\nreturn [\n  {\n    json: {\n      correo: correoLimpio,\n      nombre: nombreLimpio,\n      titulo: tituloLimpio,\n      descripcion: descripcionLimpio,\n      fecha: fechaLimpia,\n      inicio: inicioLimpio,\n      termino: terminoLimpio,\n      area: areaLimpia,\n      participantes: participantesLimpio,\n      sala: salaLimpia,\n      correos_participantes: correosValidos,\n      inicio_calendar: inicioCalendar,\n      termino_calendar: terminoCalendar,\n      calendar_id: calendarId\n    }\n  }\n];\n"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -5776,
-        368
+        -256,
+        496
       ],
-      "id": "e26dcd36-e6e7-46d4-8c00-20db0363d775",
+      "id": "492f428a-e7d9-438f-a544-d2b0b563440a",
       "name": "Crear ID reserva y sanitizar campos"
     },
     {
@@ -1521,10 +1506,10 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -7568,
-        2432
+        -2048,
+        2560
       ],
-      "id": "30a23f8c-b2c5-4801-8801-cbfc9e80d247",
+      "id": "36c9bb9a-9834-45d8-a7d3-18ebb18de3f0",
       "name": "Sala para horarios",
       "credentials": {
         "googleSheetsOAuth2Api": {
@@ -1540,10 +1525,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -7392,
-        2448
+        -1872,
+        2576
       ],
-      "id": "744dc338-3298-4e96-801b-35274c85cc52",
+      "id": "2cb70ba8-1d84-4c7c-b1e6-a907656a078e",
       "name": "preparar horairos"
     },
     {
@@ -1556,10 +1541,10 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2.1,
       "position": [
-        -7968,
-        2432
+        -2448,
+        2560
       ],
-      "id": "ab3b5d75-ac2a-4258-9d05-d62eaa5113b5",
+      "id": "3791e900-89df-472e-b516-f33f060744e5",
       "name": "Consulta de salas",
       "webhookId": "ed0bdf40-07e3-4b74-80c7-5ed3afaba6ee"
     },
@@ -1570,10 +1555,10 @@
       "type": "n8n-nodes-base.stopAndError",
       "typeVersion": 1,
       "position": [
-        -7600,
-        2624
+        -2080,
+        2752
       ],
-      "id": "16275899-2671-4c6f-b011-5674f5b3fb7b",
+      "id": "a141fa99-a52d-4bb0-8263-01bacc1faf2d",
       "name": "Invalid token"
     },
     {
@@ -1583,10 +1568,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -8112,
-        1248
+        -2928,
+        1616
       ],
-      "id": "a4b3ceb9-a681-43fb-a686-e67dfd8cafab",
+      "id": "8c6393b1-fa46-49b9-9919-dea1be2027a6",
       "name": "Normalizar, sanitizar y validar reserva"
     },
     {
@@ -1617,10 +1602,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        -7968,
-        1248
+        -2784,
+        1616
       ],
-      "id": "54e5f446-dc10-4b99-a5d9-bd2f57eb4a78",
+      "id": "e2453961-1c3d-4ea1-92de-bfa9dcc9b9f0",
       "name": "Datos reserva obligatorios"
     },
     {
@@ -1786,10 +1771,10 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -5824,
-        1024
+        -640,
+        1392
       ],
-      "id": "7c9bfdaf-e36d-4e0c-99a7-8ebde9a51862",
+      "id": "9bf5efb4-3474-438d-b026-9e55c75fb52c",
       "name": "Subir solicitud de reserva",
       "credentials": {
         "googleSheetsOAuth2Api": {
@@ -1827,10 +1812,10 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -6480,
-        1104
+        -1296,
+        1472
       ],
-      "id": "0373411b-b509-4734-a0f3-dcfe9317a9c9",
+      "id": "99ba5a53-8c3d-4087-9bab-96dc2e110a1f",
       "name": "solicitudes pendientes",
       "alwaysOutputData": true,
       "credentials": {
@@ -1847,10 +1832,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -6256,
-        1104
+        -1072,
+        1472
       ],
-      "id": "c35b7c1f-cdd8-4ab4-b2da-acdca291d219",
+      "id": "e78e0a6e-b843-454a-82a7-4fcae4539aea",
       "name": "verificar solicitudes pendientes"
     },
     {
@@ -1881,10 +1866,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        -6016,
-        1104
+        -832,
+        1472
       ],
-      "id": "11fb7fd6-34fe-4235-b1e7-0590f440dc32",
+      "id": "bcb1b554-d6cd-47b0-a98f-8fbfe985285f",
       "name": "Puede reservar?"
     },
     {
@@ -1914,10 +1899,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        -7472,
-        368
+        -1952,
+        496
       ],
-      "id": "7ee9bc94-6702-4927-b449-0c807ffc53a5",
+      "id": "a5ff497b-6f8e-4244-811c-5b752744bd4f",
       "name": "mismo correo solicitante?"
     },
     {
@@ -1947,10 +1932,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        -2896,
-        176
+        2048,
+        256
       ],
-      "id": "d0cb93dd-51ac-460a-911b-dbd74700437c",
+      "id": "cefda31f-cc01-4634-8f07-7c4efe872d42",
       "name": "Token crear sala"
     },
     {
@@ -1960,10 +1945,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -2688,
-        160
+        2256,
+        240
       ],
-      "id": "f490b60b-39ee-4b41-984b-663699389d65",
+      "id": "75aed2b6-0703-4c30-8bd0-dca4ebf7d423",
       "name": "Sanitizar solicitud crear sala"
     },
     {
@@ -1994,10 +1979,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        -2544,
-        160
+        2400,
+        240
       ],
-      "id": "954b79c9-80e5-48e5-9cb7-afd909310283",
+      "id": "f9d9c9bc-bc6e-435e-aff2-43b4226194f3",
       "name": "correo solicitud crear sala"
     },
     {
@@ -2028,10 +2013,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        -2384,
-        144
+        2560,
+        224
       ],
-      "id": "eacdc68a-a9a2-46e6-8fe1-da07a7652a1c",
+      "id": "7af8ab6a-1594-415a-a443-6c95f6502e9e",
       "name": "campos completos creacion sala?"
     },
     {
@@ -2063,10 +2048,10 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -2192,
-        128
+        2752,
+        208
       ],
-      "id": "326c688f-3fdc-4efd-912f-4abe9bba41ae",
+      "id": "59053ffb-ec73-4668-a8f2-e5cdaa69e994",
       "name": "Solicitudes crear sala pendiente",
       "alwaysOutputData": true,
       "credentials": {
@@ -2104,10 +2089,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        -1920,
-        128
+        3024,
+        208
       ],
-      "id": "60d64784-8b0e-468f-87df-e1f856597665",
+      "id": "010413e9-3fa0-4a67-b74c-429c181cdf97",
       "name": "Crear sala pendiente?"
     },
     {
@@ -2117,10 +2102,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -912,
-        112
+        4032,
+        192
       ],
-      "id": "7e8335ee-677c-442b-a844-017bb907659c",
+      "id": "82339b06-b1e5-4788-8706-0aabcf9b2e3c",
       "name": "html crear sala"
     },
     {
@@ -2226,10 +2211,10 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -1088,
-        112
+        3856,
+        192
       ],
-      "id": "bbc8638d-3012-407b-9e98-a055a9263772",
+      "id": "cdefc8b5-ca7b-4f18-9e22-0f7d85f8070c",
       "name": "Subir solicitud crear sala",
       "credentials": {
         "googleSheetsOAuth2Api": {
@@ -2247,10 +2232,10 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2.1,
       "position": [
-        -160,
-        192
+        1856,
+        848
       ],
-      "id": "aaa4e370-fbe3-4a06-aadb-43a0470b17e4",
+      "id": "04a68193-14a8-43eb-8abc-f6f91ccdb375",
       "name": "Autenticacion agregar sala1",
       "webhookId": "f74d2102-4625-4b11-9927-c95cbd49fbf3"
     },
@@ -2296,10 +2281,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        48,
-        192
+        2064,
+        848
       ],
-      "id": "fb8df5c7-000a-49e6-9351-53a4ea9d5c89",
+      "id": "e5721a84-86a4-487d-8cb8-faf888449ae6",
       "name": "Access token crear sala"
     },
     {
@@ -2319,10 +2304,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        192,
-        192
+        2208,
+        848
       ],
-      "id": "ce7baa3f-e7fc-483a-9ba1-1ed1b7df5008",
+      "id": "ee594007-d956-447b-875c-8f901b4289b3",
       "name": "Datos usuario crear sala"
     },
     {
@@ -2354,10 +2339,10 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        368,
-        192
+        2384,
+        848
       ],
-      "id": "b623bcf2-01db-4047-9484-6be48754e0b7",
+      "id": "11c2a476-e3be-4875-868e-476786994924",
       "name": "extraer solicitud crear sala",
       "alwaysOutputData": true,
       "credentials": {
@@ -2395,10 +2380,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        656,
-        192
+        2672,
+        848
       ],
-      "id": "22bc4904-43d8-4af5-b19e-3117d3fd2c5c",
+      "id": "fbb62a5d-b3d5-4569-9879-e145f53f079f",
       "name": "se extrajeron datos"
     },
     {
@@ -2428,10 +2413,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        832,
-        176
+        2848,
+        832
       ],
-      "id": "741774e6-1ab4-4157-8148-657c6291bc7b",
+      "id": "948dddce-cc78-4e0c-a30f-74c90aba382b",
       "name": "Correo correcto"
     },
     {
@@ -2441,10 +2426,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        512,
-        192
+        2528,
+        848
       ],
-      "id": "7fd5172d-33ba-447a-9bb7-cc5148671749",
+      "id": "35310453-b892-48f4-85f6-9c4df6977edd",
       "name": "Revisar contenido"
     },
     {
@@ -2476,10 +2461,10 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        1008,
-        160
+        3024,
+        816
       ],
-      "id": "d3f61e66-72a2-4007-b86d-ea16165b1a30",
+      "id": "9ad37413-223d-4fa5-b027-5b229b6627b1",
       "name": "Extraer salas coincidentes",
       "alwaysOutputData": true,
       "credentials": {
@@ -2496,10 +2481,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1152,
-        160
+        3168,
+        816
       ],
-      "id": "7418beca-4803-478b-b974-d922a98e175e",
+      "id": "b3ca8ca4-fce5-4ee8-b9b1-96586b5d48da",
       "name": "Comprobar repeticion de sala"
     },
     {
@@ -2530,10 +2515,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        1296,
-        160
+        3312,
+        816
       ],
-      "id": "bf207eb1-6756-4b0a-bf89-1dd84b904fad",
+      "id": "b690d53a-dd27-47d1-abf4-7b8f21374648",
       "name": "Sala repetida?1"
     },
     {
@@ -2543,10 +2528,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1504,
-        80
+        3520,
+        736
       ],
-      "id": "6da4216d-b7a7-4ec5-8c2f-36f17cf9880f",
+      "id": "a7c96050-59c7-4f3a-9538-485ff24f869d",
       "name": "sanitizar crear sala"
     },
     {
@@ -2651,10 +2636,10 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        1712,
-        80
+        3728,
+        736
       ],
-      "id": "33ba469c-fc88-4c28-9a79-5dca899d76f0",
+      "id": "fb5d5124-3cd9-4bcd-b658-a37910bb7224",
       "name": "Creacion sala nueva1",
       "credentials": {
         "googleSheetsOAuth2Api": {
@@ -2670,10 +2655,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        2048,
-        80
+        4064,
+        736
       ],
-      "id": "25c9f584-140f-4876-b9f4-36efaf1830b1",
+      "id": "1ec98a70-7b77-4a9d-933f-a7d98193adf8",
       "name": "HTML confirmacion creacion de sala"
     },
     {
@@ -2686,10 +2671,10 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        2224,
-        80
+        4240,
+        736
       ],
-      "id": "5ec7f91f-25a0-42c2-b679-2548c5d579e6",
+      "id": "bf716f8a-0478-4f92-a601-4ecb1dedc423",
       "name": "Creacion de sala exitosa",
       "webhookId": "124bdf93-996e-435f-aaeb-5c9482394762",
       "credentials": {
@@ -2708,10 +2693,10 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2.1,
       "position": [
-        -3104,
-        176
+        1840,
+        256
       ],
-      "id": "710b9a3d-3f31-43af-b235-8c79f6fae5f4",
+      "id": "548e837f-c25b-4712-acbc-a455a118ab20",
       "name": "Webhook formulario crear sala",
       "webhookId": "47fa1f3c-225d-41c1-8228-01a8b44a982c"
     },
@@ -2724,10 +2709,10 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2.1,
       "position": [
-        -3120,
-        672
+        3728,
+        1936
       ],
-      "id": "ab0f8789-6f70-4317-84ae-38418d91421c",
+      "id": "235171c0-52d8-450d-a40e-ea9d6d827b81",
       "name": "Webhook formulario eliminar sala",
       "webhookId": "47fa1f3c-225d-41c1-8228-01a8b44a982c"
     },
@@ -2758,10 +2743,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        -2912,
-        672
+        3936,
+        1936
       ],
-      "id": "90f572cb-d075-45be-ab1f-59761ff1b256",
+      "id": "d38687da-c888-41e9-b8f9-8a9fcee49c78",
       "name": "Token eliminar sala"
     },
     {
@@ -2771,10 +2756,10 @@
       "type": "n8n-nodes-base.stopAndError",
       "typeVersion": 1,
       "position": [
-        -2736,
-        816
+        4112,
+        2080
       ],
-      "id": "27fe7f1b-24ba-4162-aa27-28b9bad668ef",
+      "id": "68ecb560-b034-48dd-bc1f-b71abd5bc665",
       "name": "Stop and Error13"
     },
     {
@@ -2784,10 +2769,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -2736,
-        656
+        4112,
+        1920
       ],
-      "id": "ff632f0d-ffa9-4b5c-8657-9e3f7ea55363",
+      "id": "1e2415ea-43c1-47c1-8c87-9fdd44840a9c",
       "name": "Sanitizar solicitud eliminar sala"
     },
     {
@@ -2818,10 +2803,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        -2528,
-        656
+        4320,
+        1920
       ],
-      "id": "5380db8b-53fc-4d50-8937-8598dc1b8d7b",
+      "id": "47eaefde-f65c-419a-ac1d-016e1b0083f6",
       "name": "Correo solicitud eliminar sala"
     },
     {
@@ -2852,10 +2837,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        -2304,
-        640
+        4544,
+        1904
       ],
-      "id": "47bad249-de6a-4e9d-9703-1b70592878ad",
+      "id": "417383c9-94ac-40b8-a43e-53e8e3d6b01c",
       "name": "Campos completos eliminar sala"
     },
     {
@@ -2865,10 +2850,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -2048,
-        128
+        2896,
+        208
       ],
-      "id": "e6bcdc50-a32c-4c6e-9343-6f798029f6cd",
+      "id": "a8e6d4e2-4fbf-4950-911b-f58b50624945",
       "name": "Confirmar solicitudes pendientes"
     },
     {
@@ -2900,10 +2885,10 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -2080,
-        624
+        4768,
+        1888
       ],
-      "id": "b2303bf1-c73d-4e07-bb36-4f0809e2ca43",
+      "id": "689458e1-1adb-4db9-852d-f4e1f13f9821",
       "name": "Solicitudes eliminar salas pendientes",
       "alwaysOutputData": true,
       "credentials": {
@@ -2920,10 +2905,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -1920,
-        624
+        4928,
+        1888
       ],
-      "id": "b777a3b3-f448-46a8-877f-7b6f1101ac12",
+      "id": "7f6c1991-9232-4bb0-bd2b-de86762ed139",
       "name": "Confirmar eliminaciones pendientes"
     },
     {
@@ -2954,10 +2939,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        -1776,
-        624
+        5072,
+        1888
       ],
-      "id": "cb61aeb5-4fde-4770-936c-4312fcd551c1",
+      "id": "e8ee051d-3079-4cec-8274-4c732daaf1f3",
       "name": "Eliminar sala pendiente?"
     },
     {
@@ -2989,10 +2974,10 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -1568,
-        608
+        5280,
+        1872
       ],
-      "id": "e5a533a8-b964-4093-af51-802224a1c88a",
+      "id": "51cdc803-7345-46ca-85d3-64738aac4f04",
       "name": "Datos sala a eliminar",
       "alwaysOutputData": true,
       "credentials": {
@@ -3009,10 +2994,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -1424,
-        608
+        5424,
+        1872
       ],
-      "id": "96323cc4-5975-481d-9570-7d2089b600a2",
+      "id": "0e9b3e32-c67c-41ba-964d-12699a123d7d",
       "name": "Procesar solicitud"
     },
     {
@@ -3043,10 +3028,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        -1264,
-        608
+        5584,
+        1872
       ],
-      "id": "8f345883-ce5f-4c4c-914c-cbaa41875045",
+      "id": "8ae699f1-288a-46ce-b1bc-42c4e280b4b8",
       "name": "Existe la sala?"
     },
     {
@@ -3077,10 +3062,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        -1024,
-        608
+        5824,
+        1872
       ],
-      "id": "4fe4804d-a3c4-430c-9580-b08501f5cf2e",
+      "id": "b216bb1c-b4f1-4e7a-90e2-462957148ca7",
       "name": "solicitante=admin?"
     },
     {
@@ -3112,10 +3097,10 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -784,
-        592
+        6064,
+        1856
       ],
-      "id": "313072ab-d6cd-48e1-afa7-9d3cbb9a50a1",
+      "id": "208dd105-71fe-423b-9ecd-0a693f89e3fb",
       "name": "Reservas afectadas1",
       "alwaysOutputData": true,
       "credentials": {
@@ -3132,10 +3117,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -624,
-        592
+        6224,
+        1856
       ],
-      "id": "f3207281-1810-4fb7-ac2b-d5649a64671c",
+      "id": "752a30c0-e998-45e3-8987-b7bda5b9fbf4",
       "name": "Cuantas reservas se ven afectadas?"
     },
     {
@@ -3201,10 +3186,10 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -448,
-        592
+        6400,
+        1856
       ],
-      "id": "546c69e2-6a39-42aa-b390-383e0897cddb",
+      "id": "4cf2ba07-0a4b-4194-80ed-86ba0e4b40ab",
       "name": "Preparar solicitud eliminar sala",
       "credentials": {
         "googleSheetsOAuth2Api": {
@@ -3222,10 +3207,10 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2.1,
       "position": [
-        -1024,
-        1376
+        3920,
+        2736
       ],
-      "id": "a0eb790f-8433-40e4-8dc6-94320e79c66d",
+      "id": "282314b0-6723-44bf-aade-703d97e893aa",
       "name": "Autenticacion eliminar sala1",
       "webhookId": "efda54ab-63cb-4ecc-a095-cf604f7eb067"
     },
@@ -3236,10 +3221,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -272,
-        592
+        6576,
+        1856
       ],
-      "id": "f1f2db76-7493-4a7f-8815-b707e8f4eece",
+      "id": "9a98e9e1-529d-4159-bcc7-39f552a4c00e",
       "name": "HTML eliminar sala"
     },
     {
@@ -3283,10 +3268,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -832,
-        1376
+        4112,
+        2736
       ],
-      "id": "25b7bdbd-bd22-423b-a1a4-a90d9b7bd630",
+      "id": "33f88af9-ffee-4e7a-a782-4d310559e3c6",
       "name": "token solicitante eliminar sala1"
     },
     {
@@ -3306,10 +3291,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -656,
-        1376
+        4288,
+        2736
       ],
-      "id": "316462d3-329f-4bbb-810b-af7b8f2b18b2",
+      "id": "76c9ec1e-0ea5-43d0-bbd2-b3432e63252e",
       "name": "Datos solicitante eliminar sala2"
     },
     {
@@ -3341,10 +3326,10 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -448,
-        1376
+        4496,
+        2736
       ],
-      "id": "85f60b48-3498-416b-ad0e-be278b2e3016",
+      "id": "c9624836-ce17-4407-ba21-33e52ac4fad9",
       "name": "Extraer solicitud eliminar sala",
       "alwaysOutputData": true,
       "credentials": {
@@ -3361,10 +3346,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -272,
-        1376
+        4672,
+        2736
       ],
-      "id": "ef6d2747-1cbb-42da-adf5-eeca93e46e79",
+      "id": "3b9500ee-23f5-42f5-a9b0-f0e9d4eb697f",
       "name": "Existe la solicitud?"
     },
     {
@@ -3395,10 +3380,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        -96,
-        1376
+        4848,
+        2736
       ],
-      "id": "39db17f4-25fa-4a9c-8387-325273cfae52",
+      "id": "74fafb7f-891d-4185-a560-1acd1c8ae5c6",
       "name": "solicitud eliminar true?"
     },
     {
@@ -3428,10 +3413,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        128,
-        1360
+        5072,
+        2720
       ],
-      "id": "61c9b444-b035-4399-aa35-2c6c1faf79a8",
+      "id": "541faf16-28ef-451a-8c2d-e9f14f30a2d8",
       "name": "Mismo solicitante eliminar sala"
     },
     {
@@ -3463,10 +3448,10 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        288,
-        1344
+        5232,
+        2704
       ],
-      "id": "2491793c-1503-40de-b2ba-e2032263f101",
+      "id": "e7c8adbf-6f15-435f-b650-ec39ccc3fce0",
       "name": "Buscar sala a eliminar",
       "alwaysOutputData": true,
       "credentials": {
@@ -3483,10 +3468,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        752,
-        1328
+        5696,
+        2688
       ],
-      "id": "8582e8de-250b-48c2-b5a7-6c36688869de",
+      "id": "cabd7405-2333-4949-ba67-d5aa13790818",
       "name": "existe la sala todavia true/false"
     },
     {
@@ -3517,10 +3502,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        976,
-        1328
+        5920,
+        2688
       ],
-      "id": "04636947-96c9-4ab4-9274-e23d09790846",
+      "id": "1e3a91cc-104e-47ea-ad13-1e65ce92bcd6",
       "name": "Existe sala?"
     },
     {
@@ -3625,10 +3610,10 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        1488,
-        1488
+        6512,
+        2928
       ],
-      "id": "411562cf-956c-4596-9993-d75a3c369642",
+      "id": "b82af64f-151c-45ca-995e-337eb8967928",
       "name": "Agregar a salas eliminadas",
       "credentials": {
         "googleSheetsOAuth2Api": {
@@ -3659,10 +3644,10 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        1696,
-        1488
+        6720,
+        2928
       ],
-      "id": "df55213d-1393-45d3-82a9-cb9699d1da2e",
+      "id": "bede5960-5da2-49f2-b05d-72e4d0172d29",
       "name": "Eliminar sala de disponibles",
       "credentials": {
         "googleSheetsOAuth2Api": {
@@ -3678,10 +3663,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1920,
-        1488
+        6944,
+        2928
       ],
-      "id": "ed9c1dae-0e75-4ad2-bb68-b90c552b66b8",
+      "id": "ca404781-4c5f-4e98-a612-8b949d3af70f",
       "name": "Confirmar eliminacion"
     },
     {
@@ -3694,10 +3679,10 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        2144,
-        1488
+        7168,
+        2928
       ],
-      "id": "207a8b12-b6a2-46c5-88fc-c25cc2fafada",
+      "id": "8829c76e-3846-41d7-a60e-55d73e2d7a44",
       "name": "Send a message3",
       "webhookId": "f3091a07-c89c-4aab-8d79-11abfb56a30f",
       "credentials": {
@@ -3736,10 +3721,10 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        1392,
-        1168
+        6304,
+        2624
       ],
-      "id": "766b81f5-e2ca-4375-bba7-ccc718047af7",
+      "id": "b78caa4c-940b-448f-9133-17b95638a275",
       "name": "Conseguir reservas a eliminar",
       "alwaysOutputData": true,
       "credentials": {
@@ -3756,10 +3741,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1600,
-        1168
+        6480,
+        2624
       ],
-      "id": "d209925b-4df1-4824-aa3c-5fded352e030",
+      "id": "79187b84-a847-492e-bf71-d082bcfe8ba7",
       "name": "Reservas afectadas?"
     },
     {
@@ -3790,10 +3775,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        1808,
-        1168
+        6656,
+        2624
       ],
-      "id": "971dbf8a-41f8-4b37-a742-643d4f9eeb82",
+      "id": "590b146f-d8fb-4958-8988-e8adb8abd43e",
       "name": "true/false reservas afectadas"
     },
     {
@@ -3801,10 +3786,10 @@
       "type": "n8n-nodes-base.noOp",
       "typeVersion": 1,
       "position": [
-        2048,
-        1344
+        6848,
+        2720
       ],
-      "id": "5ceac8f3-aa54-47cf-bf58-e1fdba8f18d8",
+      "id": "a7cc660a-c49c-4ff7-8900-0e5ae9947e25",
       "name": "No Operation, do nothing"
     },
     {
@@ -3816,10 +3801,10 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.5,
       "position": [
-        -8608,
-        192
+        -3088,
+        720
       ],
-      "id": "6e1c23c7-64c5-491a-a86e-feea3479e81f",
+      "id": "c5df5272-abae-410e-8d15-9473943997f5",
       "name": "confirmar proceso reserva"
     },
     {
@@ -3851,10 +3836,10 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -7648,
-        1136
+        -2464,
+        1504
       ],
-      "id": "c98cb260-af72-4d57-a873-2ba45fbed863",
+      "id": "f3239303-e8ee-45af-a69a-e5aeb131e9d0",
       "name": "Sala reserva",
       "credentials": {
         "googleSheetsOAuth2Api": {
@@ -3870,10 +3855,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -7520,
-        1136
+        -2336,
+        1504
       ],
-      "id": "a732a521-8fe7-473e-ba54-90d21ea6ae91",
+      "id": "1c2060ca-6cb0-41b7-8734-ada8783cbb22",
       "name": "Comprobar dentro de horario"
     },
     {
@@ -3904,10 +3889,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        -7344,
-        1136
+        -2160,
+        1504
       ],
-      "id": "ec3605bb-a3fd-4e8b-846c-56dd37c1b989",
+      "id": "edc5a954-cc78-4d96-aacc-70d7af396988",
       "name": "dentro de horario?"
     },
     {
@@ -3939,10 +3924,10 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -7216,
-        352
+        -1696,
+        480
       ],
-      "id": "82df26ad-9cb2-43ee-8937-778795976b2d",
+      "id": "df886b6f-6c9f-4c38-8495-7684ad21ef2e",
       "name": "Sala reserva1",
       "alwaysOutputData": true,
       "credentials": {
@@ -3959,10 +3944,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        2000,
-        1040
+        6832,
+        2512
       ],
-      "id": "a36c00a6-922a-49f7-8315-68d4195ae9ca",
+      "id": "dd874f1f-214e-4767-a579-5cba0c5f37bf",
       "name": "Desarmar"
     },
     {
@@ -4108,10 +4093,10 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        2608,
-        1040
+        7216,
+        2560
       ],
-      "id": "603e75c4-02b1-42d2-a525-5c94365410cd",
+      "id": "3a95eb03-fcba-4b97-bd26-37c1a3bc4964",
       "name": "Registrar eliminados",
       "credentials": {
         "googleSheetsOAuth2Api": {
@@ -4127,10 +4112,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        2576,
-        880
+        7216,
+        2400
       ],
-      "id": "93ba0e12-cbbd-4368-8a0f-2ecb866f6437",
+      "id": "51dbbcf4-33d4-461a-8502-722835e1e12a",
       "name": "HTML cancelacion por eliminacion sala"
     },
     {
@@ -4143,50 +4128,16 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        2784,
-        880
+        7408,
+        2400
       ],
-      "id": "da7d336d-f53c-4c3e-86a3-fbb0e7fe4bb3",
+      "id": "ae9f1b53-995a-4050-9f85-deec8c9af2a8",
       "name": "Enviar a participantes",
       "webhookId": "f915277b-0bc1-45a4-b004-b1d5a74ac449",
       "credentials": {
         "gmailOAuth2": {
           "id": "NVE7iqAGLIBgX3De",
           "name": "Gmail account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "operation": "delete",
-        "documentId": {
-          "__rl": true,
-          "value": "1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M",
-          "mode": "list",
-          "cachedResultName": "Salas",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit?usp=drivesdk"
-        },
-        "sheetName": {
-          "__rl": true,
-          "value": 1945850352,
-          "mode": "list",
-          "cachedResultName": "Reservas",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit#gid=1945850352"
-        },
-        "startIndex": "={{ $json.row_number }}"
-      },
-      "type": "n8n-nodes-base.googleSheets",
-      "typeVersion": 4.7,
-      "position": [
-        2688,
-        1232
-      ],
-      "id": "ed130de6-be4e-4fe6-9bd5-b3587adc6243",
-      "name": "Delete rows or columns from sheet1",
-      "credentials": {
-        "googleSheetsOAuth2Api": {
-          "id": "ooVYKONzDWnvrKMr",
-          "name": "Google Sheets account"
         }
       }
     },
@@ -4205,10 +4156,10 @@
       "type": "n8n-nodes-base.googleCalendar",
       "typeVersion": 1.3,
       "position": [
-        2320,
-        752
+        7024,
+        2336
       ],
-      "id": "9b5e9097-e6ae-4827-b137-7bb2c476e1bd",
+      "id": "01920b00-43b1-4bb1-9d95-dd2812323350",
       "name": "Delete an event",
       "credentials": {
         "googleCalendarOAuth2Api": {
@@ -4226,10 +4177,10 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.5,
       "position": [
-        -800,
-        1584
+        4144,
+        2944
       ],
-      "id": "6556817c-6272-4b6d-9d60-6a4468a3d68e",
+      "id": "1f47b27d-4bcb-4039-9f4b-3435a7fa7612",
       "name": "confirmar proceso reserva1"
     },
     {
@@ -4241,10 +4192,10 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.5,
       "position": [
-        0,
-        0
+        2048,
+        1024
       ],
-      "id": "0f175348-28a3-447d-b697-3fd7063078b5",
+      "id": "effca010-7f09-451c-b431-e3cca1cd8b30",
       "name": "confirmar proceso reserva2"
     },
     {
@@ -4254,10 +4205,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        2304,
-        1216
+        7120,
+        2704
       ],
-      "id": "76e812b8-6acd-4cdb-9621-c17d00102833",
+      "id": "7dd6e412-006e-40b0-af7d-aa59726b5f8d",
       "name": "Code in JavaScript"
     },
     {
@@ -4267,10 +4218,10 @@
       "type": "n8n-nodes-base.stopAndError",
       "typeVersion": 1,
       "position": [
-        -8128,
-        1424
+        -2944,
+        1792
       ],
-      "id": "d1d1913e-1801-4690-9892-d813fdfdfce6",
+      "id": "63c4c3a2-7ac2-4c36-accb-0e4e86fd0a6f",
       "name": "Token invalido solicitud reserva"
     },
     {
@@ -4280,10 +4231,10 @@
       "type": "n8n-nodes-base.stopAndError",
       "typeVersion": 1,
       "position": [
-        -7824,
-        1424
+        -2640,
+        1792
       ],
-      "id": "bcaaa28a-dd10-4dde-99b8-11062aa702b2",
+      "id": "57718d13-a222-465b-aaf3-82c56ac4ac45",
       "name": "Faltan campos en solicitud de reserva"
     },
     {
@@ -4293,10 +4244,10 @@
       "type": "n8n-nodes-base.stopAndError",
       "typeVersion": 1,
       "position": [
-        -7104,
-        1360
+        -1920,
+        1728
       ],
-      "id": "427d29de-a39a-4f52-8999-5313eb21f865",
+      "id": "e94ff11f-5833-4a2c-bf09-10eaaf3dc530",
       "name": "Solicitud fuera de horario"
     },
     {
@@ -4332,10 +4283,10 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -7088,
-        1120
+        -1904,
+        1488
       ],
-      "id": "c964da70-3f01-4319-9d01-f5fbbbf8f672",
+      "id": "925afd87-2e66-4fed-aa43-ebac37085093",
       "name": "Reservas que coinciden con sala/fecha",
       "alwaysOutputData": true,
       "credentials": {
@@ -4352,10 +4303,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -6880,
-        1120
+        -1696,
+        1488
       ],
-      "id": "a589f9ac-b942-43df-aa66-48272fe35059",
+      "id": "e09e451a-3562-4553-8a28-7415a9346289",
       "name": "Comparar solicitud con reservas"
     },
     {
@@ -4386,10 +4337,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        -6672,
-        1120
+        -1488,
+        1488
       ],
-      "id": "79760679-24b2-4369-afa5-65c53a58ea93",
+      "id": "dbf8ffeb-d527-43a3-bb7f-c7c4c9d150bd",
       "name": "Sin conflicto solicitud reserva?"
     },
     {
@@ -4399,10 +4350,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -6496,
-        1312
+        -1312,
+        1680
       ],
-      "id": "02d61e52-ee2d-4d62-a383-fdc057f56120",
+      "id": "aa9d9610-6723-4df8-8b4e-2039aec355f2",
       "name": "Solicitud solapa, correo al solicitante"
     },
     {
@@ -4415,10 +4366,10 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        -6320,
-        1312
+        -1136,
+        1680
       ],
-      "id": "6a6b0daa-c1c1-4779-8107-3769584ae618",
+      "id": "e64758ca-0b00-4925-9091-22b2a74f8192",
       "name": "Solicitud rechazada",
       "webhookId": "44475c8d-a22b-40fa-b2f2-9f2f8e2ee886",
       "credentials": {
@@ -4435,10 +4386,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -5808,
-        1200
+        -624,
+        1568
       ],
-      "id": "eaba15c5-477a-4156-b7b7-5f5fdb96edeb",
+      "id": "ff4ca556-1e1c-439e-a6ce-445691d4e749",
       "name": "HTML pedir al solicitante completar solicitud previa"
     },
     {
@@ -4451,10 +4402,10 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        -5600,
-        1200
+        -416,
+        1568
       ],
-      "id": "c4245be6-041e-483a-965d-01db5c28596b",
+      "id": "ab0f45ab-c8ee-4020-b744-3366710f63c8",
       "name": "Correo solicitud pendiente",
       "webhookId": "2acf0ba1-bc8f-4836-9837-cf9c3a9362d4",
       "credentials": {
@@ -4502,10 +4453,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        -8320,
-        400
+        -2800,
+        528
       ],
-      "id": "ba4fc144-46d0-4ac2-b9a6-3795ff695d17",
+      "id": "a613338e-7fa6-41bb-adbf-21334e64ed8b",
       "name": "Bad request?"
     },
     {
@@ -4537,10 +4488,10 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -8192,
-        560
+        -2672,
+        688
       ],
-      "id": "08089a32-3a53-4a59-afc4-2e9cdccc3dea",
+      "id": "275eaae9-9111-4c7b-9b7c-4988730f305c",
       "name": "Solicitud reserva state",
       "credentials": {
         "googleSheetsOAuth2Api": {
@@ -4556,10 +4507,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -8064,
-        560
+        -2544,
+        688
       ],
-      "id": "e425b383-d8d2-4b09-9309-72e60fc071c7",
+      "id": "1b96b9a8-4516-45b5-939a-5a7ecbc0551e",
       "name": "Correo error http reserva"
     },
     {
@@ -4572,10 +4523,10 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        -7936,
-        560
+        -2416,
+        688
       ],
-      "id": "41752ecb-8d5b-4bd6-8929-76f386ee059f",
+      "id": "3620f294-822e-40ec-9546-5d479df8a36e",
       "name": "Correo http error",
       "webhookId": "f38fddaf-7a4c-4d57-aad5-8f3f2a67249a",
       "credentials": {
@@ -4592,10 +4543,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -7184,
-        528
+        -1664,
+        656
       ],
-      "id": "1476573f-e9a1-4efb-b624-8c12eb40c5c6",
+      "id": "6ffa7bfa-4155-4d09-849d-c62cc80d9ff1",
       "name": "correo autenticacion incorrecta reserva"
     },
     {
@@ -4608,10 +4559,10 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        -7024,
-        528
+        -1504,
+        656
       ],
-      "id": "608bbd18-e8c5-403e-bd48-36f2e0f57b87",
+      "id": "f5b97138-8c4e-4e0b-8cdb-f17177c04825",
       "name": "Mensaje error autenticacion reserva",
       "webhookId": "c2fc9e31-2308-433a-81fe-0ae732cb07ef",
       "credentials": {
@@ -4643,10 +4594,10 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -6624,
-        64
+        -1104,
+        192
       ],
-      "id": "367322b1-e087-4359-87a2-6c8e343a886b",
+      "id": "a9da223e-7fe9-4e7d-b46b-2912c0f4f319",
       "name": "Eliminar solicitud por error horario",
       "credentials": {
         "googleSheetsOAuth2Api": {
@@ -4662,10 +4613,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -6480,
-        64
+        -960,
+        192
       ],
-      "id": "fab9d307-4771-4968-a05b-70657241f1f4",
+      "id": "a288d677-4b99-4573-a597-4ff3809c9c11",
       "name": "HTML error solicitud horario"
     },
     {
@@ -4678,10 +4629,10 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        -6320,
-        64
+        -800,
+        192
       ],
-      "id": "8591daed-d892-4fb9-90d0-bde3a487ca65",
+      "id": "6d9928a5-7305-4018-993b-c2b5fb80bb09",
       "name": "Mensaje error horario",
       "webhookId": "c3b613d3-a0e5-453e-82c4-d734070b328f",
       "credentials": {
@@ -4697,11 +4648,11 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -8352,
-        2512
+        -2832,
+        2608
       ],
       "typeVersion": 1,
-      "id": "63250e0a-73f8-4c8f-81ec-937226fed8d2",
+      "id": "be8996c7-ea7a-4d49-a7f3-ace9e5505204",
       "name": "Sticky Note3"
     },
     {
@@ -4710,11 +4661,11 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -9152,
-        384
+        -3632,
+        512
       ],
       "typeVersion": 1,
-      "id": "a0303a0d-5708-41b8-bf4d-c20921028444",
+      "id": "be65ad76-2fbb-4c6c-ab13-fcf8e2d7430c",
       "name": "Sticky Note4"
     },
     {
@@ -4723,11 +4674,11 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -3408,
-        160
+        1536,
+        240
       ],
       "typeVersion": 1,
-      "id": "3c1d0892-46aa-4a3e-9092-534c0aecb336",
+      "id": "40a9bf44-0d03-45a1-9b16-276141dcf02f",
       "name": "Sticky Note5"
     },
     {
@@ -4736,11 +4687,11 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -448,
-        160
+        1568,
+        816
       ],
       "typeVersion": 1,
-      "id": "fd0f2318-fd30-4c38-96f6-b43672e901ab",
+      "id": "6ba92a3c-a6f4-4d02-9312-748e088f8783",
       "name": "Sticky Note6"
     },
     {
@@ -4749,11 +4700,11 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -3456,
-        688
+        3392,
+        1952
       ],
       "typeVersion": 1,
-      "id": "f7055421-2272-4e55-9aba-a5d463dcc841",
+      "id": "7037446f-1b05-487d-af8d-3e59b34a6825",
       "name": "Sticky Note7"
     },
     {
@@ -4762,11 +4713,11 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -1376,
-        1376
+        3568,
+        2736
       ],
       "typeVersion": 1,
-      "id": "7052b699-3c6b-4027-a05c-592a5c5982a4",
+      "id": "14e02447-e6b4-4629-81a2-03d12dcb5ec6",
       "name": "Sticky Note8"
     },
     {
@@ -4796,10 +4747,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        -7760,
-        2432
+        -2240,
+        2560
       ],
-      "id": "343d09ce-181a-4faf-a203-8b8ebb79dc23",
+      "id": "66003fac-e3d9-4ab4-84dd-4e5c016f89d1",
       "name": "Token solicitud ver horarios"
     },
     {
@@ -4809,10 +4760,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -7872,
-        384
+        -2352,
+        512
       ],
-      "id": "9bc83078-82e4-4739-ad44-1e2c387ed0c4",
+      "id": "5f3a6668-45c4-4d54-8260-428a5e483d61",
       "name": "revisar contenido solicitud"
     },
     {
@@ -4843,10 +4794,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        -7728,
-        384
+        -2208,
+        512
       ],
-      "id": "f5e0e8a6-f716-46bf-9a6a-00e8a401b2a5",
+      "id": "ff0f54cf-912f-4a7c-b0b2-c272934f0d59",
       "name": "existe solicitud?"
     },
     {
@@ -4856,10 +4807,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -7584,
-        528
+        -2064,
+        656
       ],
-      "id": "06e027c9-b0ce-4d1a-a3fe-bb38fbaecb63",
+      "id": "cd6e195e-360b-4688-a2d0-1387d3b48226",
       "name": "HTML solicitud expirada"
     },
     {
@@ -4872,10 +4823,10 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        -7440,
-        528
+        -1920,
+        656
       ],
-      "id": "b0ac0408-f51b-47b3-8ead-f0556bdf56d0",
+      "id": "44f9ebed-96d6-4d5f-be02-d4ea599e46ea",
       "name": "Correo solicitud reserva expirada",
       "webhookId": "e6d7903c-92dd-4623-a000-69593915114d",
       "credentials": {
@@ -4962,10 +4913,10 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.4,
       "position": [
-        -6784,
-        336
+        -1264,
+        464
       ],
-      "id": "c4da3a53-61f8-44ba-87e3-ac997f37f7ad",
+      "id": "4eeb6f27-e875-43d5-ab6f-d7476e94c536",
       "name": "horario valido/invalido o sala inexistente"
     },
     {
@@ -4990,10 +4941,10 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -6624,
-        544
+        -1104,
+        672
       ],
-      "id": "6b1c2cee-6e92-41c4-8d7c-8cd95f001ca4",
+      "id": "72f1ecb2-669f-4324-b531-c2c7abe25531",
       "name": "Eliminar solicitud por error sala",
       "credentials": {
         "googleSheetsOAuth2Api": {
@@ -5009,10 +4960,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -6496,
-        544
+        -976,
+        672
       ],
-      "id": "7eec14c8-d7da-4c34-a441-d4dc4c570610",
+      "id": "38d1a718-4393-4cb1-995c-96b54265392a",
       "name": "html error sala"
     },
     {
@@ -5025,10 +4976,10 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        -6352,
-        544
+        -832,
+        672
       ],
-      "id": "0ee7f866-2580-4b9d-a16e-7b7240b9764e",
+      "id": "8c4bfde7-ba5f-4a40-9f4d-a5156ee5be32",
       "name": "Mensaje error sala",
       "webhookId": "6594c1e2-2628-461e-8f50-a4440a57ba4e",
       "credentials": {
@@ -5045,10 +4996,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -6992,
-        352
+        -1472,
+        480
       ],
-      "id": "d3ef8ea9-d6dd-4156-a60e-0d6648c64a4c",
+      "id": "55b57bd6-b1b1-4f44-b293-771d187bfff2",
       "name": "Comprobar reserva dentro de horario"
     },
     {
@@ -5058,10 +5009,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -6304,
-        352
+        -784,
+        480
       ],
-      "id": "948f68dd-8687-4b8c-86fd-cd3477ec1c89",
+      "id": "6231e46e-f2d8-41b1-a7a1-3f658436fc16",
       "name": "Comparar reservas con solicitud",
       "executeOnce": false
     },
@@ -5087,10 +5038,10 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -5920,
-        608
+        -240,
+        736
       ],
-      "id": "e324b477-0087-47d5-8fa7-07d8349873e6",
+      "id": "814840d6-97d2-48be-8395-1a21b16d91b8",
       "name": "Eliminar solicitud reserva por falta disponibilidad",
       "credentials": {
         "googleSheetsOAuth2Api": {
@@ -5106,10 +5057,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -5744,
-        608
+        -64,
+        736
       ],
-      "id": "b91f1234-cfe8-4e26-afcc-26fe82bc1795",
+      "id": "7b62512d-6dc1-4262-ab88-00cd98ab6f8d",
       "name": "HTML hora no disponible"
     },
     {
@@ -5122,10 +5073,10 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        -5536,
-        608
+        144,
+        736
       ],
-      "id": "aa4eaec2-13e9-4982-9cc9-88136ec8bc51",
+      "id": "634fc562-5948-4368-9c19-2ec8f3865648",
       "name": "Correo hora no disponible",
       "webhookId": "dbcc8e89-5d9a-49a4-9416-e687ef100a14",
       "credentials": {
@@ -5163,10 +5114,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        -5392,
-        128
+        80,
+        160
       ],
-      "id": "921a106c-ec37-4095-9186-183d4641b9f0",
+      "id": "af73faf2-4d80-4552-9546-38d53c1433dc",
       "name": "Se envian correos?"
     },
     {
@@ -5191,10 +5142,10 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -5168,
-        368
+        352,
+        496
       ],
-      "id": "52280db2-d180-4886-a653-c35e13bd4189",
+      "id": "cd8755fa-814d-4fc9-91d4-bd0b2dd0ccd7",
       "name": "Borrar solicitud aprovada",
       "credentials": {
         "googleSheetsOAuth2Api": {
@@ -5225,10 +5176,10 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        1872,
-        80
+        3888,
+        736
       ],
-      "id": "412c0d12-a6e3-465b-858d-05cf8501a396",
+      "id": "900d4324-a9e8-4210-a52d-aa3176f4b8ff",
       "name": "Eliminar solicitud crear sala",
       "credentials": {
         "googleSheetsOAuth2Api": {
@@ -5258,10 +5209,10 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -5120,
-        3328
+        400,
+        3872
       ],
-      "id": "f196921e-12fd-493c-bd9e-ddaf4bb3364d",
+      "id": "f0a86f03-0ab8-453c-98db-c80dd6d1e4be",
       "name": "Solicitudes reserva antiguas",
       "alwaysOutputData": true,
       "credentials": {
@@ -5293,10 +5244,10 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -4128,
-        3312
+        1392,
+        3856
       ],
-      "id": "e82865b5-5ba2-433b-af32-082279f58aef",
+      "id": "05f196ba-a319-461f-bef5-11267ece89e3",
       "name": "Delete rows or columns from sheet",
       "alwaysOutputData": true,
       "credentials": {
@@ -5313,10 +5264,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -4912,
-        3328
+        608,
+        3872
       ],
-      "id": "a5f06dca-b6c6-4478-9ff1-69904b30f1fd",
+      "id": "cd81db63-37b0-4c6e-86e7-add9dbc12480",
       "name": "Hay reservas muy antiguas?",
       "alwaysOutputData": true,
       "onError": "continueRegularOutput"
@@ -5342,10 +5293,10 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -5120,
-        3552
+        400,
+        4096
       ],
-      "id": "67513a6c-fdce-4782-9c2d-50e4989d7e54",
+      "id": "076c2d70-0494-48e6-affc-2a7d50888d3a",
       "name": "Solicitudes agregar sala antigua",
       "alwaysOutputData": true,
       "credentials": {
@@ -5362,10 +5313,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -4912,
-        3552
+        608,
+        4096
       ],
-      "id": "67794624-6b5f-49de-b604-597da344326a",
+      "id": "d94ecfb0-3f49-4b3e-b955-314699463400",
       "name": "Code in JavaScript1",
       "alwaysOutputData": true,
       "onError": "continueRegularOutput"
@@ -5377,10 +5328,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -4912,
-        3712
+        608,
+        4256
       ],
-      "id": "fc91d0e6-5092-4f37-9836-1f87ed38b54f",
+      "id": "b37ba1d9-2ea4-4a3a-83bf-a15e98744b9d",
       "name": "Code in JavaScript2",
       "alwaysOutputData": true,
       "onError": "continueRegularOutput"
@@ -5406,10 +5357,10 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -5120,
-        3712
+        400,
+        4256
       ],
-      "id": "6ef47c3a-f2e8-4039-8b07-d1ff0d2cdb09",
+      "id": "a1ee06d3-4f79-4fb3-9003-1b5fee3d2d1f",
       "name": "Solicitudes eliminar sala antigua",
       "executeOnce": false,
       "alwaysOutputData": true,
@@ -5442,10 +5393,10 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -4096,
-        3536
+        1424,
+        4080
       ],
-      "id": "d199f239-f968-4519-8411-086249ca10f6",
+      "id": "4ed6f34a-5229-4624-8a2f-e9b7b3a8961a",
       "name": "Delete rows or columns from sheet2",
       "alwaysOutputData": true,
       "credentials": {
@@ -5477,10 +5428,10 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -4064,
-        3696
+        1456,
+        4240
       ],
-      "id": "73482bec-a3b2-48d5-9558-97d000fc953c",
+      "id": "b5079bb8-3319-45b6-b9c8-eb83d82e0fae",
       "name": "Delete rows or columns from sheet3",
       "alwaysOutputData": true,
       "credentials": {
@@ -5498,10 +5449,10 @@
       "type": "n8n-nodes-base.crypto",
       "typeVersion": 1,
       "position": [
-        -4720,
-        2736
+        800,
+        3200
       ],
-      "id": "5c7fe142-1d5f-423e-a34b-c728fe0516f6",
+      "id": "6a94965e-e37b-4e20-a610-4bea6a674b2f",
       "name": "Crypto"
     },
     {
@@ -5513,10 +5464,10 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.5,
       "position": [
-        -5088,
-        2048
+        432,
+        2656
       ],
-      "id": "b60c212c-ef9f-4d4a-a2ef-f23cb0a1d7c0",
+      "id": "5922b5f1-fd89-4d95-b144-78bfe61429a0",
       "name": "Respond to Webhook"
     },
     {
@@ -5526,10 +5477,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -4272,
-        2256
+        1248,
+        2384
       ],
-      "id": "df6fb3f1-eb19-44c3-8c21-e87e2f977145",
+      "id": "5cf1494f-52f3-4007-a29f-37c68bad2382",
       "name": "solicitud con contenido"
     },
     {
@@ -5560,10 +5511,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        -4112,
-        2256
+        1408,
+        2384
       ],
-      "id": "ed2f9df7-4132-45de-9b80-9121d4ec0a94",
+      "id": "3dcbf616-6951-4e8d-9fa5-4c75f9993a0a",
       "name": "has content?"
     },
     {
@@ -5576,10 +5527,10 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        -3952,
-        2368
+        1568,
+        2496
       ],
-      "id": "d64df1d5-d919-4237-aa2c-2136f0358756",
+      "id": "2522d52c-9409-40f8-aaeb-482c2efed619",
       "name": "Mensaje error con cancelacion",
       "webhookId": "c09768bd-90f3-480a-9c2a-3b519e62825e",
       "credentials": {
@@ -5599,10 +5550,10 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        -3712,
-        2384
+        1808,
+        2512
       ],
-      "id": "ae6d9e3b-1f4c-45a9-bcbf-f09fc4f3e5b8",
+      "id": "e2eff2ea-ef34-4deb-b7cf-fb07c9a243c6",
       "name": "mensaje correo incorrecto",
       "webhookId": "d42eb8e5-2418-4c3a-a185-62d54c7e5311",
       "credentials": {
@@ -5619,10 +5570,10 @@
       "type": "n8n-nodes-base.stopAndError",
       "typeVersion": 1,
       "position": [
-        -3360,
-        2320
+        2160,
+        2448
       ],
-      "id": "92635760-a4b2-477a-bd08-fd3df7143087",
+      "id": "1d649bf5-e948-400d-b889-314c41857c62",
       "name": "Stop and Error"
     },
     {
@@ -5632,10 +5583,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -3344,
-        1920
+        2176,
+        2048
       ],
-      "id": "25d55a31-1aff-4f48-a17a-4fb0176326ae",
+      "id": "24ed6e3f-33a2-4a42-ba09-ec99e46a5c81",
       "name": "Participantes a los que informar?"
     },
     {
@@ -5666,10 +5617,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        -3136,
-        1920
+        2384,
+        2048
       ],
-      "id": "fd1e3bd7-4d66-4d2c-8fd6-def0b0e3886f",
+      "id": "3cd4b7a4-a5ed-4d47-bf5a-ee7d3f81b6e1",
       "name": "If"
     },
     {
@@ -5677,10 +5628,10 @@
       "type": "n8n-nodes-base.noOp",
       "typeVersion": 1,
       "position": [
-        -2880,
-        1936
+        2640,
+        2064
       ],
-      "id": "f4579372-4ee3-4e84-a489-343d6645b326",
+      "id": "287c5376-3dd5-4e78-a147-6be77ec74adf",
       "name": "No Operation, do nothing1"
     },
     {
@@ -5711,10 +5662,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        -4560,
-        3328
+        960,
+        3872
       ],
-      "id": "2c786dd2-6a3d-425a-89c9-69ca50d002c6",
+      "id": "fc01bb7d-3fa5-4f76-bb1a-e333c2d73b38",
       "name": "If1"
     },
     {
@@ -5724,10 +5675,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -4704,
-        3328
+        816,
+        3872
       ],
-      "id": "c28a63c8-e1d8-4c0a-92a4-32151e31b911",
+      "id": "5296c776-5fe9-4a75-9214-46aa4d52d820",
       "name": "Code in JavaScript3"
     },
     {
@@ -5737,10 +5688,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -4704,
-        3552
+        816,
+        4096
       ],
-      "id": "19f1931b-7fe0-4a54-9758-8541a81da1b6",
+      "id": "1c6f63e6-7196-4244-88b2-21854c08ab0b",
       "name": "Code in JavaScript4"
     },
     {
@@ -5750,10 +5701,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -4704,
-        3712
+        816,
+        4256
       ],
-      "id": "43438986-a297-41fe-a961-6937341e363b",
+      "id": "ee06c44f-37ec-49c0-bebb-178eba0d31f3",
       "name": "Code in JavaScript5"
     },
     {
@@ -5784,10 +5735,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        -4496,
-        3552
+        1024,
+        4096
       ],
-      "id": "f1e2ab3c-9782-4269-b49e-ff4fb8f3ee60",
+      "id": "21f502b8-813b-403d-8737-98742944ffa8",
       "name": "If2"
     },
     {
@@ -5818,10 +5769,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        -4496,
-        3712
+        1024,
+        4256
       ],
-      "id": "3ad0ae8c-2b70-4a87-9b07-3d00c6ebff10",
+      "id": "d5dcec79-17a2-4504-9117-39117fbaca0d",
       "name": "If3"
     },
     {
@@ -5834,10 +5785,10 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        -2960,
-        1776
+        2560,
+        1904
       ],
-      "id": "c9e3af51-7b19-490f-a572-ca169d71a2a4",
+      "id": "7c6e6161-e2d9-4fcf-97e5-805f2b35fa7e",
       "name": "Send a message4",
       "webhookId": "666c346c-9910-46ec-ab34-8a9e7df4e0b7",
       "credentials": {
@@ -5854,10 +5805,10 @@
       "type": "n8n-nodes-base.stopAndError",
       "typeVersion": 1,
       "position": [
-        -2736,
-        320
+        2208,
+        400
       ],
-      "id": "5945876c-6ebf-4407-b55f-2811127a3151",
+      "id": "ffd6f73f-e175-48b3-8f91-d7910a7e2692",
       "name": "Token invalido - gestion sala"
     },
     {
@@ -5867,10 +5818,10 @@
       "type": "n8n-nodes-base.stopAndError",
       "typeVersion": 1,
       "position": [
-        -2432,
-        320
+        2512,
+        400
       ],
-      "id": "886c1a9f-b8ee-4346-97d4-ede19feb0bf5",
+      "id": "894947e8-e795-4eb3-89fe-9de49285f644",
       "name": "Correo invalido"
     },
     {
@@ -5880,10 +5831,10 @@
       "type": "n8n-nodes-base.stopAndError",
       "typeVersion": 1,
       "position": [
-        -2224,
-        320
+        2720,
+        400
       ],
-      "id": "8d7a957b-8569-453e-80a1-9cafdd4047fc",
+      "id": "3f930dc7-849f-43d1-a8cb-1acd51e3d24d",
       "name": "Campos incompletos"
     },
     {
@@ -5896,10 +5847,10 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        -1776,
-        272
+        3168,
+        352
       ],
-      "id": "e13c9d24-22f0-4c77-aeff-43ccf0ffa399",
+      "id": "631a199a-c9ea-4924-8774-abbb54e036ea",
       "name": "Solicitud pendiente creacion sala",
       "webhookId": "06ba8f0e-3633-4ba3-b07c-bb4231663d60",
       "credentials": {
@@ -5938,10 +5889,10 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -1728,
-        128
+        3216,
+        208
       ],
-      "id": "57f4ed35-314f-40da-b04f-ae761088d02a",
+      "id": "c9dac467-5440-4447-8097-4746492bef15",
       "name": "Buscar salas repetidas",
       "executeOnce": false,
       "alwaysOutputData": true,
@@ -5959,10 +5910,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -1520,
-        128
+        3424,
+        208
       ],
-      "id": "939364c1-7462-4c56-a61b-300a05a519a3",
+      "id": "40547a02-11b0-40de-862b-c3af6c7fd502",
       "name": "Comprobar repeticion"
     },
     {
@@ -5993,10 +5944,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        -1376,
-        128
+        3568,
+        208
       ],
-      "id": "96682203-beef-4a4d-9d98-8bee47ef187a",
+      "id": "272b1300-47ef-48d0-bd03-d65f503901eb",
       "name": "sala repetida?"
     },
     {
@@ -6009,10 +5960,10 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        -1200,
-        240
+        3744,
+        320
       ],
-      "id": "eff244da-6ae9-43bf-a54d-a5876f4c76c7",
+      "id": "15ea499a-bcd7-41cb-b550-afae44d23de9",
       "name": "Correo cancelar solicitud sala repetida",
       "webhookId": "15b0cdbc-be26-4793-98c7-015515ddc501",
       "credentials": {
@@ -6032,10 +5983,10 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        -768,
-        112
+        4176,
+        192
       ],
-      "id": "ecc105a4-2ee1-43f5-89d0-69d887ebfb3f",
+      "id": "9736dbdb-4518-43bf-b10e-be097ae8a85b",
       "name": "Autenticacion crear sala",
       "webhookId": "7b37df97-84e0-4e5c-9962-bd3d88140174",
       "credentials": {
@@ -6055,10 +6006,10 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        800,
-        352
+        2816,
+        1008
       ],
-      "id": "e824e7cb-1840-41f7-a935-dca4d2907f56",
+      "id": "6a02e32d-401b-47ac-bb31-ffcd862b67fa",
       "name": "Solicitud no encontrada",
       "webhookId": "8a3f59e8-be87-4a45-9ed8-b3593999e900",
       "credentials": {
@@ -6078,10 +6029,10 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        1024,
-        336
+        3040,
+        992
       ],
-      "id": "b24a52b9-cd99-4255-923e-62626ab0aa45",
+      "id": "596df82a-ba0f-4996-a527-5d239c766185",
       "name": "Error autenticacion crear sala",
       "webhookId": "51f84791-1b63-4525-80fe-35bff4694329",
       "credentials": {
@@ -6101,10 +6052,10 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        1472,
-        272
+        3488,
+        928
       ],
-      "id": "064c9b3d-8734-4ad7-a5f3-05ffc48d2c35",
+      "id": "3f74553f-10ab-4ada-b0e5-a686b0b5ccf0",
       "name": "Sala repetida",
       "webhookId": "bee89afd-dda8-4be4-84f1-c357200b653d",
       "credentials": {
@@ -6136,10 +6087,10 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        1680,
-        272
+        3696,
+        928
       ],
-      "id": "eec6d634-c10a-4aca-b25a-3a5151463d60",
+      "id": "0cc76d1e-6b9e-440f-8d94-bc0165ab87bf",
       "name": "Eliminar solicitud crear sala1",
       "credentials": {
         "googleSheetsOAuth2Api": {
@@ -6155,10 +6106,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -4256,
-        3696
+        1264,
+        4240
       ],
-      "id": "5d3538bf-b2e9-47ce-b923-d33ccc63f040",
+      "id": "084e0eff-a8dc-4386-99ce-9766053f718f",
       "name": "Code in JavaScript6"
     },
     {
@@ -6168,10 +6119,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -4256,
-        3536
+        1264,
+        4080
       ],
-      "id": "00898287-3827-48f1-89b3-4c69b3125cdf",
+      "id": "45041450-b8e5-4ea5-9850-7dc1d86d193f",
       "name": "Code in JavaScript7"
     },
     {
@@ -6181,10 +6132,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -4304,
-        3312
+        1216,
+        3856
       ],
-      "id": "1c7b19fb-69fe-431d-a94f-a3e6c9170d1b",
+      "id": "27210ded-0f2c-400d-ab2c-55b2c6cfa551",
       "name": "Code in JavaScript8"
     },
     {
@@ -6194,10 +6145,10 @@
       "type": "n8n-nodes-base.stopAndError",
       "typeVersion": 1,
       "position": [
-        -2400,
-        832
+        4448,
+        2096
       ],
-      "id": "f5a48bd4-f7c4-497e-ae40-f327bad370c9",
+      "id": "3734d344-1375-4f13-9459-e0ce02c706a0",
       "name": "Correo invalido1"
     },
     {
@@ -6207,10 +6158,10 @@
       "type": "n8n-nodes-base.stopAndError",
       "typeVersion": 1,
       "position": [
-        -2112,
-        816
+        4736,
+        2080
       ],
-      "id": "76f76fbf-7540-4ed2-95b3-da27fbddcd8f",
+      "id": "206ac6f0-38a8-43b8-93b4-30eed8420f04",
       "name": "Datos incompletos"
     },
     {
@@ -6223,10 +6174,10 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        -1568,
-        784
+        5280,
+        2048
       ],
-      "id": "43f8e727-53ae-4c8c-ba46-55f0824caef5",
+      "id": "591cc8d8-0ce2-48b4-a8e9-515fa67cc4ad",
       "name": "Mensaje solicitud pendiente",
       "webhookId": "9c98cc4d-8dd9-499d-b855-c24d715a8e71",
       "credentials": {
@@ -6246,10 +6197,10 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        -1152,
-        736
+        5696,
+        2000
       ],
-      "id": "6f9835d4-e689-4a82-96cb-5a6252fe481d",
+      "id": "c8b66d9b-6831-4358-94ca-92d57458a9b2",
       "name": "Mensaje sala inexistente",
       "webhookId": "db991ba4-f81a-4a7c-94ce-8eb598244a99",
       "credentials": {
@@ -6269,10 +6220,10 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        -848,
-        768
+        6080,
+        2032
       ],
-      "id": "b0a579f5-cb1a-4c6c-bba4-a4e458e6a36d",
+      "id": "9c4030d6-7ab3-4806-a70a-638ee5098cc4",
       "name": "Send a message",
       "webhookId": "88c89071-af2f-47dd-afd3-52e51afe0714",
       "credentials": {
@@ -6292,10 +6243,10 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        -80,
-        592
+        6768,
+        1856
       ],
-      "id": "aff45fe0-68ab-4702-b265-c542ee972daa",
+      "id": "045d6177-7f23-437d-983f-da27b693acd9",
       "name": "Correo autenticacion eliminar sala",
       "webhookId": "e34b36bc-1fee-451a-abcd-1f8ca9614c70",
       "credentials": {
@@ -6315,10 +6266,10 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        80,
-        1536
+        5024,
+        2896
       ],
-      "id": "cbfc9b7b-4300-45a9-9e7c-4184142b725b",
+      "id": "24a8f466-22d0-472c-b4af-cfedb3c31f36",
       "name": "Mensaje solicitud no encontrada",
       "webhookId": "87f0bf1d-cb88-41d0-8a05-f30e9e560b62",
       "credentials": {
@@ -6338,10 +6289,10 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        320,
-        1520
+        5264,
+        2880
       ],
-      "id": "a40c042b-fda4-4d08-919e-813796414cc3",
+      "id": "48f49506-63dd-4d79-8c29-7ad67b473c86",
       "name": "Mensaje solicitante incorrecto",
       "webhookId": "95d74067-5d04-419e-98ea-13484e9ef334",
       "credentials": {
@@ -6378,10 +6329,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        496,
-        1344
+        5440,
+        2704
       ],
-      "id": "bfab9b8c-db6f-4022-b7db-8ccb0e8040cf",
+      "id": "08f778db-476e-4cf1-be05-7cb76014e51d",
       "name": "Correo admin?"
     },
     {
@@ -6394,10 +6345,10 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        688,
-        1472
+        5632,
+        2832
       ],
-      "id": "57a0df6b-3a85-4e72-a8d5-0d4ac08d6fe3",
+      "id": "3dc176cf-4129-4f74-ac61-c2c3474da07f",
       "name": "Mensaje admin incorrecto",
       "webhookId": "9b6a6175-e00b-4e50-86c2-6cfef2fb7f66",
       "credentials": {
@@ -6417,10 +6368,10 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        1120,
-        1504
+        6192,
+        3120
       ],
-      "id": "352c1e4a-3ebe-40e6-a384-bd6b590aa8c8",
+      "id": "0a16fbcc-0cd5-4852-aeac-cab21123c070",
       "name": "Mensaje sala inexistente1",
       "webhookId": "612a3b5a-6540-4a46-bce0-45b88dfb081c",
       "credentials": {
@@ -6429,6 +6380,501 @@
           "name": "Gmail account"
         }
       }
+    },
+    {
+      "parameters": {
+        "content": "Revisar redirecuri e id_client\nCambiar entre /webhook/ y /webhook-test/",
+        "height": 240,
+        "width": 176,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -480,
+        1264
+      ],
+      "typeVersion": 1,
+      "id": "4c07fbe6-ae47-4cd2-95f6-83e3e851a7c7",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "Revisar redirecuri e id_client\nCambiar entre /webhook/ y /webhook-test/",
+        "height": 240,
+        "width": 176,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        4000,
+        64
+      ],
+      "typeVersion": 1,
+      "id": "c2f4c5fe-acdf-4ff9-8758-264691b35e14",
+      "name": "Sticky Note9"
+    },
+    {
+      "parameters": {
+        "content": "Revisar redirecuri e id_client\nCambiar entre /webhook/ y /webhook-test/",
+        "height": 240,
+        "width": 176,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        6544,
+        1744
+      ],
+      "typeVersion": 1,
+      "id": "9d5de2da-32a3-4b81-86fb-0d09258f3166",
+      "name": "Sticky Note10"
+    },
+    {
+      "parameters": {
+        "content": "Revisar redirecuri e id_client\nCambiar entre /webhook/ y /webhook-test/",
+        "height": 272,
+        "width": 150,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1104,
+        3072
+      ],
+      "typeVersion": 1,
+      "id": "fea4b9f8-1bc2-47f7-8e9d-7bfb1db2ccc2",
+      "name": "Sticky Note11"
+    },
+    {
+      "parameters": {
+        "content": "Verificar credenciales",
+        "height": 240,
+        "width": 150,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        4096,
+        2608
+      ],
+      "typeVersion": 1,
+      "id": "33d7f75f-ed48-41d1-9268-0ac56b55b8ed",
+      "name": "Sticky Note12"
+    },
+    {
+      "parameters": {
+        "content": "Verificar credenciales",
+        "height": 208,
+        "width": 150,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2032,
+        768
+      ],
+      "typeVersion": 1,
+      "id": "f1b2098e-77bc-4a96-8c8a-f4fc18c7179e",
+      "name": "Sticky Note13"
+    },
+    {
+      "parameters": {
+        "content": "Verificar credenciales",
+        "height": 208,
+        "width": 150,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -3120,
+        432
+      ],
+      "typeVersion": 1,
+      "id": "3f56ddd7-b7c9-45bd-895e-3e93198de716",
+      "name": "Sticky Note14"
+    },
+    {
+      "parameters": {
+        "content": "Verificar credenciales",
+        "height": 208,
+        "width": 150,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        400,
+        2304
+      ],
+      "typeVersion": 1,
+      "id": "6d75fbc3-9ecd-44f0-a555-d5700828a74f",
+      "name": "Sticky Note15"
+    },
+    {
+      "parameters": {
+        "content": "## HU 7 y 12: Flujo encargado de preparar la lista de salas y sus respectivos horarios para el frontend\n",
+        "height": 480,
+        "width": 880,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -2528,
+        2416
+      ],
+      "typeVersion": 1,
+      "id": "8965849e-79b6-45a7-945c-0a72c1b6b854",
+      "name": "Sticky Note16"
+    },
+    {
+      "parameters": {
+        "content": "## HU 6: cancelacion de reserva",
+        "height": 992,
+        "width": 2832,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        176,
+        1840
+      ],
+      "typeVersion": 1,
+      "id": "81a2b5ed-6ab7-4020-9dcf-0df609e679de",
+      "name": "Sticky Note17"
+    },
+    {
+      "parameters": {
+        "content": "## Registro de participantes",
+        "height": 384,
+        "width": 688,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        0,
+        0
+      ],
+      "typeVersion": 1,
+      "id": "2139755e-27fd-454c-81c9-dd89694326d5",
+      "name": "Sticky Note18"
+    },
+    {
+      "parameters": {
+        "content": "## HU 7: recordatorio previo",
+        "height": 720,
+        "width": 1520,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        64,
+        3040
+      ],
+      "typeVersion": 1,
+      "id": "ad1cad7b-6068-4913-a7de-c8cc4b96350a",
+      "name": "Sticky Note19"
+    },
+    {
+      "parameters": {
+        "content": "## Flujo encargado de limpiar las solicitudes antiguas para evitar acumulacion excesiva de solicitudes sin procesar",
+        "height": 624,
+        "width": 1312
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        352,
+        3792
+      ],
+      "typeVersion": 1,
+      "id": "0699a49c-4041-4b2e-bcbb-5055c6f8c062",
+      "name": "Sticky Note20"
+    },
+    {
+      "parameters": {
+        "content": "## Notificacion al solicitante",
+        "height": 576,
+        "width": 1232,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -368,
+        400
+      ],
+      "typeVersion": 1,
+      "id": "c0587f19-9b73-4dc1-a79a-ccf0e391ff20",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## Proceso de la solicitud de reserva, validando los datos",
+        "height": 1008,
+        "width": 2912,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -3344,
+        32
+      ],
+      "typeVersion": 1,
+      "id": "17b59842-cb39-4fed-9911-ab2aec8114a8",
+      "name": "Sticky Note21"
+    },
+    {
+      "parameters": {
+        "content": "## Recibir datos del formulario de reserva y validando datos",
+        "height": 816,
+        "width": 2384,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -3280,
+        1216
+      ],
+      "typeVersion": 1,
+      "id": "80d6dd96-c8ff-4290-b913-b6acac7eef10",
+      "name": "Sticky Note22"
+    },
+    {
+      "parameters": {
+        "content": "## Correo solicitando autenticacion del usuario",
+        "height": 624,
+        "width": 800,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -880,
+        1200
+      ],
+      "typeVersion": 1,
+      "id": "12bf0c84-a64f-4eaf-b87d-51ee292fe19d",
+      "name": "Sticky Note23"
+    },
+    {
+      "parameters": {
+        "content": "## Validar datos solicitud crear sala",
+        "height": 464,
+        "width": 1888,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1792,
+        112
+      ],
+      "typeVersion": 1,
+      "id": "4428205b-13b3-44a0-abd2-93bc0c42f1ad",
+      "name": "Sticky Note24"
+    },
+    {
+      "parameters": {
+        "content": "## Correo solicitando autenticacion crear sala",
+        "height": 544,
+        "width": 672,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        3696,
+        16
+      ],
+      "typeVersion": 1,
+      "id": "3a060069-6946-42c4-8c03-359012f93e5e",
+      "name": "Sticky Note25"
+    },
+    {
+      "parameters": {
+        "content": "## Validar datos para agegar sala",
+        "height": 592,
+        "width": 1616,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1840,
+        624
+      ],
+      "typeVersion": 1,
+      "id": "42c785e4-3670-44af-a009-47c15ce9208c",
+      "name": "Sticky Note26"
+    },
+    {
+      "parameters": {
+        "content": "## Notificacion para el encargado",
+        "height": 448,
+        "width": 880,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        3472,
+        656
+      ],
+      "typeVersion": 1,
+      "id": "00600318-46b8-40a4-89b1-b3ed0d2ac923",
+      "name": "Sticky Note27"
+    },
+    {
+      "parameters": {
+        "content": "## Validar autenticacion",
+        "height": 416,
+        "width": 496
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1856,
+        720
+      ],
+      "typeVersion": 1,
+      "id": "70f85dff-7148-41e5-b82c-adbba043cb3d",
+      "name": "Sticky Note28"
+    },
+    {
+      "parameters": {
+        "content": "## Autenticacion de usuario",
+        "height": 480,
+        "width": 624
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -3312,
+        384
+      ],
+      "typeVersion": 1,
+      "id": "8e060001-2e3e-44e1-ba0d-fe7c9d4ceaf1",
+      "name": "Sticky Note29"
+    },
+    {
+      "parameters": {
+        "content": "## Validar datos solicitud eliminar sala",
+        "height": 480,
+        "width": 2320,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        3664,
+        1808
+      ],
+      "typeVersion": 1,
+      "id": "8a699ba8-4a9e-461f-996b-87c04f25facd",
+      "name": "Sticky Note30"
+    },
+    {
+      "parameters": {
+        "content": "## Correo autenticacion al solicitante",
+        "height": 576,
+        "width": 976,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        6016,
+        1648
+      ],
+      "typeVersion": 1,
+      "id": "3ff75c3d-a038-4d89-9dba-3add1b43f53f",
+      "name": "Sticky Note31"
+    },
+    {
+      "parameters": {
+        "content": "## Validar autenticacion",
+        "height": 608,
+        "width": 576,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        3856,
+        2496
+      ],
+      "typeVersion": 1,
+      "id": "11e63c77-7fbc-463f-81ac-ed427e90129d",
+      "name": "Sticky Note32"
+    },
+    {
+      "parameters": {
+        "content": "## Verificar datos para crear sala",
+        "height": 560,
+        "width": 1584,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        4480,
+        2576
+      ],
+      "typeVersion": 1,
+      "id": "bf16d577-904e-4448-8e00-63fe85b2c4d7",
+      "name": "Sticky Note33"
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "documentId": {
+          "__rl": true,
+          "value": "1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M",
+          "mode": "list",
+          "cachedResultName": "Salas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1945850352,
+          "mode": "list",
+          "cachedResultName": "Reservas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O_F7LDf9GlUNUWcHCW3gnjIc2TRJXYpiItAkrv5cI0M/edit#gid=1945850352"
+        },
+        "startIndex": "={{ $json.row_number }}"
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        7312,
+        2704
+      ],
+      "id": "0be99934-c6a3-415f-b40d-cef80c537e44",
+      "name": "Eliminar reservas",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "ooVYKONzDWnvrKMr",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Eliminacion de sala",
+        "height": 240,
+        "width": 912,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        6464,
+        2864
+      ],
+      "typeVersion": 1,
+      "id": "3725b75d-4898-4210-beb4-c93d8234caee",
+      "name": "Sticky Note34"
+    },
+    {
+      "parameters": {
+        "content": "## Cancelacion de reservas afectadas",
+        "height": 528,
+        "width": 1328,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        6288,
+        2320
+      ],
+      "typeVersion": 1,
+      "id": "50d66945-4d0f-4b2c-a803-ceaa10daac39",
+      "name": "Sticky Note35"
     }
   ],
   "pinData": {},
@@ -7806,7 +8252,7 @@
       "main": [
         [
           {
-            "node": "Delete rows or columns from sheet1",
+            "node": "Eliminar reservas",
             "type": "main",
             "index": 0
           }
